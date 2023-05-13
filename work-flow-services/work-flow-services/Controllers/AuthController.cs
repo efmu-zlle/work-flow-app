@@ -29,7 +29,8 @@ namespace work_flow_services.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
+                    return BadRequest(errors);
                 }
 
                 if (await _context.Users.AnyAsync(u => u.Username == request.Username))
@@ -47,6 +48,7 @@ namespace work_flow_services.Controllers
                     UserId = Guid.NewGuid().ToString(),
                     Username = request.Username,
                     Email = request.Email,
+                    Password = "",
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
@@ -57,7 +59,7 @@ namespace work_flow_services.Controllers
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "User created successfully." });
+                return Ok("User created successfully.");
             }
             catch (Exception ex)
             {
@@ -66,13 +68,14 @@ namespace work_flow_services.Controllers
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn(User request)
+        public async Task<IActionResult> SignIn(UserModel request)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
+                    return BadRequest(errors);
                 }
 
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
@@ -83,7 +86,7 @@ namespace work_flow_services.Controllers
                     return Unauthorized("Invalid username or password.");
                 }
 
-                return Ok(new { message = "User signed in successfully." });
+                return Ok("User signed in successfully.");
             }
             catch (Exception ex)
             {
