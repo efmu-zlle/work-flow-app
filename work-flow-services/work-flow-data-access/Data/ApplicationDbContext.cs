@@ -15,10 +15,10 @@ namespace work_flow_data_access.Data
 
         }
 
-        public DbSet<Teams> Teams { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
-        public DbSet<Users> Users { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        public DbSet<Todos> Todos { get; set; }
+        public DbSet<Todo> Todos { get; set; }
     }
 }

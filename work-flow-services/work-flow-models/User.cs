@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace work_flow_models
 {
-   public class Users
+   public class User
     {
         [Key]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public string Username { get; set; }
 

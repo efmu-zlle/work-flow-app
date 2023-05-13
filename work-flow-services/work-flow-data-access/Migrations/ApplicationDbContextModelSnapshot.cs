@@ -19,12 +19,10 @@ namespace work_flow_data_access.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("work_flow_models.Teams", b =>
+            modelBuilder.Entity("work_flow_models.Team", b =>
                 {
-                    b.Property<int>("TeamId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("TeamId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -32,8 +30,8 @@ namespace work_flow_data_access.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -51,12 +49,10 @@ namespace work_flow_data_access.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("work_flow_models.Todos", b =>
+            modelBuilder.Entity("work_flow_models.Todo", b =>
                 {
-                    b.Property<int>("TodoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("TodoId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -64,17 +60,14 @@ namespace work_flow_data_access.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("TeamId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("isCompleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("TodoId");
 
@@ -83,12 +76,10 @@ namespace work_flow_data_access.Migrations
                     b.ToTable("Todos");
                 });
 
-            modelBuilder.Entity("work_flow_models.Users", b =>
+            modelBuilder.Entity("work_flow_models.User", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -113,26 +104,22 @@ namespace work_flow_data_access.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("work_flow_models.Teams", b =>
+            modelBuilder.Entity("work_flow_models.Team", b =>
                 {
-                    b.HasOne("work_flow_models.Users", "Creator")
+                    b.HasOne("work_flow_models.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("work_flow_models.Todos", b =>
+            modelBuilder.Entity("work_flow_models.Todo", b =>
                 {
-                    b.HasOne("work_flow_models.Teams", "Teams")
+                    b.HasOne("work_flow_models.Team", "Team")
                         .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeamId");
 
-                    b.Navigation("Teams");
+                    b.Navigation("Team");
                 });
 #pragma warning restore 612, 618
         }

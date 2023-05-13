@@ -20,32 +20,5 @@ namespace work_flow_utils
 
             return result;
         }
-
-        public static string GetHash(string input)
-        {
-            using (var algorithm = SHA256.Create())
-            {
-                var hashBytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
-                var hash = new StringBuilder();
-
-                foreach (byte b in hashBytes)
-                {
-                    hash.Append(b.ToString("x2"));
-                }
-
-                return hash.ToString();
-            }
-        }
-
-        public static string GenerateId(int length)
-        {
-
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var random = new Random();
-            var result = new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-
-            return result;
-        }
     }
 }

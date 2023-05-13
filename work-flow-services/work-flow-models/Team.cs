@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace work_flow_models
 {
-    public class Teams
+    public class Team
     {
         [Key]
-        public int TeamId { get; set; }
+        public string TeamId { get; set; }
 
         public string Name { get; set; }
 
         public string Description { get; set; }
 
-        public int CreatorId { get; set; }
+        public string CreatorId { get; set; }
 
         public string Code { get; set; }
 
@@ -28,7 +28,7 @@ namespace work_flow_models
 
 
         [ForeignKey("CreatorId")]
-        public Users Creator { get; set; }
+        public User Creator { get; set; }
 
     }
 }
