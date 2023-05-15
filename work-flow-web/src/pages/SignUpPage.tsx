@@ -42,7 +42,7 @@ function SignUpPage() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  variant="filled"
+                  variant="standard"
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -54,7 +54,7 @@ function SignUpPage() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  variant="filled"
+                  variant="standard"
                   required
                   fullWidth
                   id="lastName"
@@ -65,7 +65,7 @@ function SignUpPage() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
+                  variant="standard"
                   fullWidth
                   id="email"
                   label="Email Address"
@@ -75,7 +75,7 @@ function SignUpPage() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
+                  variant="standard"
                   fullWidth
                   name="password"
                   label="Password"

@@ -16,7 +16,6 @@ namespace work_flow_services.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
         public AuthController(ApplicationDbContext context)
         {
             _context = context;
