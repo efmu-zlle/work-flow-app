@@ -1,37 +1,23 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-
-interface IRequestConfig extends AxiosRequestConfig {
-  url: string;
-}
-
-interface IResponse<T> {
-  data: T | null;
-  isLoading: boolean;
-  error: any;
-}
-
-interface IAxiosProps<T> {
-  initialConfig?: IRequestConfig;
-  initialData?: T;
-}
+import { IAxiosProps, IResponse } from "../interfaces";
 
 function useAxios<T = any>({
   initialConfig,
   initialData,
 }: IAxiosProps<T>): [
   IResponse<T>,
-  (config: IRequestConfig) => void,
+  (config: AxiosRequestConfig) => void,
   () => void
 ] {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<any | null>(null);
-  const [config, setConfig] = useState<IRequestConfig | undefined>(
+  const [config, setConfig] = useState<AxiosRequestConfig | undefined>(
     initialConfig
   );
 
-  async function sendRequest(requestConfig: IRequestConfig) {
+  async function sendRequest(requestConfig: AxiosRequestConfig) {
     setIsLoading(true);
     try {
       const response: AxiosResponse<T> = await axios(requestConfig);
@@ -57,5 +43,7 @@ function useAxios<T = any>({
 
   return [{ data, isLoading, error }, setConfig, reset];
 }
+
+axios.defaults.baseURL = "https://localhost:5001";
 
 export default useAxios;

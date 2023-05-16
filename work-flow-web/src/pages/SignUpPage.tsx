@@ -1,5 +1,5 @@
 import useAxios from "../hooks/useFetch";
-import { APIConfig } from "../services/EndPoints";
+import { EndPoints, IUser } from "../interfaces";
 
 function SignUpPage() {
   const [{ data, isLoading, error }, setConfig] = useAxios<IUser[]>({});
@@ -15,14 +15,14 @@ function SignUpPage() {
   const handleClick = () => {
     setConfig({
       method: "get",
-      url: `${APIConfig.BASE_URL}/api${APIConfig.EndPoints.test}`,
+      url: `/api${EndPoints.test}`,
     });
   };
 
   return (
     <>
       <button onClick={() => handleClick()}>click here</button>
-      <div>{data?.map((e) => e.username)}</div>{" "}
+      <div>{data?.map((e) => e.email)}</div>{" "}
     </>
   );
 }
