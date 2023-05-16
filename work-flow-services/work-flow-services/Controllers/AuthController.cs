@@ -21,6 +21,23 @@ namespace work_flow_services.Controllers
             _context = context;
         }
 
+        [HttpGet("test")]
+        public ActionResult<IEnumerable<User>> Test()
+        {
+            try
+            {
+                var users = _context.Users.ToList();
+
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = new { message = "Internal server error", error = ex.ToString() };
+
+                return StatusCode(500, errorMessage);
+            }
+        }
+
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp(User request)
         {

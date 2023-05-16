@@ -1,37 +1,61 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-interface FetchResponse<T> {
+interface IRequestConfig extends AxiosRequestConfig {
+  url: string;
+}
+
+interface IResponse<T> {
   data: T | null;
   isLoading: boolean;
   error: any;
 }
 
-function useFetch<T>(
-  url: string,
-  options?: AxiosRequestConfig
-): FetchResponse<T> {
+interface IAxiosProps<T> {
+  initialConfig?: IRequestConfig;
+  initialData?: T;
+}
+
+function useAxios<T = any>({
+  initialConfig,
+  initialData,
+}: IAxiosProps<T>): [
+  IResponse<T>,
+  (config: IRequestConfig) => void,
+  () => void
+] {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any | null>(null);
+  const [config, setConfig] = useState<IRequestConfig | undefined>(
+    initialConfig
+  );
 
-  async function fetchData() {
+  async function sendRequest(requestConfig: IRequestConfig) {
     setIsLoading(true);
     try {
-      const response = await axios(url, options);
-      // setData(response);
-    } catch (error) {
-      // setError(error);
+      const response: AxiosResponse<T> = await axios(requestConfig);
+      setData(response.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   useEffect(() => {
-    fetchData();
-    return () => {};
-  }, [url, options]);
+    if (config) {
+      sendRequest(config);
+    }
+  }, [config]);
 
-  return { data, isLoading, error };
+  function reset() {
+    setData(initialData || null);
+    setError(null);
+    setIsLoading(false);
+  }
+
+  return [{ data, isLoading, error }, setConfig, reset];
 }
 
-export default useFetch;
+export default useAxios;

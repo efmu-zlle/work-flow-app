@@ -1,4 +1,4 @@
-interface IApiConfig {
+interface IAPIConfig {
   BASE_URL: string;
   EndPoints: {
     test: string;
@@ -7,11 +7,11 @@ interface IApiConfig {
   };
 }
 
-export const ApiConfig: IApiConfig = {
-  BASE_URL: "https://example.com/",
+export const APIConfig: IAPIConfig = {
+  BASE_URL: "https://localhost:5001",
   EndPoints: {
-    test: "test/",
-    signup: "signup/",
-    signin: "signin",
+    test: "/Auth/test",
+    signup: "/Auth/signup",
+    signin: "/Auth/signin",
   },
 };
