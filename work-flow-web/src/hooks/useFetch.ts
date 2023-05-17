@@ -6,6 +6,7 @@ const BASE_URL = "https://localhost:5001";
 function useFetch<T = any>(
   initialRequest?: IRequest
 ): [IResponse<T>, (request: IRequest) => void] {
+  const [config, setConfig] = useState<IRequest | undefined>(initialRequest);
   const [response, setResponse] = useState<IResponse<T>>({
     data: null,
     isLoading: false,
@@ -21,7 +22,7 @@ function useFetch<T = any>(
     }));
 
     try {
-      const responseSever = await fetch(`${BASE_URL}/api${request.url}`, {
+      const responseServer = await fetch(`${BASE_URL}/api${request.url}`, {
         method: request.method,
         headers: {
           "Content-Type": "application/json",
@@ -29,7 +30,7 @@ function useFetch<T = any>(
         body: request.body ? JSON.stringify(request.body) : undefined,
       });
 
-      const responseData: IResponse<T> = await responseSever.json();
+      const responseData: IResponse<T> = await responseServer.json();
 
       setResponse((prevResponse) => ({
         ...prevResponse,
@@ -37,7 +38,7 @@ function useFetch<T = any>(
         messageSuccess: responseData.messageSuccess,
       }));
 
-      if (responseSever.status === 400) {
+      if (responseServer.status === 400) {
         setResponse((prevResponse) => ({
           ...prevResponse,
           messageError: responseData.messageError,
@@ -47,7 +48,7 @@ function useFetch<T = any>(
     } catch (err) {
       setResponse((prevResponse) => ({
         ...prevResponse,
-        error: err,
+        error: err || "An error occurred.",
       }));
     } finally {
       setResponse((prevResponse) => ({
@@ -58,12 +59,12 @@ function useFetch<T = any>(
   }
 
   useEffect(() => {
-    if (initialRequest) {
-      sendRequest(initialRequest);
+    if (config) {
+      sendRequest(config);
     }
-  }, [initialRequest?.url]);
+  }, [config]);
 
-  return [response, sendRequest];
+  return [response, setConfig];
 }
 
 export default useFetch;
