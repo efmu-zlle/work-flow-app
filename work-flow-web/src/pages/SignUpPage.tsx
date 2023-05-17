@@ -1,42 +1,79 @@
-import { useState } from "react";
-import useFetch from "../hooks/useFetch";
-import { EndPoints, IUser } from "../interfaces";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 function SignUpPage() {
-  const [
-    { isLoading, data, error, messageSuccess, messageError },
-    sendRequest,
-  ] = useFetch<IUser[]>({ method: "GET", url: `${EndPoints.test}` });
-
-  const [user, setUser] = useState<IUser>({
-    username: "",
-    email: "",
-    password: "",
-  });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  const handleClick = () => {
-    sendRequest({
-      method: "POST",
-      url: `${EndPoints.signup}`,
-      body: user,
-    });
-  };
-
   return (
-    <>
-      <button onClick={() => handleClick()}>click here</button>
-      {data?.map((e) => (
-        <div key={e.userId}>
-          <span>{e.username}</span>
-        </div>
-      ))}
-      {messageSuccess}
-      {messageError}
-    </>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          mt: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <Box component="form" noValidate sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                autoFocus
+                variant="outlined"
+                fullWidth
+                label="Username"
+                name="username"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                label="Email Address"
+                name="email"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                label="Password"
+                name="password"
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="#" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
