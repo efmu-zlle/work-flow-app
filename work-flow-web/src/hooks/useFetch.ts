@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { IRequest, IResponse } from "../interfaces";
+import { IRequestInit, IResponseInit } from "../interfaces";
 
 const BASE_URL = "https://localhost:5001";
 
 function useFetch<T = any>(
-  initialRequest?: IRequest
-): [IResponse<T>, (request: IRequest) => void] {
-  const [config, setConfig] = useState<IRequest | undefined>(initialRequest);
-  const [response, setResponse] = useState<IResponse<T>>({
+  initialRequest?: IRequestInit
+): [IResponseInit<T>, (request: IRequestInit) => void] {
+  const [config, setConfig] = useState<IRequestInit | undefined>(
+    initialRequest
+  );
+  const [responseInit, setResponseInit] = useState<IResponseInit<T>>({
     data: null,
     isLoading: false,
     messageSuccess: null,
@@ -15,14 +17,11 @@ function useFetch<T = any>(
     error: null,
   });
 
-  async function sendRequest(request: IRequest) {
-    setResponse((prevResponse) => ({
-      ...prevResponse,
-      isLoading: true,
-    }));
+  async function sendRequest(request: IRequestInit) {
+    setResponseInit((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      const responseServer = await fetch(`${BASE_URL}/api${request.url}`, {
+      const response = await fetch(`${BASE_URL}/api${request.url}`, {
         method: request.method,
         headers: {
           "Content-Type": "application/json",
@@ -30,31 +29,28 @@ function useFetch<T = any>(
         body: request.body ? JSON.stringify(request.body) : undefined,
       });
 
-      const responseData: IResponse<T> = await responseServer.json();
+      const responseData: IResponseInit<T> = await response.json();
 
-      setResponse((prevResponse) => ({
-        ...prevResponse,
+      setResponseInit((prev) => ({
+        ...prev,
         data: responseData.data,
         messageSuccess: responseData.messageSuccess,
       }));
 
-      if (responseServer.status === 400) {
-        setResponse((prevResponse) => ({
-          ...prevResponse,
+      if (response.status === 400) {
+        setResponseInit((prev) => ({
+          ...prev,
           messageError: responseData.messageError,
         }));
         return;
       }
     } catch (err) {
-      setResponse((prevResponse) => ({
-        ...prevResponse,
+      setResponseInit((prev) => ({
+        ...prev,
         error: err || "An error occurred.",
       }));
     } finally {
-      setResponse((prevResponse) => ({
-        ...prevResponse,
-        isLoading: false,
-      }));
+      setResponseInit((prev) => ({ ...prev, isLoading: false }));
     }
   }
 
@@ -64,7 +60,7 @@ function useFetch<T = any>(
     }
   }, [config]);
 
-  return [response, setConfig];
+  return [responseInit, setConfig];
 }
 
 export default useFetch;

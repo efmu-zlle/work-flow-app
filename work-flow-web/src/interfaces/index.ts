@@ -16,7 +16,7 @@ interface IUserError {
   Password: string;
 }
 
-export interface IResponse<T> {
+export interface IResponseInit<T> {
   data: T | null;
   isLoading: boolean;
   error: any;
@@ -25,7 +25,7 @@ export interface IResponse<T> {
   errors?: IUserError;
 }
 
-export interface IRequest {
+export interface IRequestInit {
   method: HttpMethod;
   url: string;
   body?: any;
