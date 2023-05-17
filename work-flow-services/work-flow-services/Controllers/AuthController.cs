@@ -28,7 +28,7 @@ namespace work_flow_services.Controllers
             {
                 var users = _context.Users.ToList();
 
-                return Ok(users);
+                return Ok(new { data = users });
             }
             catch (Exception ex)
             {
@@ -51,12 +51,12 @@ namespace work_flow_services.Controllers
 
                 if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 {
-                    return BadRequest("Username is already taken.");
+                    return BadRequest(new { messageError = "Username is already taken." });
                 }
 
                 if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                 {
-                    return BadRequest("Email is already taken.");
+                    return BadRequest(new { messageError = "Email is already taken." });
                 }
 
                 var user = new User
@@ -65,8 +65,8 @@ namespace work_flow_services.Controllers
                     Username = request.Username,
                     Email = request.Email,
                     Password = "",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
 
                 user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.Password);
@@ -75,7 +75,7 @@ namespace work_flow_services.Controllers
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                return Ok("User created successfully.");
+                return Ok(new { messageSuccess = "User created successfully."  } );
             }
             catch (Exception ex)
             {
@@ -99,10 +99,10 @@ namespace work_flow_services.Controllers
                 var _passwordHasher = new PasswordHasher<User>();
                 if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password).Equals(PasswordVerificationResult.Success))
                 {
-                    return Unauthorized("Invalid username or password.");
+                    return BadRequest(new { messageError = "Invalid username or password." });
                 }
 
-                return Ok("User signed in successfully.");
+                return Ok(new { messageSuccess = "User signed in successfully." });
             }
             catch (Exception ex)
             {

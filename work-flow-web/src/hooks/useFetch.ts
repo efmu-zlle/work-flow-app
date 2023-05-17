@@ -1,49 +1,69 @@
-import { useState, useEffect } from "react";
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { IAxiosProps, IResponse } from "../interfaces";
+import { useEffect, useState } from "react";
+import { IRequest, IResponse } from "../interfaces";
 
-function useAxios<T = any>({
-  initialConfig,
-  initialData,
-}: IAxiosProps<T>): [
-  IResponse<T>,
-  (config: AxiosRequestConfig) => void,
-  () => void
-] {
-  const [data, setData] = useState<T | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<any | null>(null);
-  const [config, setConfig] = useState<AxiosRequestConfig | undefined>(
-    initialConfig
-  );
+const BASE_URL = "https://localhost:5001";
 
-  async function sendRequest(requestConfig: AxiosRequestConfig) {
-    setIsLoading(true);
+function useFetch<T = any>(
+  initialRequest?: IRequest
+): [IResponse<T>, (request: IRequest) => void] {
+  const [response, setResponse] = useState<IResponse<T>>({
+    data: null,
+    isLoading: false,
+    messageSuccess: null,
+    messageError: null,
+    error: null,
+  });
+
+  async function sendRequest(request: IRequest) {
+    setResponse((prevResponse) => ({
+      ...prevResponse,
+      isLoading: true,
+    }));
+
     try {
-      const response: AxiosResponse<T> = await axios(requestConfig);
-      setData(response.data);
+      const responseSever = await fetch(`${BASE_URL}/api${request.url}`, {
+        method: request.method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: request.body ? JSON.stringify(request.body) : undefined,
+      });
+
+      const responseData: IResponse<T> = await responseSever.json();
+
+      setResponse((prevResponse) => ({
+        ...prevResponse,
+        data: responseData.data,
+        messageSuccess: responseData.messageSuccess,
+      }));
+
+      if (responseSever.status === 400) {
+        setResponse((prevResponse) => ({
+          ...prevResponse,
+          messageError: responseData.messageError,
+        }));
+        return;
+      }
     } catch (err) {
-      setError(err);
+      setResponse((prevResponse) => ({
+        ...prevResponse,
+        error: err,
+      }));
     } finally {
-      setIsLoading(false);
+      setResponse((prevResponse) => ({
+        ...prevResponse,
+        isLoading: false,
+      }));
     }
   }
 
   useEffect(() => {
-    if (config) {
-      sendRequest(config);
+    if (initialRequest) {
+      sendRequest(initialRequest);
     }
-  }, [config]);
+  }, [initialRequest?.url]);
 
-  function reset() {
-    setData(initialData || null);
-    setError(null);
-    setIsLoading(false);
-  }
-
-  return [{ data, isLoading, error }, setConfig, reset];
+  return [response, sendRequest];
 }
 
-axios.defaults.baseURL = "https://localhost:5001";
-
-export default useAxios;
+export default useFetch;

@@ -1,28 +1,41 @@
-import useAxios from "../hooks/useFetch";
+import { useState } from "react";
+import useFetch from "../hooks/useFetch";
 import { EndPoints, IUser } from "../interfaces";
 
 function SignUpPage() {
-  const [{ data, isLoading, error }, setConfig] = useAxios<IUser[]>({});
+  const [
+    { isLoading, data, error, messageSuccess, messageError },
+    sendRequest,
+  ] = useFetch<IUser[]>({ method: "GET", url: `${EndPoints.test}` });
+
+  const [user, setUser] = useState<IUser>({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error:</div>;
-  }
-
   const handleClick = () => {
-    setConfig({
-      method: "get",
-      url: `/api${EndPoints.test}`,
+    sendRequest({
+      method: "POST",
+      url: `${EndPoints.signup}`,
+      body: user,
     });
   };
 
   return (
     <>
       <button onClick={() => handleClick()}>click here</button>
-      <div>{data?.map((e) => e.email)}</div>{" "}
+      {data?.map((e) => (
+        <div key={e.userId}>
+          <span>{e.username}</span>
+        </div>
+      ))}
+      {messageSuccess}
+      {messageError}
     </>
   );
 }

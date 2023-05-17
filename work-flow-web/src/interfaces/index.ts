@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios";
+type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export interface IUser {
   userId?: string;
@@ -10,15 +10,25 @@ export interface IUser {
   updatedAt?: string;
 }
 
+interface IUserError {
+  Email: string;
+  Username: string;
+  Password: string;
+}
+
 export interface IResponse<T> {
   data: T | null;
   isLoading: boolean;
   error: any;
+  messageSuccess: string | null;
+  messageError: string | null;
+  errors?: IUserError;
 }
 
-export interface IAxiosProps<T> {
-  initialConfig?: AxiosRequestConfig;
-  initialData?: T;
+export interface IRequest {
+  method: HttpMethod;
+  url: string;
+  body?: any;
 }
 
 interface IEndPoints {
