@@ -1,26 +1,81 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Link,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Box from "@mui/material/Box";
+import CardMedia from "@mui/material/CardMedia";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import hero from "../assets/images/bg-hero.png";
+import logo from "../assets/images/logo.svg";
+import CustomButton from "../components/CustomButton";
+import CustomDivider from "../components/CustomDivider";
 
 function SignInPage() {
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
         item
+        xs={12}
+        sm={8}
+        md={5}
+        lg={4}
+        sx={{ backgroundColor: "#EBE5D9" }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            mt: 4,
+            px: 4.25,
+          }}
+        >
+          <CardMedia
+            component="img"
+            image={logo}
+            alt="logo"
+            sx={{ height: "0", width: "80px", mb: 15 }}
+          ></CardMedia>
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{ fontWeight: "bolder", mb: 0.5 }}
+          >
+            Welcome back,
+          </Typography>
+          <Typography variant="body2">Please enter your details</Typography>
+          <Box component="form" sx={{ mt: 4 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Enter your username"
+                  label="username"
+                  name=""
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Enter your password"
+                  label="password"
+                  name=""
+                />
+              </Grid>
+            </Grid>
+            <CustomButton text={"login"} />
+            <CustomDivider />
+            <CustomButton text={"create account"} />
+          </Box>
+        </Box>
+      </Grid>
+      <Grid
+        item
         xs={false}
         sm={4}
-        md={8}
+        md={7}
+        lg={8}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
+          backgroundImage: `url(${hero})`,
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
@@ -30,55 +85,6 @@ function SignInPage() {
           backgroundPosition: "center",
         }}
       ></Grid>
-      <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
-        <Box
-          sx={{
-            my: 8,
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign In
-          </Typography>
-
-          <Box component="form" sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  name="username"
-                  autoFocus
-                  label="username"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField fullWidth name="password" label="password" />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Grid>
     </Grid>
   );
 }

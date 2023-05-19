@@ -1,13 +1,12 @@
-import {
-  Box,
-  Button,
-  CardMedia,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import CardMedia from "@mui/material/CardMedia";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import hero from "../assets/images/bg-hero.png";
 import logo from "../assets/images/logo.svg";
+import CustomButton from "../components/CustomButton";
+import CustomDivider from "../components/CustomDivider";
 
 function SignUpPage() {
   return (
@@ -24,50 +23,38 @@ function SignUpPage() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            minHeight: "100%",
-            justifyContent: "center",
+            mt: 4,
             px: 4.25,
           }}
         >
-          <Grid container alignItems="flex-start">
-            <Grid item>
-              <CardMedia
-                component="img"
-                image={logo}
-                alt="logo"
-                sx={{ height: "0", width: "80px", mb: 3 }}
-              ></CardMedia>
-            </Grid>
-          </Grid>
-          <Typography
-            component="h1"
-            variant="h5"
-            sx={{ textTransform: "capitalize", fontWeight: "bolder" }}
-          >
-            create account
+          <CardMedia
+            component="img"
+            image={logo}
+            alt="logo"
+            sx={{ height: "0", width: "80px", mb: 15 }}
+          ></CardMedia>
+          <Typography component="h1" variant="h5" sx={{ fontWeight: "bolder" }}>
+            Create an account
           </Typography>
           <Box component="form" sx={{ mt: 4 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
+                  autoFocus
                   variant="outlined"
                   placeholder="Enter your email address"
                   label="email"
-                  id="email"
                   name="email"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  autoFocus
                   variant="outlined"
                   placeholder="Enter your username"
                   label="username"
-                  id="username"
-                  name="username"
+                  name=""
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -76,30 +63,32 @@ function SignUpPage() {
                   variant="outlined"
                   placeholder="Enter your password"
                   label="password"
-                  id="password"
-                  name="password"
+                  name=""
                 />
               </Grid>
             </Grid>
-            <Button
-              fullWidth
-              type="submit"
-              variant="outlined"
-              color="primary"
-              sx={{ mt: 3, mb: 2, textTransform: "capitalize" }}
-            >
-              Sign Up
-            </Button>
-            <Button
-              fullWidth
-              type="submit"
-              variant="outlined"
-              color="primary"
-              sx={{ mt: 3, mb: 2, textTransform: "capitalize" }}
-            >
-              Sign In
-            </Button>
+            <CustomButton text={"create account"} />
+            <CustomDivider />
+            <CustomButton text={"login"} />
           </Box>
+          <Typography variant="body2">
+            Creating an account means you’re okay with our{" "}
+            <Typography
+              component="span"
+              variant="body2"
+              sx={{ color: "#0359AE" }}
+            >
+              Terms of Service
+            </Typography>{" "}
+            and{" "}
+            <Typography
+              component="span"
+              variant="body2"
+              sx={{ color: "#0359AE" }}
+            >
+              Privacy Policy.
+            </Typography>
+          </Typography>
         </Box>
       </Grid>
       <Grid
