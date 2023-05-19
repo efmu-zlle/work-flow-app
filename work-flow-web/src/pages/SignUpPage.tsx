@@ -1,174 +1,125 @@
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-
 import {
-  Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   CardMedia,
-  Container,
   Grid,
-  InputAdornment,
-  InputLabel,
-  Link,
-  Paper,
   TextField,
   Typography,
 } from "@mui/material";
+import hero from "../assets/images/bg-hero.png";
+import logo from "../assets/images/logo.svg";
 
 function SignUpPage() {
   return (
-    <>
-      <div
-        style={{
-          backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
-          height: "100vh",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
-      <Container
-        maxWidth="xs"
-        sx={{ position: "absolute", top: "0", left: "50%" }}
+    <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={5}
+        lg={4}
+        sx={{ backgroundColor: "#EBE5D9" }}
       >
         <Box
           sx={{
-            my: 10,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            px: "1.85em",
-            py: 5,
+            minHeight: "100%",
+            justifyContent: "center",
+            px: 4.25,
           }}
-          component={Paper}
-          elevation={4}
         >
-          {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar> */}
-
-          <Typography component="h1" variant="h5">
-            Sign up
+          <Grid container alignItems="flex-start">
+            <Grid item>
+              <CardMedia
+                component="img"
+                image={logo}
+                alt="logo"
+                sx={{ height: "0", width: "80px", mb: 3 }}
+              ></CardMedia>
+            </Grid>
+          </Grid>
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{ textTransform: "capitalize", fontWeight: "bolder" }}
+          >
+            create account
           </Typography>
-
-          <Box component="form" noValidate sx={{ mt: 3 }}>
-            <Grid container spacing={2.3}>
+          <Box component="form" sx={{ mt: 4 }}>
+            <Grid container spacing={2}>
               <Grid item xs={12}>
-                <InputLabel
-                  sx={{
-                    fontSize: ".80em",
-                    fontWeight: "Bolder",
-                    mb: ".25em",
-                  }}
-                  htmlFor="username"
-                >
-                  Username
-                </InputLabel>
-                <TextField
-                  autoFocus
-                  fullWidth
-                  variant="outlined"
-                  color="secondary"
-                  size="small"
-                  placeholder="Enter your username"
-                  id="username"
-                  name="username"
-                  sx={{
-                    "& ::placeholder": {
-                      fontSize: ".80em",
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <InputLabel
-                  sx={{
-                    fontSize: ".80em",
-                    fontWeight: "Bolder",
-                    mb: ".25em",
-                  }}
-                  htmlFor="email"
-                >
-                  Email
-                </InputLabel>
                 <TextField
                   fullWidth
                   variant="outlined"
-                  color="secondary"
-                  size="small"
                   placeholder="Enter your email address"
+                  label="email"
                   id="email"
                   name="email"
-                  sx={{
-                    "& ::placeholder": {
-                      fontSize: ".80em", // Customize the font size here
-                    },
-                  }}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <InputLabel
-                  sx={{
-                    fontSize: ".80em",
-                    fontWeight: "Bolder",
-                    mb: ".25em",
-                  }}
-                  htmlFor="password"
-                >
-                  Password
-                </InputLabel>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  autoFocus
+                  variant="outlined"
+                  placeholder="Enter your username"
+                  label="username"
+                  id="username"
+                  name="username"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   variant="outlined"
-                  color="secondary"
-                  size="small"
                   placeholder="Enter your password"
+                  label="password"
                   id="password"
                   name="password"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    "& ::placeholder": {
-                      fontSize: ".80em", // Customize the font size here
-                    },
-                  }}
                 />
               </Grid>
             </Grid>
-            <Grid container spacing={1} sx={{ mt: ".90em" }}>
-              <Grid item xs={6}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="outlined"
-                  color="secondary"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Continue
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="outlined"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign In
-                </Button>
-              </Grid>
-            </Grid>
+            <Button
+              fullWidth
+              type="submit"
+              variant="outlined"
+              color="primary"
+              sx={{ mt: 3, mb: 2, textTransform: "capitalize" }}
+            >
+              Sign Up
+            </Button>
+            <Button
+              fullWidth
+              type="submit"
+              variant="outlined"
+              color="primary"
+              sx={{ mt: 3, mb: 2, textTransform: "capitalize" }}
+            >
+              Sign In
+            </Button>
           </Box>
         </Box>
-      </Container>
-    </>
+      </Grid>
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        lg={8}
+        sx={{
+          backgroundImage: `url(${hero})`,
+          backgroundRepeat: "no-repeat",
+          backgroundColor: (t) =>
+            t.palette.mode === "light"
+              ? t.palette.grey[50]
+              : t.palette.grey[900],
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      ></Grid>
+    </Grid>
   );
 }
 
