@@ -19,10 +19,11 @@ interface IRequired {
 export interface IResponseInit<T> {
   data: T | null;
   isLoading: boolean;
-  error: any;
+  errorHttp: any;
   messageSuccess: string | null;
   messageError: string | null;
-  isSuccess: boolean | null;
+  isSuccess: boolean;
+  isError: boolean;
   showAlert: boolean;
   errors?: IRequired | null;
 }

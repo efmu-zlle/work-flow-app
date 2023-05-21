@@ -10,14 +10,14 @@ function useFetch<T = any>(
     initialRequest
   );
 
-  // using this instead of the having tons of useStates
   const [responseInit, setResponseInit] = useState<IResponseInit<T>>({
     data: null,
     isLoading: false,
-    error: null,
+    errorHttp: null,
     messageSuccess: "",
     messageError: "",
-    isSuccess: null,
+    isSuccess: false,
+    isError: false,
     showAlert: false,
     errors: null,
   });
@@ -44,8 +44,11 @@ function useFetch<T = any>(
           ...prev,
           data: responseData.data,
           messageSuccess: responseData.messageSuccess,
-          showAlert: true,
+          messageError: "",
           isSuccess: true,
+          showAlert: true,
+          isError: false,
+          errors: null,
         }));
 
         // here's the timeout, this will work with the alert
@@ -57,6 +60,9 @@ function useFetch<T = any>(
       if (response.status === 400) {
         setResponseInit((prev) => ({
           ...prev,
+          messageSuccess: "",
+          messageError: "",
+          isError: true,
           isSuccess: false,
           errors: responseData.errors,
         }));
@@ -67,9 +73,12 @@ function useFetch<T = any>(
       if (response.status === 401) {
         setResponseInit((prev) => ({
           ...prev,
+          messageSuccess: "",
           messageError: responseData.messageError,
-          isSuccess: false,
+          isError: true,
           showAlert: true,
+          isSuccess: false,
+          errors: null,
         }));
 
         timeoutId = setTimeout(() => {
@@ -79,7 +88,7 @@ function useFetch<T = any>(
     } catch (err) {
       setResponseInit((prev) => ({
         ...prev,
-        error: err || "An error occurred.",
+        errorHttp: err || "An error occurred.",
       }));
     } finally {
       setResponseInit((prev) => ({ ...prev, isLoading: false }));

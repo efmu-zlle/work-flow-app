@@ -15,7 +15,15 @@ import Alert from "@mui/material/Alert";
 
 function SignInPage() {
   const [
-    { isLoading, showAlert, isSuccess, messageSuccess, messageError },
+    {
+      isLoading,
+      showAlert,
+      isSuccess,
+      isError,
+      messageSuccess,
+      messageError,
+      errors,
+    },
     setConfig,
   ] = useFetch();
 
@@ -34,6 +42,8 @@ function SignInPage() {
 
     setConfig({ method: "POST", url: `${EndPoints.signin}`, body: user });
   };
+
+  console.log(errors?.Username);
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -69,7 +79,13 @@ function SignInPage() {
             Welcome back,
           </Typography>
           <Typography variant="body2">Please enter your details</Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ mt: 4 }}
+            noValidate
+            autoComplete="off"
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -80,7 +96,9 @@ function SignInPage() {
                   name="username"
                   value={user.username}
                   onChange={handleInputChange}
-                  disabled={isLoading ? true : false}
+                  disabled={isLoading}
+                  error={isError}
+                  helperText={isError ? errors?.Username : ""}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -92,7 +110,9 @@ function SignInPage() {
                   name="password"
                   value={user.password}
                   onChange={handleInputChange}
-                  disabled={isLoading ? true : false}
+                  disabled={isLoading}
+                  error={isError}
+                  helperText={errors?.Password ? errors?.Password : ""}
                 />
               </Grid>
             </Grid>
@@ -137,7 +157,7 @@ function SignInPage() {
           </Alert>
         )}
 
-        {showAlert && !isSuccess && (
+        {showAlert && isError && (
           <Alert
             sx={{ position: "absolute", top: "5%", left: "80%" }}
             severity="error"
