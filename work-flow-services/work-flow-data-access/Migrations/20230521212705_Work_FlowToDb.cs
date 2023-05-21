@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace work_flow_data_access.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Work_FlowToDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -1,14 +1,14 @@
 import { useEffect, useReducer, useState, Reducer, Dispatch } from "react";
-import { Action, IRequestInit, IResponseInit } from "../interfaces";
+import { Action, IHttpRequest, IResponseInit } from "../interfaces";
 import { reducer } from "../utils/reducer";
 import { initialState } from "../utils/initialState";
 
 const BASE_URL = "https://localhost:5001";
 
 function useFetch<T = any>(
-  initialRequest?: IRequestInit
-): [IResponseInit<T>, (request: IRequestInit) => void, Dispatch<Action<T>>] {
-  const [config, setConfig] = useState<IRequestInit | undefined>(
+  initialRequest?: IHttpRequest
+): [IResponseInit<T>, (request: IHttpRequest) => void, Dispatch<Action<T>>] {
+  const [config, setConfig] = useState<IHttpRequest | undefined>(
     initialRequest
   );
 
@@ -19,7 +19,7 @@ function useFetch<T = any>(
   // adding a timeeoutId to clean it up later
   let timeoutId: number | null = null;
 
-  async function sendRequest(request: IRequestInit) {
+  async function sendRequest(request: IHttpRequest) {
     dispatch({ type: "REQUEST_START" });
 
     try {
@@ -34,7 +34,11 @@ function useFetch<T = any>(
       const responseData: IResponseInit<T> = await response.json();
 
       if (response.status === 200) {
-        dispatch({ type: "REQUEST_SUCCESS", payload: responseData });
+        if (!request.body) {
+          dispatch({ type: "REQUEST_SUCCESS", payload: responseData });
+        } else {
+          dispatch({ type: "POST_SUCCESS", payload: responseData });
+        }
 
         // here's the timeout, this will work with the alert
         timeoutId = setTimeout(() => {
@@ -43,6 +47,7 @@ function useFetch<T = any>(
       }
 
       if (response.status === 400) {
+        console.log(responseData);
         dispatch({ type: "REQUEST_ERROR_400", payload: responseData });
       }
 

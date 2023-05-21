@@ -11,6 +11,16 @@ export const reducer = (state: IResponseInit<any>, action: Action<any>) => {
     case "REQUEST_SUCCESS":
       return {
         ...state,
+        data: action.payload.data,
+        isSuccess: action.payload.isSuccess,
+        message: action.payload.message,
+        showAlert: true,
+        isError: false,
+      };
+
+    case "POST_SUCCESS":
+      return {
+        ...state,
         isSuccess: action.payload.isSuccess,
         message: action.payload.message,
         showAlert: true,

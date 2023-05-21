@@ -86,7 +86,11 @@ function SignInPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  helperText={isError ? errors?.Username : ""}
+                  helperText={
+                    isError && Array.isArray(errors?.Username)
+                      ? errors?.Username[0]
+                      : ""
+                  }
                   required
                 />
               </Grid>
@@ -101,7 +105,11 @@ function SignInPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  helperText={isError ? errors?.Password : ""}
+                  helperText={
+                    isError && Array.isArray(errors?.Password)
+                      ? errors?.Password[0]
+                      : ""
+                  }
                   required
                 />
               </Grid>

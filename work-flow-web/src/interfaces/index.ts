@@ -3,6 +3,7 @@ type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export type Action<T> =
   | { type: "REQUEST_START" }
   | { type: "REQUEST_SUCCESS"; payload: IResponseInit<T> }
+  | { type: "POST_SUCCESS"; payload: IResponseInit<T> }
   | { type: "REQUEST_ERROR"; payload: IResponseInit<T> }
   | { type: "REQUEST_FAILURE"; payload: any }
   | { type: "UPDATE_USER_DATA"; payload: Partial<T> }
@@ -21,9 +22,9 @@ export interface IUser {
 }
 
 interface IErrors {
-  Email: string;
-  Username: string;
-  Password: string;
+  Email: string | string[] | Record<string, string>;
+  Username: string | string[] | Record<string, string>;
+  Password: string | string[] | Record<string, string>;
 }
 
 export interface IResponseInit<T> {
@@ -37,7 +38,7 @@ export interface IResponseInit<T> {
   errors?: IErrors | null;
 }
 
-export interface IRequestInit {
+export interface IHttpRequest {
   method: HttpMethod;
   url: string;
   body?: any;
