@@ -12,15 +12,15 @@ namespace work_flow_models
         [Key]
         public string UserId { get; set; }
 
-        [Required(ErrorMessage = "The 'Username' field is required.")]
+        [Required(ErrorMessage  = "The 'username' field is required.")]
         public string Username { get; set; }
 
-        [Required(ErrorMessage = "The 'Email' field is required.")]
+        [Required(ErrorMessage = "The 'email' field is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "The 'Password' field is required.")]
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
+        [Required(ErrorMessage = "The 'password' field is required.")]
+        [MinLength(6, ErrorMessage = "password must be at least 6 characters long")]
         public string Password { get; set; }
 
         public string PasswordHash { get; set; }
@@ -34,11 +34,11 @@ namespace work_flow_models
 
     public class UserModel
     {
-        [Required(ErrorMessage = "The 'Username' field is required.")]
+        [Required(ErrorMessage = "The 'username' field is required.")]
         public string Username { get; set; }
 
-        [Required(ErrorMessage = "The 'Password' field is required.")]
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
+        [Required(ErrorMessage = "The 'password' field is required.")]
+        [MinLength(6, ErrorMessage = "password must be at least 6 characters long")]
         public string Password { get; set; }
     }
 }

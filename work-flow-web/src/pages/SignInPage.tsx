@@ -15,35 +15,22 @@ import Alert from "@mui/material/Alert";
 
 function SignInPage() {
   const [
-    {
-      isLoading,
-      showAlert,
-      isSuccess,
-      isError,
-      messageSuccess,
-      messageError,
-      errors,
-    },
+    { data, isLoading, isSuccess, isError, message, showAlert },
     setConfig,
-  ] = useFetch();
-
-  const [user, setUser] = useState<IUser>({
-    username: "",
-    password: "",
-  });
+    dispatch,
+  ] = useFetch<IUser>();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+
+    dispatch({ type: "UPDATE_USER_DATA", payload: { [name]: value } });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    setConfig({ method: "POST", url: `${EndPoints.signin}`, body: user });
+    setConfig({ method: "POST", url: `${EndPoints.signin}`, body: data });
   };
-
-  console.log(errors?.Username);
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -94,11 +81,10 @@ function SignInPage() {
                   placeholder="Enter your username"
                   label="username"
                   name="username"
-                  value={user.username}
+                  value={data?.username || ""}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  helperText={isError ? errors?.Username : ""}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -108,11 +94,10 @@ function SignInPage() {
                   placeholder="Enter your password"
                   label="password"
                   name="password"
-                  value={user.password}
+                  value={data?.password || ""}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  helperText={errors?.Password ? errors?.Password : ""}
                 />
               </Grid>
             </Grid>
@@ -153,7 +138,7 @@ function SignInPage() {
             severity="success"
             variant="filled"
           >
-            {messageSuccess}
+            {message}
           </Alert>
         )}
 
@@ -163,7 +148,7 @@ function SignInPage() {
             severity="error"
             variant="filled"
           >
-            {messageError}
+            {message}
           </Alert>
         )}
       </Grid>

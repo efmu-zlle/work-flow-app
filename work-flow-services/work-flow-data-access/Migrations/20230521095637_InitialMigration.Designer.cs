@@ -10,7 +10,7 @@ using work_flow_data_access.Data;
 namespace work_flow_data_access.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230513190903_InitialMigration")]
+    [Migration("20230521095637_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

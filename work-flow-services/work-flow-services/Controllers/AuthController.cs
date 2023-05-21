@@ -43,20 +43,14 @@ namespace work_flow_services.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    var required = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
-                    return NotFound(required);
-                }
-
                 if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 {
-                    return Unauthorized(new { messageError = "Username is already taken." });
+                    return Unauthorized(new { isError = true, message = "Username is already taken." });
                 }
 
                 if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                 {
-                    return Unauthorized(new { messageError = "Email is already taken." });
+                    return Unauthorized(new { isError = true, message = "Email is already taken." });
                 }
 
                 var user = new User
@@ -75,7 +69,7 @@ namespace work_flow_services.Controllers
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { messageSuccess = "User created successfully."  } );
+                return Ok(new { isSuccess = true, message = "User created successfully." } );            
             }
             catch (Exception ex)
             {
@@ -88,26 +82,20 @@ namespace work_flow_services.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    var required = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
-                    return NotFound(required);
-                }
-
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
 
                 var _passwordHasher = new PasswordHasher<User>();
                 if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password).Equals(PasswordVerificationResult.Success))
                 {
-                    return Unauthorized(new { messageError = "Invalid username or password." });
+                    return Unauthorized(new { isError = true, message = "Invalid username or password." });
                 }
 
                 user.UpdatedAt = DateTime.Now;
 
-                _context.Users.Update(user); 
-                await _context.SaveChangesAsync(); 
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
 
-                return Ok(new { messageSuccess = "User signed in successfully." });
+                return Ok(new { isSuccess = true, message = "User signed in successfully." } );
             }
             catch (Exception ex)
             {

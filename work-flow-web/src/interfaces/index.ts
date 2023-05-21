@@ -1,5 +1,14 @@
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
+export type Action<T> =
+  | { type: "REQUEST_START" }
+  | { type: "REQUEST_SUCCESS"; payload: IResponseInit<T> }
+  | { type: "REQUEST_ERROR"; payload: IResponseInit<T> }
+  | { type: "REQUEST_FAILURE"; payload: any }
+  | { type: "UPDATE_USER_DATA"; payload: Partial<T> }
+  | { type: "FINISH_ALERT" }
+  | { type: "REQUEST_FINISH" };
+
 export interface IUser {
   userId?: string;
   username: string;
@@ -10,7 +19,7 @@ export interface IUser {
   updatedAt?: string;
 }
 
-interface IRequired {
+interface IErrors {
   Email: string;
   Username: string;
   Password: string;
@@ -18,14 +27,13 @@ interface IRequired {
 
 export interface IResponseInit<T> {
   data: T | null;
-  isLoading: boolean;
-  errorHttp: any;
-  messageSuccess: string | null;
-  messageError: string | null;
+  message: string;
   isSuccess: boolean;
   isError: boolean;
+  isLoading: boolean;
+  exception: any;
   showAlert: boolean;
-  errors?: IRequired | null;
+  errors?: IErrors | null;
 }
 
 export interface IRequestInit {

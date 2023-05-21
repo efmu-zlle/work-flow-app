@@ -1,32 +1,23 @@
-import { useEffect, useState } from "react";
-import { IRequestInit, IResponseInit } from "../interfaces";
+import { useEffect, useReducer, useState, Reducer, Dispatch } from "react";
+import { Action, IRequestInit, IResponseInit } from "../interfaces";
+import { reducer } from "../utils/reducer";
+import { initialState } from "../utils/initialState";
 
 const BASE_URL = "https://localhost:5001";
 
 function useFetch<T = any>(
   initialRequest?: IRequestInit
-): [IResponseInit<T>, (request: IRequestInit) => void] {
+): [IResponseInit<T>, (request: IRequestInit) => void, Dispatch<Action<T>>] {
   const [config, setConfig] = useState<IRequestInit | undefined>(
     initialRequest
   );
 
-  const [responseInit, setResponseInit] = useState<IResponseInit<T>>({
-    data: null,
-    isLoading: false,
-    errorHttp: null,
-    messageSuccess: "",
-    messageError: "",
-    isSuccess: false,
-    isError: false,
-    showAlert: false,
-    errors: null,
-  });
-
+  const [state, dispatch] = useReducer(reducer, initialState);
   // adding a timeeoutId to clean it up later
   let timeoutId: number | null = null;
 
   async function sendRequest(request: IRequestInit) {
-    setResponseInit((prev) => ({ ...prev, isLoading: true }));
+    dispatch({ type: "REQUEST_START" });
 
     try {
       const response = await fetch(`${BASE_URL}/api${request.url}`, {
@@ -40,58 +31,32 @@ function useFetch<T = any>(
       const responseData: IResponseInit<T> = await response.json();
 
       if (response.status === 200) {
-        setResponseInit((prev) => ({
-          ...prev,
-          data: responseData.data,
-          messageSuccess: responseData.messageSuccess,
-          messageError: "",
-          isSuccess: true,
-          showAlert: true,
-          isError: false,
-          errors: null,
-        }));
+        dispatch({ type: "REQUEST_SUCCESS", payload: responseData });
 
         // here's the timeout, this will work with the alert
         timeoutId = setTimeout(() => {
-          setResponseInit((prev) => ({ ...prev, showAlert: false }));
+          dispatch({ type: "FINISH_ALERT" });
         }, 2000);
       }
 
       if (response.status === 400) {
-        setResponseInit((prev) => ({
-          ...prev,
-          messageSuccess: "",
-          messageError: "",
-          isError: true,
-          isSuccess: false,
-          errors: responseData.errors,
-        }));
-
         console.log(responseData);
       }
 
       if (response.status === 401) {
-        setResponseInit((prev) => ({
-          ...prev,
-          messageSuccess: "",
-          messageError: responseData.messageError,
-          isError: true,
-          showAlert: true,
-          isSuccess: false,
-          errors: null,
-        }));
+        dispatch({ type: "REQUEST_ERROR", payload: responseData });
 
         timeoutId = setTimeout(() => {
-          setResponseInit((prev) => ({ ...prev, showAlert: false }));
+          dispatch({ type: "FINISH_ALERT" });
         }, 2000);
       }
     } catch (err) {
-      setResponseInit((prev) => ({
-        ...prev,
-        errorHttp: err || "An error occurred.",
-      }));
+      dispatch({
+        type: "REQUEST_FAILURE",
+        payload: err || "An error occurred.",
+      });
     } finally {
-      setResponseInit((prev) => ({ ...prev, isLoading: false }));
+      dispatch({ type: "REQUEST_FINISH" });
     }
   }
 
@@ -111,7 +76,7 @@ function useFetch<T = any>(
     };
   }, [config]);
 
-  return [responseInit, setConfig];
+  return [state, setConfig, dispatch];
 }
 
 export default useFetch;
