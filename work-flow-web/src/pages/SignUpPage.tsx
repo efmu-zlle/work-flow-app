@@ -10,6 +10,7 @@ import CustomDivider from "../components/CustomDivider";
 import useFetch from "../hooks/useFetch";
 import { EndPoints, IUser } from "../interfaces";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { Link } from "react-router-dom";
 
 function SignUpPage() {
   const [{ isLoading }, setConfig] = useFetch();
@@ -31,8 +32,7 @@ function SignUpPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    console.log(user);
-    setConfig({ method: "POST", url: `${EndPoints.signin}`, body: user });
+    setConfig({ method: "POST", url: `${EndPoints.signup}`, body: user });
   };
 
   return (
@@ -99,9 +99,19 @@ function SignUpPage() {
                 />
               </Grid>
             </Grid>
-            <CustomButton text={"create account"} />
+            <CustomButton
+              isLink={false}
+              isLoading={isLoading}
+              text={"create account"}
+            />
             <CustomDivider />
-            <CustomButton text={"login"} />
+            <Link to="/">
+              <CustomButton
+                isLink={true}
+                isLoading={isLoading}
+                text={"sign in"}
+              />
+            </Link>
           </Box>
           <Typography variant="body2">
             Creating an account means you’re okay with our{" "}

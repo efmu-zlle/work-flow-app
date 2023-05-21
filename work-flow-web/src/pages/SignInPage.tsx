@@ -1,3 +1,6 @@
+import { ChangeEvent, FormEvent, useState } from "react";
+import { EndPoints, IUser } from "../interfaces";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
@@ -8,34 +11,33 @@ import logo from "../assets/images/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
 import useFetch from "../hooks/useFetch";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { EndPoints, IUser } from "../interfaces";
+import Alert from "@mui/material/Alert";
 
 function SignInPage() {
-  const [{ isLoading }, setConfig] = useFetch();
+  const [
+    { isLoading, showAlert, isSuccess, messageSuccess, messageError },
+    setConfig,
+  ] = useFetch();
+
   const [user, setUser] = useState<IUser>({
     username: "",
     password: "",
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    console.log(user);
     setConfig({ method: "POST", url: `${EndPoints.signin}`, body: user });
   };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
+      {/* first item of the container */}
       <Grid
         item
         xs={12}
@@ -44,6 +46,7 @@ function SignInPage() {
         lg={4}
         sx={{ backgroundColor: "#EBE5D9" }}
       >
+        {/* container of the form  */}
         <Box
           sx={{
             display: "flex",
@@ -77,6 +80,7 @@ function SignInPage() {
                   name="username"
                   value={user.username}
                   onChange={handleInputChange}
+                  disabled={isLoading ? true : false}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -88,15 +92,24 @@ function SignInPage() {
                   name="password"
                   value={user.password}
                   onChange={handleInputChange}
+                  disabled={isLoading ? true : false}
                 />
               </Grid>
             </Grid>
-            <CustomButton text={"login"} />
+            <CustomButton isLink={false} isLoading={isLoading} text={"login"} />
             <CustomDivider />
-            <CustomButton text={"create account"} />
+            <Link to="/sign-up">
+              <CustomButton
+                isLink={true}
+                isLoading={isLoading}
+                text={"sing up"}
+              />
+            </Link>
           </Box>
         </Box>
       </Grid>
+
+      {/* second grid item */}
       <Grid
         item
         xs={false}
@@ -113,7 +126,27 @@ function SignInPage() {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      ></Grid>
+      >
+        {showAlert && isSuccess && (
+          <Alert
+            sx={{ position: "absolute", top: "5%", left: "80%" }}
+            severity="success"
+            variant="filled"
+          >
+            {messageSuccess}
+          </Alert>
+        )}
+
+        {showAlert && !isSuccess && (
+          <Alert
+            sx={{ position: "absolute", top: "5%", left: "80%" }}
+            severity="error"
+            variant="filled"
+          >
+            {messageError}
+          </Alert>
+        )}
+      </Grid>
     </Grid>
   );
 }

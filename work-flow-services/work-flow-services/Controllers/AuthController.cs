@@ -45,18 +45,18 @@ namespace work_flow_services.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
-                    return BadRequest(errors);
+                    var required = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
+                    return NotFound(required);
                 }
 
                 if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 {
-                    return BadRequest(new { messageError = "Username is already taken." });
+                    return Unauthorized(new { messageError = "Username is already taken." });
                 }
 
                 if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                 {
-                    return BadRequest(new { messageError = "Email is already taken." });
+                    return Unauthorized(new { messageError = "Email is already taken." });
                 }
 
                 var user = new User
@@ -90,8 +90,8 @@ namespace work_flow_services.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
-                    return BadRequest(errors);
+                    var required = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
+                    return NotFound(required);
                 }
 
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
@@ -99,8 +99,13 @@ namespace work_flow_services.Controllers
                 var _passwordHasher = new PasswordHasher<User>();
                 if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password).Equals(PasswordVerificationResult.Success))
                 {
-                    return BadRequest(new { messageError = "Invalid username or password." });
+                    return Unauthorized(new { messageError = "Invalid username or password." });
                 }
+
+                user.UpdatedAt = DateTime.Now;
+
+                _context.Users.Update(user); 
+                await _context.SaveChangesAsync(); 
 
                 return Ok(new { messageSuccess = "User signed in successfully." });
             }

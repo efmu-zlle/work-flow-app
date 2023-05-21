@@ -10,7 +10,7 @@ export interface IUser {
   updatedAt?: string;
 }
 
-interface IUserError {
+interface IRequired {
   Email: string;
   Username: string;
   Password: string;
@@ -22,7 +22,9 @@ export interface IResponseInit<T> {
   error: any;
   messageSuccess: string | null;
   messageError: string | null;
-  errors?: IUserError;
+  isSuccess: boolean | null;
+  showAlert: boolean;
+  errors?: IRequired | null;
 }
 
 export interface IRequestInit {

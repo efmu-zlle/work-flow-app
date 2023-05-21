@@ -1,10 +1,13 @@
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface ButtonProps {
   text: string;
+  isLoading: boolean;
+  isLink: boolean;
 }
 
-function CustomButton({ text }: ButtonProps) {
+function CustomButton({ isLink, isLoading, text }: ButtonProps) {
   return (
     <Button
       fullWidth
@@ -17,8 +20,9 @@ function CustomButton({ text }: ButtonProps) {
         textTransform: "capitalize",
         "&:hover": { backgroundColor: "#002233", color: "#EBE5D9" },
       }}
+      disabled={isLoading}
     >
-      {text}
+      {!isLink && isLoading ? <CircularProgress size={24} /> : text}
     </Button>
   );
 }

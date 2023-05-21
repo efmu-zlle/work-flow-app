@@ -9,13 +9,21 @@ function useFetch<T = any>(
   const [config, setConfig] = useState<IRequestInit | undefined>(
     initialRequest
   );
+
+  // using this instead of the having tons of useStates
   const [responseInit, setResponseInit] = useState<IResponseInit<T>>({
     data: null,
     isLoading: false,
-    messageSuccess: null,
-    messageError: null,
     error: null,
+    messageSuccess: "",
+    messageError: "",
+    isSuccess: null,
+    showAlert: false,
+    errors: null,
   });
+
+  // adding a timeeoutId to clean it up later
+  let timeoutId: number | null = null;
 
   async function sendRequest(request: IRequestInit) {
     setResponseInit((prev) => ({ ...prev, isLoading: true }));
@@ -31,18 +39,42 @@ function useFetch<T = any>(
 
       const responseData: IResponseInit<T> = await response.json();
 
-      setResponseInit((prev) => ({
-        ...prev,
-        data: responseData.data,
-        messageSuccess: responseData.messageSuccess,
-      }));
+      if (response.status === 200) {
+        setResponseInit((prev) => ({
+          ...prev,
+          data: responseData.data,
+          messageSuccess: responseData.messageSuccess,
+          showAlert: true,
+          isSuccess: true,
+        }));
+
+        // here's the timeout, this will work with the alert
+        timeoutId = setTimeout(() => {
+          setResponseInit((prev) => ({ ...prev, showAlert: false }));
+        }, 2000);
+      }
 
       if (response.status === 400) {
         setResponseInit((prev) => ({
           ...prev,
-          messageError: responseData.messageError,
+          isSuccess: false,
+          errors: responseData.errors,
         }));
-        return;
+
+        console.log(responseData);
+      }
+
+      if (response.status === 401) {
+        setResponseInit((prev) => ({
+          ...prev,
+          messageError: responseData.messageError,
+          isSuccess: false,
+          showAlert: true,
+        }));
+
+        timeoutId = setTimeout(() => {
+          setResponseInit((prev) => ({ ...prev, showAlert: false }));
+        }, 2000);
       }
     } catch (err) {
       setResponseInit((prev) => ({
@@ -55,9 +87,19 @@ function useFetch<T = any>(
   }
 
   useEffect(() => {
+    // only when there's data this will execute
     if (config) {
+      console.log(config);
       sendRequest(config);
     }
+
+    return () => {
+      // here we clean it
+      if (timeoutId) {
+        console.log("Cleanup function executed.");
+        clearTimeout(timeoutId);
+      }
+    };
   }, [config]);
 
   return [responseInit, setConfig];
