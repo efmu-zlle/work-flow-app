@@ -12,7 +12,10 @@ function useFetch<T = any>(
     initialRequest
   );
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer<Reducer<IResponseInit<T>, Action<T>>>(
+    reducer,
+    initialState
+  );
   // adding a timeeoutId to clean it up later
   let timeoutId: number | null = null;
 
@@ -40,7 +43,7 @@ function useFetch<T = any>(
       }
 
       if (response.status === 400) {
-        console.log(responseData);
+        dispatch({ type: "REQUEST_ERROR_400", payload: responseData });
       }
 
       if (response.status === 401) {
@@ -63,14 +66,12 @@ function useFetch<T = any>(
   useEffect(() => {
     // only when there's data this will execute
     if (config) {
-      console.log(config);
       sendRequest(config);
     }
 
     return () => {
       // here we clean it
       if (timeoutId) {
-        console.log("Cleanup function executed.");
         clearTimeout(timeoutId);
       }
     };

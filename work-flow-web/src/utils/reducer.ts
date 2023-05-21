@@ -1,10 +1,6 @@
-import { Reducer } from "react";
 import { Action, IResponseInit } from "../interfaces";
 
-export const reducer: Reducer<IResponseInit<any>, Action<any>> = (
-  state,
-  action
-) => {
+export const reducer = (state: IResponseInit<any>, action: Action<any>) => {
   switch (action.type) {
     case "REQUEST_START":
       return {
@@ -15,7 +11,6 @@ export const reducer: Reducer<IResponseInit<any>, Action<any>> = (
     case "REQUEST_SUCCESS":
       return {
         ...state,
-        data: action.payload.data,
         isSuccess: action.payload.isSuccess,
         message: action.payload.message,
         showAlert: true,
@@ -56,6 +51,14 @@ export const reducer: Reducer<IResponseInit<any>, Action<any>> = (
           ...state.data,
           ...action.payload,
         },
+        isError: false,
+      };
+
+    case "REQUEST_ERROR_400":
+      return {
+        ...state,
+        errors: action.payload?.errors,
+        isError: true,
       };
 
     default:

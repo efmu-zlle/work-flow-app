@@ -6,6 +6,7 @@ export type Action<T> =
   | { type: "REQUEST_ERROR"; payload: IResponseInit<T> }
   | { type: "REQUEST_FAILURE"; payload: any }
   | { type: "UPDATE_USER_DATA"; payload: Partial<T> }
+  | { type: "REQUEST_ERROR_400"; payload: IResponseInit<T> }
   | { type: "FINISH_ALERT" }
   | { type: "REQUEST_FINISH" };
 

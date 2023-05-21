@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent } from "react";
 import { EndPoints, IUser } from "../interfaces";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -15,7 +15,7 @@ import Alert from "@mui/material/Alert";
 
 function SignInPage() {
   const [
-    { data, isLoading, isSuccess, isError, message, showAlert },
+    { data, isLoading, isSuccess, isError, message, showAlert, errors },
     setConfig,
     dispatch,
   ] = useFetch<IUser>();
@@ -76,6 +76,7 @@ function SignInPage() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+                  autoFocus
                   fullWidth
                   variant="outlined"
                   placeholder="Enter your username"
@@ -85,6 +86,8 @@ function SignInPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
+                  helperText={isError ? errors?.Username : ""}
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
@@ -98,6 +101,8 @@ function SignInPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
+                  helperText={isError ? errors?.Password : ""}
+                  required
                 />
               </Grid>
             </Grid>

@@ -39,7 +39,7 @@ namespace work_flow_services.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp(User request)
+        public async Task<IActionResult> SignUp([FromBody] User request)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace work_flow_services.Controllers
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn(UserModel request)
+        public async Task<IActionResult> SignIn([FromBody] UserModel request)
         {
             try
             {

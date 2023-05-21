@@ -1,7 +1,7 @@
 import { IResponseInit } from "../interfaces";
 
 export const initialState: IResponseInit<any> = {
-  data: null,
+  data: {},
   message: "",
   isSuccess: false,
   isError: false,
