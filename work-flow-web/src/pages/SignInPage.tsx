@@ -7,8 +7,33 @@ import hero from "../assets/images/bg-hero.png";
 import logo from "../assets/images/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
+import useFetch from "../hooks/useFetch";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { EndPoints, IUser } from "../interfaces";
 
 function SignInPage() {
+  const [{ isLoading }, setConfig] = useFetch();
+  const [user, setUser] = useState<IUser>({
+    username: "",
+    password: "",
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+
+    console.log(user);
+    setConfig({ method: "POST", url: `${EndPoints.signin}`, body: user });
+  };
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
@@ -41,7 +66,7 @@ function SignInPage() {
             Welcome back,
           </Typography>
           <Typography variant="body2">Please enter your details</Typography>
-          <Box component="form" sx={{ mt: 4 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -49,7 +74,9 @@ function SignInPage() {
                   variant="outlined"
                   placeholder="Enter your username"
                   label="username"
-                  name=""
+                  name="username"
+                  value={user.username}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -58,7 +85,9 @@ function SignInPage() {
                   variant="outlined"
                   placeholder="Enter your password"
                   label="password"
-                  name=""
+                  name="password"
+                  value={user.password}
+                  onChange={handleInputChange}
                 />
               </Grid>
             </Grid>

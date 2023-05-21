@@ -8,15 +8,32 @@ import logo from "../assets/images/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
 import useFetch from "../hooks/useFetch";
-import { IUser } from "../interfaces";
+import { EndPoints, IUser } from "../interfaces";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 function SignUpPage() {
-  const [{ payload, isLoading, messageError, messageSuccess }, setConfig] =
-    useFetch<IUser>();
+  const [{ isLoading }, setConfig] = useFetch();
+  const [user, setUser] = useState<IUser>({
+    email: "",
+    username: "",
+    password: "",
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+
+    console.log(user);
+    setConfig({ method: "POST", url: `${EndPoints.signin}`, body: user });
+  };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -45,7 +62,7 @@ function SignUpPage() {
           <Typography component="h1" variant="h5" sx={{ fontWeight: "bolder" }}>
             Create an account
           </Typography>
-          <Box component="form" sx={{ mt: 4 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -55,6 +72,8 @@ function SignUpPage() {
                   placeholder="Enter your email address"
                   label="email"
                   name="email"
+                  value={user?.email}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -63,7 +82,9 @@ function SignUpPage() {
                   variant="outlined"
                   placeholder="Enter your username"
                   label="username"
-                  name=""
+                  name="username"
+                  value={user?.username}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -72,7 +93,9 @@ function SignUpPage() {
                   variant="outlined"
                   placeholder="Enter your password"
                   label="password"
-                  name=""
+                  name="password"
+                  value={user?.password}
+                  onChange={handleInputChange}
                 />
               </Grid>
             </Grid>

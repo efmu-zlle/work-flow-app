@@ -11,7 +11,6 @@ function useFetch<T = any>(
   );
   const [responseInit, setResponseInit] = useState<IResponseInit<T>>({
     data: null,
-    payload: null,
     isLoading: false,
     messageSuccess: null,
     messageError: null,
