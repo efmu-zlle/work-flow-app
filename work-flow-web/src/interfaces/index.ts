@@ -18,6 +18,7 @@ interface IUserError {
 
 export interface IResponseInit<T> {
   data: T | null;
+  payload: T | null;
   isLoading: boolean;
   error: any;
   messageSuccess: string | null;

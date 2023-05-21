@@ -7,8 +7,17 @@ import hero from "../assets/images/bg-hero.png";
 import logo from "../assets/images/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
+import useFetch from "../hooks/useFetch";
+import { IUser } from "../interfaces";
 
 function SignUpPage() {
+  const [{ payload, isLoading, messageError, messageSuccess }, setConfig] =
+    useFetch<IUser>();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
