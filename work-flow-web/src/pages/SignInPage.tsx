@@ -1,6 +1,6 @@
-import { ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { EndPoints, IUser } from "../interfaces";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
@@ -12,6 +12,10 @@ import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
 import useFetch from "../hooks/useFetch";
 import Alert from "@mui/material/Alert";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function SignInPage() {
   const [
@@ -19,6 +23,11 @@ function SignInPage() {
     setConfig,
     dispatch,
   ] = useFetch<IUser>();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () =>
+    setShowPassword((prevToggle) => !prevToggle);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -103,6 +112,7 @@ function SignInPage() {
                 <TextField
                   fullWidth
                   variant="outlined"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   label="password"
                   name="password"
@@ -116,6 +126,15 @@ function SignInPage() {
                       : ""
                   }
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePassword}>
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>

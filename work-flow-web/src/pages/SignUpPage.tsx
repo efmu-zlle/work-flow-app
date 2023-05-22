@@ -9,9 +9,13 @@ import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
 import useFetch from "../hooks/useFetch";
 import { EndPoints, IUser } from "../interfaces";
-import { ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import Alert from "@mui/material/Alert";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function SignUpPage() {
   const [
@@ -19,6 +23,11 @@ function SignUpPage() {
     setConfig,
     dispatch,
   ] = useFetch<IUser>();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () =>
+    setShowPassword((prevToggle) => !prevToggle);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -77,19 +86,20 @@ function SignUpPage() {
                   fullWidth
                   autoFocus
                   variant="outlined"
+                  type="email"
                   placeholder="Enter your email address"
                   label="email"
                   name="email"
                   value={data?.email || ""}
                   onChange={handleInputChange}
                   error={isError}
+                  disabled={isLoading}
                   helperText={
                     isError && Array.isArray(errors?.Email)
                       ? errors?.Email[0]
                       : ""
                   }
                   required
-                  disabled={isLoading}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -101,6 +111,7 @@ function SignUpPage() {
                   name="username"
                   value={data?.username || ""}
                   onChange={handleInputChange}
+                  disabled={isLoading}
                   error={isError}
                   helperText={
                     isError && Array.isArray(errors?.Username)
@@ -108,18 +119,19 @@ function SignUpPage() {
                       : ""
                   }
                   required
-                  disabled={isLoading}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   variant="outlined"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   label="password"
                   name="password"
                   value={data?.password || ""}
                   onChange={handleInputChange}
+                  disabled={isLoading}
                   error={isError}
                   helperText={
                     isError && Array.isArray(errors?.Password)
@@ -127,7 +139,15 @@ function SignUpPage() {
                       : ""
                   }
                   required
-                  disabled={isLoading}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePassword}>
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>
