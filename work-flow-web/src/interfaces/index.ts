@@ -42,6 +42,7 @@ export interface IHttpRequest {
   method: HttpMethod;
   url: string;
   body?: any;
+  to?: string | null;
 }
 
 interface IEndPoints {

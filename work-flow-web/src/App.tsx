@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import NotFound from "./pages/NotFound";
+import HomePage from "./pages/HomePage";
 
 function App() {
   const customTheme = createTheme({
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SignInPage />} />
           <Route path="sign-up" element={<SignUpPage />} />
+          <Route path="home" element={<HomePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

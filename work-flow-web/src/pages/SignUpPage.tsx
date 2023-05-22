@@ -29,7 +29,12 @@ function SignUpPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    setConfig({ method: "POST", url: `${EndPoints.signup}`, body: data });
+    setConfig({
+      method: "POST",
+      url: `${EndPoints.signup}`,
+      body: data,
+      to: "/home",
+    });
   };
 
   return (

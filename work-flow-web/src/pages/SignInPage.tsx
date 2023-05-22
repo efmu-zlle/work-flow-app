@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent } from "react";
 import { EndPoints, IUser } from "../interfaces";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
@@ -29,7 +29,12 @@ function SignInPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    setConfig({ method: "POST", url: `${EndPoints.signin}`, body: data });
+    setConfig({
+      method: "POST",
+      url: `${EndPoints.signin}`,
+      body: data,
+      to: "/home",
+    });
   };
 
   return (
@@ -120,7 +125,7 @@ function SignInPage() {
               <CustomButton
                 isLink={true}
                 isLoading={isLoading}
-                text={"sing up"}
+                text={"sign up"}
               />
             </Link>
           </Box>

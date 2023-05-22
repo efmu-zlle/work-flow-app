@@ -2,6 +2,7 @@ import { useEffect, useReducer, useState, Reducer, Dispatch } from "react";
 import { Action, IHttpRequest, IResponseInit } from "../interfaces";
 import { reducer } from "../utils/reducer";
 import { initialState } from "../utils/initialState";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "https://localhost:5001";
 
@@ -11,6 +12,8 @@ function useFetch<T = any>(
   const [config, setConfig] = useState<IHttpRequest | undefined>(
     initialRequest
   );
+
+  const navigate = useNavigate();
 
   const [state, dispatch] = useReducer<Reducer<IResponseInit<T>, Action<T>>>(
     reducer,
@@ -40,14 +43,12 @@ function useFetch<T = any>(
           dispatch({ type: "POST_SUCCESS", payload: responseData });
         }
 
-        // here's the timeout, this will work with the alert
-        timeoutId = setTimeout(() => {
-          dispatch({ type: "FINISH_ALERT" });
-        }, 2000);
+        if (typeof request.to === "string") {
+          navigate(`${request.to}`);
+        }
       }
 
       if (response.status === 400) {
-        console.log(responseData);
         dispatch({ type: "REQUEST_ERROR_400", payload: responseData });
         return;
       }
