@@ -49,6 +49,7 @@ function useFetch<T = any>(
       if (response.status === 400) {
         console.log(responseData);
         dispatch({ type: "REQUEST_ERROR_400", payload: responseData });
+        return;
       }
 
       if (response.status === 401) {
@@ -57,6 +58,7 @@ function useFetch<T = any>(
         timeoutId = setTimeout(() => {
           dispatch({ type: "FINISH_ALERT" });
         }, 2000);
+        return;
       }
     } catch (err) {
       dispatch({

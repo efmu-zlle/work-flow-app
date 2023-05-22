@@ -34,6 +34,7 @@ export const reducer = (state: IResponseInit<any>, action: Action<any>) => {
         isError: action.payload.isError,
         showAlert: true,
         isSuccess: false,
+        errors: null,
       };
 
     case "REQUEST_FAILURE":

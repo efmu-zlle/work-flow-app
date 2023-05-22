@@ -9,30 +9,27 @@ import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
 import useFetch from "../hooks/useFetch";
 import { EndPoints, IUser } from "../interfaces";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 function SignUpPage() {
-  const [{ isLoading }, setConfig] = useFetch();
-  const [user, setUser] = useState<IUser>({
-    email: "",
-    username: "",
-    password: "",
-  });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const [
+    { data, isLoading, isError, isSuccess, message, errors, showAlert },
+    setConfig,
+    dispatch,
+  ] = useFetch<IUser>();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+
+    dispatch({ type: "UPDATE_USER_DATA", payload: { [name]: value } });
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    setConfig({ method: "POST", url: `${EndPoints.signup}`, body: user });
+    setConfig({ method: "POST", url: `${EndPoints.signup}`, body: data });
   };
 
   return (
@@ -62,7 +59,13 @@ function SignUpPage() {
           <Typography component="h1" variant="h5" sx={{ fontWeight: "bolder" }}>
             Create an account
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ mt: 4 }}
+            noValidate
+            autoComplete="off"
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -72,8 +75,16 @@ function SignUpPage() {
                   placeholder="Enter your email address"
                   label="email"
                   name="email"
-                  value={user?.email}
+                  value={data?.email || ""}
                   onChange={handleInputChange}
+                  error={isError}
+                  helperText={
+                    isError && Array.isArray(errors?.Email)
+                      ? errors?.Email[0]
+                      : ""
+                  }
+                  required
+                  disabled={isLoading}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -83,8 +94,16 @@ function SignUpPage() {
                   placeholder="Enter your username"
                   label="username"
                   name="username"
-                  value={user?.username}
+                  value={data?.username || ""}
                   onChange={handleInputChange}
+                  error={isError}
+                  helperText={
+                    isError && Array.isArray(errors?.Username)
+                      ? errors?.Username
+                      : ""
+                  }
+                  required
+                  disabled={isLoading}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -94,8 +113,16 @@ function SignUpPage() {
                   placeholder="Enter your password"
                   label="password"
                   name="password"
-                  value={user?.password}
+                  value={data?.password || ""}
                   onChange={handleInputChange}
+                  error={isError}
+                  helperText={
+                    isError && Array.isArray(errors?.Password)
+                      ? errors?.Password
+                      : ""
+                  }
+                  required
+                  disabled={isLoading}
                 />
               </Grid>
             </Grid>
@@ -149,7 +176,27 @@ function SignUpPage() {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      ></Grid>
+      >
+        {showAlert && isSuccess && (
+          <Alert
+            sx={{ position: "absolute", top: "5%", left: "80%" }}
+            severity="success"
+            variant="filled"
+          >
+            {message}
+          </Alert>
+        )}
+
+        {showAlert && isError && (
+          <Alert
+            sx={{ position: "absolute", top: "5%", left: "80%" }}
+            severity="error"
+            variant="filled"
+          >
+            {message}
+          </Alert>
+        )}
+      </Grid>
     </Grid>
   );
 }
