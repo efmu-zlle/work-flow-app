@@ -10,9 +10,10 @@ function App() {
     palette: {
       primary: {
         main: "#002233",
-        dark: "#023459",
-        light: "#B2A59F",
+        dark: "#001926",
+        light: "#EBE5D9",
       },
+      divider: "#EBE5D9",
     },
     typography: {
       fontFamily: ["Wix Madefor Display", "sans-serif"].join(","),
@@ -23,9 +24,9 @@ function App() {
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SignInPage />} />
+          <Route path="sing-in" element={<SignInPage />} />
           <Route path="sign-up" element={<SignUpPage />} />
-          <Route path="home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

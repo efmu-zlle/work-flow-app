@@ -54,7 +54,7 @@ function SignUpPage() {
         sm={8}
         md={5}
         lg={4}
-        sx={{ backgroundColor: "#EBE5D9" }}
+        sx={{ backgroundColor: (theme) => `${theme.palette.primary.light}` }}
       >
         <Box
           sx={{

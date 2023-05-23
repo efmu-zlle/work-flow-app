@@ -9,16 +9,15 @@ const BASE_URL = "https://localhost:5001";
 function useFetch<T = any>(
   initialRequest?: IHttpRequest
 ): [IResponseInit<T>, (request: IHttpRequest) => void, Dispatch<Action<T>>] {
-  const [config, setConfig] = useState<IHttpRequest | undefined>(
-    initialRequest
-  );
-
   const navigate = useNavigate();
-
   const [state, dispatch] = useReducer<Reducer<IResponseInit<T>, Action<T>>>(
     reducer,
     initialState
   );
+  const [config, setConfig] = useState<IHttpRequest | undefined>(
+    initialRequest
+  );
+
   // adding a timeeoutId to clean it up later
   let timeoutId: number | null = null;
 
