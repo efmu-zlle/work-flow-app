@@ -8,6 +8,8 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import deepOrange from "@mui/material/colors/deepOrange";
 import Container from "@mui/material/Container";
+import { Link as RouterLink } from "react-router-dom";
+import { Link as MuiLink } from "@mui/material";
 
 function Header() {
   return (
@@ -17,16 +19,51 @@ function Header() {
       sx={{
         backgroundImage:
           "linear-gradient(90deg, #CEDFFF 0%, #D7FFEF 35%, #D4F7FF 80%)",
-        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ flexWrap: "wrap" }}>
           <Box sx={{ flexGrow: 1 }}>
             <IconButton sx={{ "&:hover": { backgroundColor: "transparent" } }}>
               <CardMedia component="img" src={logo}></CardMedia>
             </IconButton>
           </Box>
+          <nav style={{ flexGrow: 1.2 }}>
+            {["home", "team", "member"].map((text, index) => (
+              <MuiLink
+                key={index}
+                component={RouterLink}
+                to={`/${text}`}
+                color="text.primary"
+                variant="button"
+                sx={{
+                  my: 1,
+                  mx: 2,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  position: "relative",
+                  transition: "transform 0.3s",
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: "100%",
+                    height: 2,
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    transform: "scaleX(0)",
+                    transformOrigin: "left",
+                    transition: "transform 0.3s",
+                  },
+                  "&:hover::after": {
+                    transform: "scaleX(1)",
+                  },
+                }}
+              >
+                {text}
+              </MuiLink>
+            ))}
+          </nav>
           <Box>
             <Tooltip title="Open settings">
               <IconButton sx={{ p: 0 }}>

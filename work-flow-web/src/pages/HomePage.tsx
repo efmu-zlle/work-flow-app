@@ -10,51 +10,50 @@ function HomePage() {
   return (
     <>
       <Header />
-      <Box sx={{ display: "flex", height: "100vh" }}>
-        <Sidebar />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          backgroundImage:
+            "linear-gradient(90deg, #CEDFFF 0%, #D7FFEF 35%, #D4F7FF 80%)",
+          height: "100vh",
+        }}
+      >
+        <Toolbar />
         <Box
-          component="main"
+          component="section"
           sx={{
-            flexGrow: 1,
-            p: 3,
-            backgroundImage:
-              "linear-gradient(90deg, #CEDFFF 0%, #D7FFEF 35%, #D4F7FF 80%)",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            display: "flex",
+            flexDirection: "column",
+            mt: "4em",
           }}
         >
-          <Toolbar />
           <Box
             sx={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              display: "flex",
-              flexDirection: "column",
-              mt: "4em",
+              textAlign: "center",
+              textTransform: "uppercase",
+              mb: "6em",
             }}
           >
-            <Box
-              sx={{
-                textAlign: "center",
-                textTransform: "uppercase",
-                mb: "6em",
-              }}
-            >
-              <Typography variant="h3" sx={{ fontWeight: 800 }}>
-                Design your dreams,
-              </Typography>
-              <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                one line at a time.
-              </Typography>
-            </Box>
-            <CardMedia
-              component="img"
-              src="src/assets/svg/festivities_dark.svg"
-              sx={{
-                height: "auto",
-                width: 400,
-                alignSelf: "center",
-              }}
-            />
+            <Typography variant="h3" sx={{ fontWeight: 800 }}>
+              Design your dreams,
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 600 }}>
+              one line at a time.
+            </Typography>
           </Box>
+          <CardMedia
+            component="img"
+            src="src/assets/svg/festivities_dark.svg"
+            sx={{
+              height: "auto",
+              width: 400,
+              alignSelf: "center",
+            }}
+          />
         </Box>
       </Box>
     </>

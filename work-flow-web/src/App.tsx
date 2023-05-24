@@ -4,6 +4,8 @@ import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage";
+import TeamPage from "./pages/TeamPage";
+import MemberPage from "./pages/MemberPage";
 
 function App() {
   const customTheme = createTheme({
@@ -29,9 +31,11 @@ function App() {
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Routes>
-          <Route path="sign-in" element={<SignInPage />} />
+          <Route path="/" element={<SignInPage />} />
           <Route path="sign-up" element={<SignUpPage />} />
-          <Route path="/" element={<HomePage />} />
+          <Route path="home" element={<HomePage />} />
+          <Route path="team" element={<TeamPage />} />
+          <Route path="member" element={<MemberPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
