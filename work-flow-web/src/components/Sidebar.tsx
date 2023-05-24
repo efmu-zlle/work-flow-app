@@ -29,8 +29,7 @@ function Sidebar() {
           pr: 5,
           mt: 3,
           borderRight: "none",
-          backgroundColor: "#d5e4ff",
-          color: (theme) => `${theme.palette.primary.main}`,
+          backgroundColor: "#D5E4FF",
         },
       }}
     >
@@ -45,88 +44,94 @@ function Sidebar() {
             textTransform: "uppercase",
           }}
         >
-          welcome
-        </Typography>
-        <List>
-          {["General", "Launch", "Dashboard"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton
-                sx={{
-                  p: 0,
-                  mb: 0.7,
-                  pl: 0.7,
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider
-          sx={{
-            border: "1px solid #b4cbd6",
-            my: 3,
-          }}
-        />
-        <Typography
-          variant="h5"
-          sx={{
-            color: "#7c9cab",
-            fontSize: ".75em",
-            fontWeight: 900,
-            textTransform: "uppercase",
-          }}
-        >
-          group
-        </Typography>
-        <List>
-          {["Teams", "Members", "Products"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton
-                sx={{
-                  p: 0,
-                  mb: 0.7,
-                  pl: 0.7,
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider
-          sx={{
-            border: "1px solid #b4cbd6",
-            my: 3,
-          }}
-        />
-        <Typography
-          variant="h5"
-          sx={{
-            color: "#7c9cab",
-            fontSize: ".75em",
-            fontWeight: 900,
-            textTransform: "uppercase",
-          }}
-        >
           managment
         </Typography>
         <List>
-          {["Vendor Help Center", "Shopper's Guide", "Contact us"].map(
-            (text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton
-                  sx={{
-                    p: 0,
-                    mb: 0.7,
-                    pl: 0.7,
-                  }}
-                >
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            )
-          )}
+          {["Team", "Members"].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton
+                sx={{
+                  p: 0,
+                  mb: 0.7,
+                  pl: 0.7,
+                  position: "relative",
+                  transition: "transform 0.3s",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: "50%",
+                    height: 2,
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    transform: "scaleX(0)",
+                    transformOrigin: "left",
+                    transition: "transform 0.3s",
+                  },
+                  "&:hover::after": {
+                    transform: "scaleX(1)",
+                  },
+                }}
+              >
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider
+          sx={{
+            border: "1px solid #B4CBD6",
+            my: 3,
+          }}
+        />
+        <Typography
+          variant="h5"
+          sx={{
+            color: "#7C9CAB",
+            fontSize: ".75em",
+            fontWeight: 900,
+            textTransform: "uppercase",
+          }}
+        >
+          others
+        </Typography>
+        <List>
+          {["Contact us"].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton
+                sx={{
+                  p: 0,
+                  mb: 0.7,
+                  pl: 0.7,
+                  position: "relative",
+                  transition: "transform 0.3s",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: "75%",
+                    height: 2,
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    transform: "scaleX(0)",
+                    transformOrigin: "left",
+                    transition: "transform 0.3s",
+                  },
+                  "&:hover::after": {
+                    transform: "scaleX(1)",
+                  },
+                }}
+              >
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
       </Box>
     </Drawer>

@@ -56,9 +56,7 @@ function SignInPage() {
         md={5}
         lg={4}
         sx={{
-          backgroundColor: "rgb(112,155,176)",
-          backgroundImage:
-            "linear-gradient(90deg, rgba(112,155,176,1) 0%, rgba(214,239,244,1) 100%)",
+          backgroundImage: "linear-gradient(68deg, #CEDFFF, #D7FFEF, #D4F7FF)",
         }}
       >
         {/* container of the form  */}

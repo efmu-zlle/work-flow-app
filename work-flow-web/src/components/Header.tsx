@@ -15,9 +15,8 @@ function Header() {
       position="fixed"
       elevation={0}
       sx={{
-        backgroundColor: "rgb(213,228,255)",
         backgroundImage:
-          "linear-gradient(90deg, rgba(206,223,255,1) 0%, rgba(215,255,239,1) 35%, rgba(212,247,255,1) 80%)",
+          "linear-gradient(90deg, #CEDFFF 0%, #D7FFEF 35%, #D4F7FF 80%)",
         zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >

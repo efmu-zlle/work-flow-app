@@ -55,9 +55,7 @@ function SignUpPage() {
         md={5}
         lg={4}
         sx={{
-          backgroundColor: "rgb(112,155,176)",
-          backgroundImage:
-            "linear-gradient(90deg, rgba(213,228,255,1) 0%, rgba(223,255,233,1) 47%, rgba(212,240,255,1) 100%)",
+          backgroundImage: "linear-gradient(68deg, #CEDFFF, #D7FFEF, #D4F7FF)",
         }}
       >
         <Box

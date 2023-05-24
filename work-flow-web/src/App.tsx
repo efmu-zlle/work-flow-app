@@ -15,9 +15,9 @@ function App() {
       },
       divider: "#EBE5D9",
       secondary: {
-        main: "rgba(215,255,239,1)",
-        dark: "rgba(213,228,255,1)",
-        light: "rgba(212,247,255,1)",
+        main: "#CEDFFF",
+        dark: "#D7FFEF",
+        light: "#D4F7FF",
       },
     },
     typography: {

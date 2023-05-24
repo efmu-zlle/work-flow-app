@@ -10,47 +10,51 @@ function HomePage() {
   return (
     <>
       <Header />
-      <Box
-        sx={{
-          display: "flex",
-          height: "100vh",
-          color: (theme) => `${theme.palette.primary.light}`,
-        }}
-      >
+      <Box sx={{ display: "flex", height: "100vh" }}>
         <Sidebar />
         <Box
           component="main"
           sx={{
             flexGrow: 1,
             p: 3,
-            backgroundColor: "rgb(213,228,255)",
             backgroundImage:
-              "linear-gradient(90deg, rgba(206,223,255,1) 0%, rgba(215,255,239,1) 35%, rgba(212,247,255,1) 80%)",
+              "linear-gradient(90deg, #CEDFFF 0%, #D7FFEF 35%, #D4F7FF 80%)",
           }}
         >
           <Toolbar />
           <Box
             sx={{
               maxWidth: "100%",
-              maxHeight: 400,
+              maxHeight: "100%",
               display: "flex",
-              justifyContent: "space-around",
+              flexDirection: "column",
+              mt: "4em",
             }}
           >
+            <Box
+              sx={{
+                textAlign: "center",
+                textTransform: "uppercase",
+                mb: "6em",
+              }}
+            >
+              <Typography variant="h3" sx={{ fontWeight: 800 }}>
+                Design your dreams,
+              </Typography>
+              <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                one line at a time.
+              </Typography>
+            </Box>
             <CardMedia
               component="img"
-              src="src/assets/svg/welcoming_re.svg"
-              sx={{ height: 500, width: "auto" }}
+              src="src/assets/svg/festivities_dark.svg"
+              sx={{
+                height: "auto",
+                width: 400,
+                alignSelf: "center",
+              }}
             />
           </Box>
-
-          {/* <Box sx={{ maxWidth: "100%", maxHeight: 300 }}>
-            <CardMedia
-              component="img"
-              src="src/assets/svg/welcoming_re.svg"
-              sx={{ height: 550, width: "100%", objectFit: "contain" }}
-            />
-          </Box> */}
         </Box>
       </Box>
     </>
