@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import hero from "../assets/images/bg-hero.png";
-import logo from "../assets/images/logo.svg";
+import logo from "../assets/svg/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
 import useFetch from "../hooks/useFetch";
@@ -55,7 +55,11 @@ function SignInPage() {
         sm={8}
         md={5}
         lg={4}
-        sx={{ backgroundColor: "#EBE5D9" }}
+        sx={{
+          backgroundColor: "rgb(112,155,176)",
+          backgroundImage:
+            "linear-gradient(90deg, rgba(112,155,176,1) 0%, rgba(214,239,244,1) 100%)",
+        }}
       >
         {/* container of the form  */}
         <Box

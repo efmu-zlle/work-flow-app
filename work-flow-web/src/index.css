@@ -19,8 +19,3 @@ body {
   max-width: 100% !important;
   height: auto;
 }
-
-.filter-grey {
-  filter: invert(70%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(90%)
-    contrast(100%);
-}

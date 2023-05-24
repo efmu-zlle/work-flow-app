@@ -10,6 +10,8 @@ import WorkspacesIcon from "@mui/icons-material/Workspaces";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import SettingsIcon from "@mui/icons-material/Settings";
+import Divider from "@mui/material/Divider";
+import { Typography } from "@mui/material";
 
 const drawerWidth = 300;
 
@@ -23,60 +25,108 @@ function Sidebar() {
         [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
           boxSizing: "border-box",
-          mt: 8,
-          px: 4,
-          border: "none",
-          backgroundColor: (theme) => `${theme.palette.primary.dark}`,
-          color: (theme) => `${theme.palette.primary.light}`,
+          pl: 3,
+          pr: 5,
+          mt: 3,
+          borderRight: "none",
+          backgroundColor: "#d5e4ff",
+          color: (theme) => `${theme.palette.primary.main}`,
         },
       }}
     >
       <Toolbar />
       <Box>
+        <Typography
+          variant="h5"
+          sx={{
+            color: "#7c9cab",
+            fontSize: ".75em",
+            fontWeight: 900,
+            textTransform: "uppercase",
+          }}
+        >
+          welcome
+        </Typography>
         <List>
-          {["General"].map((text, index) => (
+          {["General", "Launch", "Dashboard"].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton
                 sx={{
-                  "&:hover": {
-                    backgroundColor: (theme) => `${theme.palette.primary.main}`,
-                  },
+                  p: 0,
+                  mb: 0.7,
+                  pl: 0.7,
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    color: (theme) => theme.palette.primary.light,
-                  }}
-                >
-                  {index % 2 === 0 ? <SettingsIcon /> : <MailIcon />}
-                </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
-
+        <Divider
+          sx={{
+            border: "1px solid #b4cbd6",
+            my: 3,
+          }}
+        />
+        <Typography
+          variant="h5"
+          sx={{
+            color: "#7c9cab",
+            fontSize: ".75em",
+            fontWeight: 900,
+            textTransform: "uppercase",
+          }}
+        >
+          group
+        </Typography>
         <List>
-          {["Teams", "Members"].map((text, index) => (
+          {["Teams", "Members", "Products"].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton
                 sx={{
-                  "&:hover": {
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                  },
+                  p: 0,
+                  mb: 0.7,
+                  pl: 0.7,
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    color: (theme) => theme.palette.primary.light,
-                  }}
-                >
-                  {index % 2 === 0 ? <WorkspacesIcon /> : <GroupsIcon />}
-                </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
           ))}
+        </List>
+        <Divider
+          sx={{
+            border: "1px solid #b4cbd6",
+            my: 3,
+          }}
+        />
+        <Typography
+          variant="h5"
+          sx={{
+            color: "#7c9cab",
+            fontSize: ".75em",
+            fontWeight: 900,
+            textTransform: "uppercase",
+          }}
+        >
+          managment
+        </Typography>
+        <List>
+          {["Vendor Help Center", "Shopper's Guide", "Contact us"].map(
+            (text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton
+                  sx={{
+                    p: 0,
+                    mb: 0.7,
+                    pl: 0.7,
+                  }}
+                >
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+            )
+          )}
         </List>
       </Box>
     </Drawer>
