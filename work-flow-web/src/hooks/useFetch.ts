@@ -1,8 +1,7 @@
-import { useEffect, useReducer, useState, Reducer, Dispatch } from "react";
+import { useEffect, useState, Dispatch, useContext } from "react";
 import { Action, IHttpRequest, IResponseInit } from "../interfaces";
-import { reducer } from "../utils/reducer";
-import { initialState } from "../utils/initialState";
 import { useNavigate } from "react-router-dom";
+import { FetchContext } from "../context/FetchProvider";
 
 const BASE_URL = "https://localhost:5001";
 
@@ -10,10 +9,7 @@ function useFetch<T = any>(
   initialRequest?: IHttpRequest
 ): [IResponseInit<T>, (request: IHttpRequest) => void, Dispatch<Action<T>>] {
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer<Reducer<IResponseInit<T>, Action<T>>>(
-    reducer,
-    initialState
-  );
+  const { state, dispatch } = useContext(FetchContext);
   const [config, setConfig] = useState<IHttpRequest | undefined>(
     initialRequest
   );

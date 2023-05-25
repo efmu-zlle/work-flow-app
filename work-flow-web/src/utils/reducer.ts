@@ -19,11 +19,20 @@ export const reducer = (state: IResponseInit<any>, action: Action<any>) => {
       };
 
     case "POST_SUCCESS":
+      if (!state.currentUser) {
+        return {
+          ...state,
+          isSuccess: action.payload.isSuccess,
+          message: action.payload.message,
+          isError: false,
+          currentUser: action.payload.data,
+        };
+      }
       return {
         ...state,
+        data: action.payload.data,
         isSuccess: action.payload.isSuccess,
         message: action.payload.message,
-        showAlert: true,
         isError: false,
       };
 

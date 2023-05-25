@@ -9,4 +9,7 @@ export const initialState: IResponseInit<any> = {
   showAlert: false,
   exception: null,
   errors: null,
+  currentUser: localStorage.getItem("currentUser")
+    ? JSON.parse(localStorage.getItem("currentUser")!)
+    : null,
 };

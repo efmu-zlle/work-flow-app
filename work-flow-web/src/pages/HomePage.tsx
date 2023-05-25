@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box";
 import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
-import IconButton from "@mui/material/IconButton";
+import useFetch from "../hooks/useFetch";
+import { EndPoints } from "../interfaces";
 
 function HomePage() {
   return (
@@ -20,7 +20,6 @@ function HomePage() {
           height: "100vh",
         }}
       >
-        <Toolbar />
         <Box
           component="section"
           sx={{

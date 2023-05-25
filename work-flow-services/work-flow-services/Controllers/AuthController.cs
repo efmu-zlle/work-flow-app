@@ -69,7 +69,7 @@ namespace work_flow_services.Controllers
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { isSuccess = true, message = "User created successfully." } );            
+                return Ok(new { isSuccess = true, message = "User created successfully.", data = user } );            
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace work_flow_services.Controllers
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { isSuccess = true, message = "User signed in successfully." } );
+                return Ok(new { isSuccess = true, message = "User signed in successfully.", data = user } );
             }
             catch (Exception ex)
             {

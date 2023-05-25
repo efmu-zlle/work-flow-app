@@ -36,6 +36,7 @@ export interface IResponseInit<T> {
   exception: any;
   showAlert: boolean;
   errors?: IErrors | null;
+  currentUser: IUser | null;
 }
 
 export interface IHttpRequest {
