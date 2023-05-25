@@ -24,7 +24,7 @@ export function FetchProvider<T>({ children }: Props) {
   );
 
   useEffect(() => {
-    if (state.isSuccess) {
+    if (state.currentUser) {
       localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
     }
   }, [state.currentUser]);

@@ -1,10 +1,8 @@
 import Box from "@mui/material/Box";
 import Header from "../components/Header";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
-import useFetch from "../hooks/useFetch";
-import { EndPoints } from "../interfaces";
+import festivities from "../assets/svg/festivities_dark.svg";
 
 function HomePage() {
   return (
@@ -13,7 +11,6 @@ function HomePage() {
       <Box
         component="main"
         sx={{
-          flexGrow: 1,
           p: 3,
           backgroundImage:
             "linear-gradient(90deg, #CEDFFF 0%, #D7FFEF 35%, #D4F7FF 80%)",
@@ -46,7 +43,7 @@ function HomePage() {
           </Box>
           <CardMedia
             component="img"
-            src="src/assets/svg/festivities_dark.svg"
+            src={festivities}
             sx={{
               height: "auto",
               width: 400,

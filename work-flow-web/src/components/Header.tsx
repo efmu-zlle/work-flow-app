@@ -10,8 +10,11 @@ import deepOrange from "@mui/material/colors/deepOrange";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
+import useFetch from "../hooks/useFetch";
 
 function Header() {
+  const [{ currentUser }] = useFetch();
+
   return (
     <AppBar
       position="fixed"
@@ -28,7 +31,10 @@ function Header() {
               <CardMedia component="img" src={logo}></CardMedia>
             </IconButton>
           </Box>
-          <nav style={{ flexGrow: 1.2 }}>
+          <Box
+            component="nav"
+            sx={{ flexGrow: 1.2, display: { xs: "none", sm: "block" } }}
+          >
             {["home", "team", "member"].map((text, index) => (
               <MuiLink
                 key={index}
@@ -63,11 +69,15 @@ function Header() {
                 {text}
               </MuiLink>
             ))}
-          </nav>
+          </Box>
           <Box>
-            <Tooltip title="Open settings">
+            <Tooltip title={`${currentUser?.email}`}>
               <IconButton sx={{ p: 0 }}>
-                <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+                <Avatar
+                  sx={{ bgcolor: deepOrange[500], textTransform: "uppercase" }}
+                >
+                  {currentUser?.username[0]}
+                </Avatar>
               </IconButton>
             </Tooltip>
           </Box>
