@@ -39,7 +39,7 @@ namespace work_flow_services.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] User request)
+        public async Task<IActionResult> SignUp(User request)
         {
             try
             {
@@ -65,11 +65,20 @@ namespace work_flow_services.Controllers
 
                 user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.Password);
 
-
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { isSuccess = true, message = "User created successfully.", data = user } );            
+                // sending only the data that I need
+                var userDTO = new UserResponseDTO
+                {
+                    UserId = user.UserId,
+                    Username = user.Username,
+                    Email = user.Email,
+                    CreatedAt = user.CreatedAt,
+                    UpdatedAt = user.UpdatedAt
+                };
+
+                return Ok(new { isSuccess = true, message = "User created successfully.", data = userDTO } );            
             }
             catch (Exception ex)
             {
@@ -78,7 +87,7 @@ namespace work_flow_services.Controllers
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] UserModel request)
+        public async Task<IActionResult> SignIn(UserModel request)
         {
             try
             {
@@ -95,7 +104,16 @@ namespace work_flow_services.Controllers
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { isSuccess = true, message = "User signed in successfully.", data = user } );
+                var userDTO = new UserResponseDTO
+                {
+                    UserId = user.UserId,
+                    Username = user.Username,
+                    Email = user.Email,
+                    CreatedAt = user.CreatedAt,
+                    UpdatedAt = user.UpdatedAt
+                };
+
+                return Ok(new { isSuccess = true, message = "User signed in successfully.", data = userDTO } );
             }
             catch (Exception ex)
             {

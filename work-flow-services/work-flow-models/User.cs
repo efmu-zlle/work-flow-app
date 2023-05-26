@@ -41,4 +41,17 @@ namespace work_flow_models
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
         public string Password { get; set; }
     }
+
+    public class UserResponseDTO
+    {
+        public string UserId { get; set; }
+
+        public string Username { get; set; }
+
+        public string Email { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+    }
 }

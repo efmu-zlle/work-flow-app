@@ -16,7 +16,6 @@ export interface IUser {
   username: string;
   email?: string;
   password: string;
-  passwordHash?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -47,13 +46,11 @@ export interface IHttpRequest {
 }
 
 interface IEndPoints {
-  test: string;
   signup: string;
   signin: string;
 }
 
 export const EndPoints: IEndPoints = {
-  test: "/Auth/test",
   signup: "/Auth/signup",
   signin: "/Auth/signin",
 };
