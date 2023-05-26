@@ -168,7 +168,7 @@ function SignUpPage() {
             </Link>
           </Box>
           <Typography variant="body2">
-            Creating an account means you’re okay with our{" "}
+            Creating an account means you&apos;re okay with our{" "}
             <Typography
               component="span"
               variant="body2"
