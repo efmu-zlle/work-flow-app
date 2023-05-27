@@ -9,10 +9,6 @@ import MemberPage from "./pages/MemberPage";
 import { FetchContext } from "./context/FetchProvider";
 import { useContext } from "react";
 
-type Props = {
-  children: JSX.Element;
-};
-
 function App() {
   const customTheme = createTheme({
     palette: {
@@ -34,9 +30,6 @@ function App() {
   });
   const { state } = useContext(FetchContext);
 
-  const AuthSession = ({ children }: Props) =>
-    state.currentUser ? children : <Navigate to="/" />;
-
   return (
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
@@ -55,9 +48,7 @@ function App() {
           <Route
             path="home"
             element={
-              <AuthSession>
-                <HomePage />
-              </AuthSession>
+              !state.currentUser ? <Navigate to="/" replace /> : <HomePage />
             }
           />
           <Route path="team" element={<TeamPage />} />

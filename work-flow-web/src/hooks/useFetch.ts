@@ -1,23 +1,18 @@
-import { useEffect, useState, Dispatch, useContext } from "react";
+import { Dispatch, useContext, useEffect, useState } from "react";
 import { Action, IHttpRequest, IResponseInit } from "../interfaces";
-import { useNavigate } from "react-router-dom";
 import { FetchContext } from "../context/FetchProvider";
 
 const BASE_URL = "https://localhost:5001";
 
-function useFetch<T = any>(
+export default function useFetch<T = any>(
   initialRequest?: IHttpRequest
-): [IResponseInit<T>, (request: IHttpRequest) => void, Dispatch<Action<T>>] {
-  const navigate = useNavigate();
+): [IResponseInit<T>, (settings: IHttpRequest) => void, Dispatch<Action<T>>] {
   const { state, dispatch } = useContext(FetchContext);
-  const [config, setConfig] = useState<IHttpRequest | undefined>(
+  const [settings, setSettings] = useState<IHttpRequest | undefined>(
     initialRequest
   );
 
-  // adding a timeeoutId to clean it up later
-  let timeoutId: number | null = null;
-
-  async function sendRequest(request: IHttpRequest) {
+  async function makeRequest(request: IHttpRequest) {
     dispatch({ type: "REQUEST_START" });
 
     try {
@@ -31,35 +26,25 @@ function useFetch<T = any>(
 
       const responseData: IResponseInit<T> = await response.json();
 
-      if (response.status === 200) {
+      if (response.ok) {
         if (!request.body) {
           dispatch({ type: "REQUEST_SUCCESS", payload: responseData });
         } else {
           dispatch({ type: "POST_SUCCESS", payload: responseData });
         }
-
-        if (typeof request.to === "string") {
-          navigate(`${request.to}`);
-        }
       }
 
       if (response.status === 400) {
         dispatch({ type: "REQUEST_ERROR_400", payload: responseData });
-        return;
       }
 
       if (response.status === 401) {
         dispatch({ type: "REQUEST_ERROR", payload: responseData });
-
-        timeoutId = setTimeout(() => {
-          dispatch({ type: "FINISH_ALERT" });
-        }, 2000);
-        return;
       }
     } catch (err) {
       dispatch({
         type: "REQUEST_FAILURE",
-        payload: err || "An error occurred.",
+        payload: err || "An error occurred",
       });
     } finally {
       dispatch({ type: "REQUEST_FINISH" });
@@ -67,20 +52,10 @@ function useFetch<T = any>(
   }
 
   useEffect(() => {
-    // only when there's data this will execute
-    if (config) {
-      sendRequest(config);
+    if (settings) {
+      makeRequest(settings);
     }
+  }, [settings]);
 
-    return () => {
-      // here we clean it
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [config]);
-
-  return [state, setConfig, dispatch];
+  return [state, setSettings, dispatch];
 }
-
-export default useFetch;

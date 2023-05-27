@@ -7,7 +7,6 @@ import hero from "../assets/images/bg-hero.png";
 import logo from "../assets/svg/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
-import useFetch from "../hooks/useFetch";
 import { EndPoints, IUser } from "../interfaces";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,11 +15,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import useFetch from "../hooks/useFetch";
 
 function SignUpPage() {
   const [
     { data, isLoading, isError, isSuccess, message, errors, showAlert },
-    setConfig,
+    setSettings,
     dispatch,
   ] = useFetch<IUser>();
 
@@ -38,11 +38,10 @@ function SignUpPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    setConfig({
+    setSettings({
       method: "POST",
       url: `${EndPoints.signup}`,
       body: data,
-      to: "/home",
     });
   };
 

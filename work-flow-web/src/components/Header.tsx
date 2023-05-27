@@ -10,11 +10,8 @@ import deepOrange from "@mui/material/colors/deepOrange";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
-import useFetch from "../hooks/useFetch";
 
 function Header() {
-  const [{ currentUser }] = useFetch();
-
   return (
     <AppBar
       position="fixed"
@@ -71,7 +68,7 @@ function Header() {
             ))}
           </Box>
           <Box>
-            <Tooltip title={`${currentUser?.email}`}>
+            {/* <Tooltip title={`${currentUser?.email}`}>
               <IconButton sx={{ p: 0 }}>
                 <Avatar
                   sx={{ bgcolor: deepOrange[500], textTransform: "uppercase" }}
@@ -79,7 +76,7 @@ function Header() {
                   {currentUser?.username[0]}
                 </Avatar>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
           </Box>
         </Toolbar>
       </Container>

@@ -10,17 +10,17 @@ import hero from "../assets/images/bg-hero.png";
 import logo from "../assets/svg/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
-import useFetch from "../hooks/useFetch";
 import Alert from "@mui/material/Alert";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import useFetch from "../hooks/useFetch";
 
 function SignInPage() {
   const [
     { data, isLoading, isSuccess, isError, message, showAlert, errors },
-    setConfig,
+    setSettings,
     dispatch,
   ] = useFetch<IUser>();
 
@@ -38,11 +38,10 @@ function SignInPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    setConfig({
+    setSettings({
       method: "POST",
       url: `${EndPoints.signin}`,
       body: data,
-      to: "/home",
     });
   };
 
