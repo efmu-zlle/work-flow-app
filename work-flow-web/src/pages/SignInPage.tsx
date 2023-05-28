@@ -40,7 +40,7 @@ function SignInPage() {
 
     setSettings({
       method: "POST",
-      url: `${EndPoints.signin}`,
+      url: `${EndPoints.signIn}`,
       body: data,
     });
   };

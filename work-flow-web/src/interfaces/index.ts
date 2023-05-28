@@ -56,11 +56,13 @@ export interface IHttpRequest {
 }
 
 interface IEndPoints {
-  signup: string;
-  signin: string;
+  signUp: string;
+  signIn: string;
+  getTeam: string;
 }
 
 export const EndPoints: IEndPoints = {
-  signup: "/Auth/signup",
-  signin: "/Auth/signin",
+  signUp: "/Auth/signUp",
+  signIn: "/Auth/signIn",
+  getTeam: "/Team",
 };

@@ -40,7 +40,7 @@ function SignUpPage() {
 
     setSettings({
       method: "POST",
-      url: `${EndPoints.signup}`,
+      url: `${EndPoints.signUp}`,
       body: data,
     });
   };

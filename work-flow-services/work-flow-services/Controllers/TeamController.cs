@@ -20,13 +20,12 @@ namespace work_flow_services.Controllers
             _context = context;
         }
 
-        [HttpGet]
-
-        public ActionResult<IEnumerable<Team>> GetTeams()
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<Team>> GetTeamsByUserId(string id)
         {
             try
             {
-                var teams = _context.Teams.ToList();
+                var teams = _context.Teams.Where(t => t.CreatorId == id).ToList();
 
                 return Ok(new { data = teams });
             }
@@ -38,7 +37,7 @@ namespace work_flow_services.Controllers
             }
         }
 
-        [HttpPost("createteam")]
+        [HttpPost("createTeam")]
         public async Task<IActionResult> CreateTeam(Team request)
         {
             try

@@ -21,24 +21,7 @@ namespace work_flow_services.Controllers
             _context = context;
         }
 
-        [HttpGet("test")]
-        public ActionResult<IEnumerable<User>> Test()
-        {
-            try
-            {
-                var users = _context.Users.ToList();
-
-                return Ok(new { data = users });
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = new { message = "Internal server error", error = ex.ToString() };
-
-                return StatusCode(500, errorMessage);
-            }
-        }
-
-        [HttpPost("signup")]
+        [HttpPost("signUp")]
         public async Task<IActionResult> SignUp(User request)
         {
             try
@@ -86,7 +69,7 @@ namespace work_flow_services.Controllers
             }
         }
 
-        [HttpPost("signin")]
+        [HttpPost("signIn")]
         public async Task<IActionResult> SignIn(UserModel request)
         {
             try
@@ -103,8 +86,6 @@ namespace work_flow_services.Controllers
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
-
-                var team = await _context.Teams.Where(t => t.CreatorId == user.UserId).ToListAsync();
 
                 var userDTO = new UserResponseDTO
                 {
