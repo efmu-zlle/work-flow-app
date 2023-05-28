@@ -104,6 +104,8 @@ namespace work_flow_services.Controllers
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
+                var team = await _context.Teams.Where(t => t.CreatorId == user.UserId).ToListAsync();
+
                 var userDTO = new UserResponseDTO
                 {
                     UserId = user.UserId,

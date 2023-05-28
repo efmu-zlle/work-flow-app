@@ -20,6 +20,16 @@ export interface IUser {
   updatedAt?: string;
 }
 
+export interface ITeam {
+  teamId: string;
+  name: string;
+  description: string;
+  creatorId: string;
+  code: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 interface IErrors {
   Email: string | string[] | Record<string, string>;
   Username: string | string[] | Record<string, string>;

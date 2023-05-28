@@ -53,5 +53,6 @@ namespace work_flow_models
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
     }
 }
