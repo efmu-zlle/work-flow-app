@@ -1,5 +1,3 @@
-import { IErrors, IUser } from "./user";
-
 interface IEndPoints {
   signUp: string;
   signIn: string;

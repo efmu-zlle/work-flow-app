@@ -14,18 +14,19 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useSignInMutation } from "../store/api/authSlice";
-import { IErrors, IUserCredentials, IUserErrors } from "../interfaces/user";
+import { IUserCredentials } from "../interfaces/user";
 import { useSnackbar } from "notistack";
+import { isRequiredError, isValidationError } from "../services/helpers";
+import { IUserError } from "../interfaces/error";
 
 function SignInPage() {
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
   const [signIn, { isLoading, isError }] = useSignInMutation();
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState("");
-  const [userError, setUserError] = useState<IUserErrors>({
-    Username: "",
-    Password: "",
+  const [userError, setUserError] = useState<IUserError>({
+    Username: {},
+    Password: {},
   });
   const [user, setUser] = useState<IUserCredentials>({
     username: "",
@@ -41,11 +42,18 @@ function SignInPage() {
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
+  const getUsernameError = () =>
+    userError.Username && userError.Username[0] ? userError.Username[0] : "";
+
+  const getPasswordError = () =>
+    userError.Password && userError.Password ? userError.Password[0] : "";
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
       const response = await signIn(user).unwrap();
+
       enqueueSnackbar(response.message, {
         variant: "success",
         autoHideDuration: 2000,
@@ -53,19 +61,18 @@ function SignInPage() {
 
       navigation("/home");
     } catch (err) {
-      const { data } = err as any;
-      const dataError = data as IErrors;
+      if (isValidationError(err)) {
+        enqueueSnackbar(err.data.message, { variant: "error" });
+        setUserError({
+          Username: "",
+          Password: "",
+        });
+      } else if (isRequiredError(err)) {
+        console.log(err.data.errors);
+        const { Username, Password } = err.data.errors;
+        setUserError({ Username: Username, Password: Password });
 
-      if (data.message === "Invalid username or password.") {
-        enqueueSnackbar(dataError.message, {
-          variant: "error",
-          autoHideDuration: 2000,
-        });
-      } else {
-        enqueueSnackbar(dataError.title, {
-          variant: "error",
-          autoHideDuration: 2000,
-        });
+        enqueueSnackbar(err.data.title, { variant: "error" });
       }
     }
   };
@@ -126,7 +133,7 @@ function SignInPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  // helperText={message !== "" ? userError.Username : message}
+                  helperText={getUsernameError()}
                   required
                 />
               </Grid>
@@ -142,7 +149,7 @@ function SignInPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  // helperText={message !== "" ? userError.Password : message}
+                  helperText={getPasswordError()}
                   required
                   InputProps={{
                     endAdornment: (
