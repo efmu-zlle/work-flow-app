@@ -1,13 +1,10 @@
 import Box from "@mui/material/Box";
 import Header from "../components/Header";
 import Button from "@mui/material/Button";
-import useFetch from "../hooks/useFetch";
 import { IUser } from "../interfaces";
 import ListTeam from "../components/ListTeam";
 
 function TeamPage() {
-  const [{ currentUser }] = useFetch<IUser>();
-
   return (
     <>
       <Header />
@@ -41,7 +38,7 @@ function TeamPage() {
             create team
           </Button>
         </div>
-        <ListTeam userId={currentUser?.userId} />
+        <ListTeam />
       </Box>
     </>
   );

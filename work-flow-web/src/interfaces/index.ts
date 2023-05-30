@@ -1,16 +1,3 @@
-type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-export type Action<T> =
-  | { type: "REQUEST_START" }
-  | { type: "REQUEST_SUCCESS"; payload: IResponseInit<T> }
-  | { type: "POST_SUCCESS"; payload: IResponseInit<T> }
-  | { type: "REQUEST_ERROR"; payload: IResponseInit<T> }
-  | { type: "REQUEST_FAILURE"; payload: any }
-  | { type: "UPDATE_USER_DATA"; payload: Partial<T> }
-  | { type: "REQUEST_ERROR_400"; payload: IResponseInit<T> }
-  | { type: "FINISH_ALERT" }
-  | { type: "REQUEST_FINISH" };
-
 export interface IUser {
   userId?: string;
   username: string;
@@ -18,6 +5,11 @@ export interface IUser {
   password: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface IUserCredentials {
+  username: string;
+  password: string;
 }
 
 export interface ITeam {
@@ -47,22 +39,3 @@ export interface IResponseInit<T> {
   errors?: IErrors | null;
   currentUser: IUser | null;
 }
-
-export interface IHttpRequest {
-  method: HttpMethod;
-  url: string;
-  body?: any;
-  to?: string | null;
-}
-
-interface IEndPoints {
-  signUp: string;
-  signIn: string;
-  getTeam: string;
-}
-
-export const EndPoints: IEndPoints = {
-  signUp: "/Auth/signUp",
-  signIn: "/Auth/signIn",
-  getTeam: "/Team",
-};

@@ -15,34 +15,19 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import useFetch from "../hooks/useFetch";
 
 function SignUpPage() {
-  const [
-    { data, isLoading, isError, isSuccess, message, errors, showAlert },
-    setSettings,
-    dispatch,
-  ] = useFetch<IUser>();
-
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () =>
     setShowPassword((prevToggle) => !prevToggle);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-
-    dispatch({ type: "UPDATE_USER_DATA", payload: { [name]: value } });
+    // const { name, value } = e.target;
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    setSettings({
-      method: "POST",
-      url: `${EndPoints.signUp}`,
-      body: data,
-    });
   };
 
   return (
@@ -91,15 +76,15 @@ function SignUpPage() {
                   placeholder="Enter your email address"
                   label="email"
                   name="email"
-                  value={data?.email || ""}
-                  onChange={handleInputChange}
-                  error={isError}
-                  disabled={isLoading}
-                  helperText={
-                    isError && Array.isArray(errors?.Email)
-                      ? errors?.Email[0]
-                      : ""
-                  }
+                  // value={data?.email || ""}
+                  // onChange={handleInputChange}
+                  // error={isError}
+                  // disabled={isLoading}
+                  // helperText={
+                  //   isError && Array.isArray(errors?.Email)
+                  //     ? errors?.Email[0]
+                  //     : ""
+                  // }
                   required
                 />
               </Grid>
@@ -110,15 +95,15 @@ function SignUpPage() {
                   placeholder="Enter your username"
                   label="username"
                   name="username"
-                  value={data?.username || ""}
-                  onChange={handleInputChange}
-                  disabled={isLoading}
-                  error={isError}
-                  helperText={
-                    isError && Array.isArray(errors?.Username)
-                      ? errors?.Username
-                      : ""
-                  }
+                  // value={data?.username || ""}
+                  // onChange={handleInputChange}
+                  // disabled={isLoading}
+                  // error={isError}
+                  // helperText={
+                  //   isError && Array.isArray(errors?.Username)
+                  //     ? errors?.Username
+                  //     : ""
+                  // }
                   required
                 />
               </Grid>
@@ -130,15 +115,15 @@ function SignUpPage() {
                   placeholder="Enter your password"
                   label="password"
                   name="password"
-                  value={data?.password || ""}
-                  onChange={handleInputChange}
-                  disabled={isLoading}
-                  error={isError}
-                  helperText={
-                    isError && Array.isArray(errors?.Password)
-                      ? errors?.Password
-                      : ""
-                  }
+                  // value={data?.password || ""}
+                  // onChange={handleInputChange}
+                  // disabled={isLoading}
+                  // error={isError}
+                  // helperText={
+                  //   isError && Array.isArray(errors?.Password)
+                  //     ? errors?.Password
+                  //     : ""
+                  // }
                   required
                   InputProps={{
                     endAdornment: (
@@ -152,18 +137,18 @@ function SignUpPage() {
                 />
               </Grid>
             </Grid>
-            <CustomButton
+            {/* <CustomButton
               isLink={false}
               isLoading={isLoading}
               text={"create account"}
-            />
+            /> */}
             <CustomDivider />
             <Link to="/">
-              <CustomButton
+              {/* <CustomButton
                 isLink={true}
                 isLoading={isLoading}
                 text={"sign in"}
-              />
+              /> */}
             </Link>
           </Box>
           <Typography variant="body2">
@@ -198,27 +183,7 @@ function SignUpPage() {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      >
-        {showAlert && isSuccess && (
-          <Alert
-            sx={{ position: "absolute", top: "5%", left: "80%" }}
-            severity="success"
-            variant="filled"
-          >
-            {message}
-          </Alert>
-        )}
-
-        {showAlert && isError && (
-          <Alert
-            sx={{ position: "absolute", top: "5%", left: "80%" }}
-            severity="error"
-            variant="filled"
-          >
-            {message}
-          </Alert>
-        )}
-      </Grid>
+      ></Grid>
     </Grid>
   );
 }

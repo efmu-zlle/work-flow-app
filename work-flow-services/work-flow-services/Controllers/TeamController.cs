@@ -20,6 +20,23 @@ namespace work_flow_services.Controllers
             _context = context;
         }
 
+        [HttpGet("getTeam")]
+        public ActionResult<IEnumerable<Team>> GetTeams()
+        {
+            try
+            {
+                var teams = _context.Teams.ToList();
+
+                return Ok(new { payload = teams });
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = new { message = "Internal server error", error = ex.ToString() };
+
+                return StatusCode(500, errorMessage);
+            }
+        }
+
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<Team>> GetTeamsByUserId(string id)
         {
@@ -27,7 +44,7 @@ namespace work_flow_services.Controllers
             {
                 var teams = _context.Teams.Where(t => t.CreatorId == id).ToList();
 
-                return Ok(new { data = teams });
+                return Ok(new { payload = teams });
             }
             catch (Exception ex)
             {

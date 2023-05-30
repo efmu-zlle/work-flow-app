@@ -3,13 +3,14 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
-import { FetchProvider } from "./context/FetchProvider.tsx";
+import { Provider } from "react-redux";
+import { store } from "./store/store.ts";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <FetchProvider>
+    <Provider store={store}>
       <CssBaseline />
       <App />
-    </FetchProvider>
+    </Provider>
   </React.StrictMode>
 );

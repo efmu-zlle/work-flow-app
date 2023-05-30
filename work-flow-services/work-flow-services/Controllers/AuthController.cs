@@ -28,12 +28,12 @@ namespace work_flow_services.Controllers
             {
                 if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 {
-                    return Unauthorized(new { isError = true, message = "Username is already taken." });
+                    return Unauthorized(new { message = "Username is already taken." });
                 }
 
                 if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                 {
-                    return Unauthorized(new { isError = true, message = "Email is already taken." });
+                    return Unauthorized(new { message = "Email is already taken." });
                 }
 
                 var user = new User
@@ -61,7 +61,7 @@ namespace work_flow_services.Controllers
                     UpdatedAt = user.UpdatedAt
                 };
 
-                return Ok(new { isSuccess = true, message = "User created successfully.", data = userDTO } );            
+                return Ok(new { message = "User created successfully.", payload = userDTO } );            
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace work_flow_services.Controllers
                 var _passwordHasher = new PasswordHasher<User>();
                 if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password).Equals(PasswordVerificationResult.Success))
                 {
-                    return Unauthorized(new { isError = true, message = "Invalid username or password." });
+                    return Unauthorized(new { message = "Invalid username or password." });
                 }
 
                 user.UpdatedAt = DateTime.Now;
@@ -96,7 +96,7 @@ namespace work_flow_services.Controllers
                     UpdatedAt = user.UpdatedAt
                 };
 
-                return Ok(new { isSuccess = true, message = "User signed in successfully.", data = userDTO } );
+                return Ok(new { message = "User signed in successfully.", payload = userDTO } );
             }
             catch (Exception ex)
             {

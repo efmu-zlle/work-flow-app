@@ -6,8 +6,6 @@ import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage";
 import TeamPage from "./pages/TeamPage";
 import MemberPage from "./pages/MemberPage";
-import { FetchContext } from "./context/FetchProvider";
-import { useContext } from "react";
 
 function App() {
   const customTheme = createTheme({
@@ -28,7 +26,6 @@ function App() {
       fontFamily: ["Wix Madefor Display", "sans-serif"].join(","),
     },
   });
-  const { state } = useContext(FetchContext);
 
   return (
     <ThemeProvider theme={customTheme}>
@@ -37,20 +34,15 @@ function App() {
           <Route
             path="/"
             element={
-              state.currentUser ? (
-                <Navigate to="/home" replace />
-              ) : (
-                <SignInPage />
-              )
+              // state.currentUser ? (
+              //   <Navigate to="/home" replace />
+              // ) : (
+              <SignInPage />
+              // )
             }
           />
           <Route path="sign-up" element={<SignUpPage />} />
-          <Route
-            path="home"
-            element={
-              !state.currentUser ? <Navigate to="/" replace /> : <HomePage />
-            }
-          />
+          <Route path="home" element={<HomePage />} />
           <Route path="team" element={<TeamPage />} />
           <Route path="member" element={<MemberPage />} />
           <Route path="*" element={<NotFound />} />

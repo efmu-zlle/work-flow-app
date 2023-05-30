@@ -1,7 +1,6 @@
 import Grid from "@mui/material/Grid";
 import { MouseEvent, useState } from "react";
 import { EndPoints, ITeam } from "../interfaces";
-import useFetch from "../hooks/useFetch";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
@@ -19,32 +18,20 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import CardHeader from "@mui/material/CardHeader";
 
-interface Props {
-  userId: string | undefined;
-}
-
-function ListTeam({ userId }: Props) {
-  const [{ data, isLoading }] = useFetch<ITeam[]>({
-    method: "GET",
-    url: `${EndPoints.getTeam}/${userId}`,
-  });
-
+function ListTeam() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
-      {data && Array.isArray(data) && data.length !== 0 ? (
+      {/* {data && Array.isArray(data) && data.length !== 0 ? (
         <Grid container spacing={2} sx={{ width: "100%", maxHeight: "100%" }}>
           {data.map((team) => (
             <Grid item key={team.teamId} xs={12} sm={6} md={4}>
@@ -160,7 +147,7 @@ function ListTeam({ userId }: Props) {
             </Typography>
           </div>
         </Box>
-      )}
+      )} */}
     </>
   );
 }
