@@ -7,27 +7,42 @@ import hero from "../assets/images/bg-hero.png";
 import logo from "../assets/svg/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
-import { EndPoints, IUser } from "../interfaces";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import Alert from "@mui/material/Alert";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { IUser } from "../interfaces/user";
+import { useSignUpMutation } from "../store/api/authSlice";
 
 function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [signUp, { isLoading, isError }] = useSignUpMutation();
+  const [user, setUser] = useState<IUser>({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   const handleTogglePassword = () =>
     setShowPassword((prevToggle) => !prevToggle);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    // const { name, value } = e.target;
+    const { name, value } = e.target;
+
+    setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    try {
+      const response = await signUp(user).unwrap();
+      console.log("has succeded", response);
+    } catch (error) {
+      console.error("request failed", error);
+    }
   };
 
   return (
@@ -76,10 +91,10 @@ function SignUpPage() {
                   placeholder="Enter your email address"
                   label="email"
                   name="email"
-                  // value={data?.email || ""}
-                  // onChange={handleInputChange}
+                  value={user.email}
+                  onChange={handleInputChange}
                   // error={isError}
-                  // disabled={isLoading}
+                  disabled={isLoading}
                   // helperText={
                   //   isError && Array.isArray(errors?.Email)
                   //     ? errors?.Email[0]
@@ -95,10 +110,10 @@ function SignUpPage() {
                   placeholder="Enter your username"
                   label="username"
                   name="username"
-                  // value={data?.username || ""}
-                  // onChange={handleInputChange}
-                  // disabled={isLoading}
-                  // error={isError}
+                  value={user.username}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  error={isError}
                   // helperText={
                   //   isError && Array.isArray(errors?.Username)
                   //     ? errors?.Username
@@ -115,10 +130,10 @@ function SignUpPage() {
                   placeholder="Enter your password"
                   label="password"
                   name="password"
-                  // value={data?.password || ""}
-                  // onChange={handleInputChange}
-                  // disabled={isLoading}
-                  // error={isError}
+                  value={user.password}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  error={isError}
                   // helperText={
                   //   isError && Array.isArray(errors?.Password)
                   //     ? errors?.Password
@@ -137,18 +152,18 @@ function SignUpPage() {
                 />
               </Grid>
             </Grid>
-            {/* <CustomButton
+            <CustomButton
               isLink={false}
               isLoading={isLoading}
               text={"create account"}
-            /> */}
+            />
             <CustomDivider />
             <Link to="/">
-              {/* <CustomButton
+              <CustomButton
                 isLink={true}
                 isLoading={isLoading}
                 text={"sign in"}
-              /> */}
+              />
             </Link>
           </Box>
           <Typography variant="body2">

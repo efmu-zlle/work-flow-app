@@ -12,8 +12,14 @@ export interface IUserCredentials {
   password: string;
 }
 
+export interface IUserErrors {
+  Email?: string;
+  Username: string;
+  Password: string;
+}
+
 export interface IErrors {
-  Email: string | string[] | Record<string, string>;
-  Username: string | string[] | Record<string, string>;
-  Password: string | string[] | Record<string, string>;
+  errors: IUserErrors;
+  title: string;
+  message: string;
 }

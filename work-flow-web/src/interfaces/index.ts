@@ -13,13 +13,6 @@ export const EndPoints: IEndPoints = {
 };
 
 export interface IResponseInit<T> {
-  data: T | null;
+  payload: T | null;
   message: string;
-  isSuccess: boolean;
-  isError: boolean;
-  isLoading: boolean;
-  exception: any;
-  showAlert: boolean;
-  errors?: IErrors | null;
-  currentUser: IUser | null;
 }

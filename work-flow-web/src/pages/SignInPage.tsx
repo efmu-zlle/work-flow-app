@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
@@ -14,11 +14,19 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useSignInMutation } from "../store/api/authSlice";
-import { IUserCredentials } from "../interfaces/user";
+import { IErrors, IUserCredentials, IUserErrors } from "../interfaces/user";
+import { useSnackbar } from "notistack";
 
 function SignInPage() {
-  const [signIn, { isLoading }] = useSignInMutation();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigation = useNavigate();
+  const [signIn, { isLoading, isError }] = useSignInMutation();
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState("");
+  const [userError, setUserError] = useState<IUserErrors>({
+    Username: "",
+    Password: "",
+  });
   const [user, setUser] = useState<IUserCredentials>({
     username: "",
     password: "",
@@ -38,10 +46,27 @@ function SignInPage() {
 
     try {
       const response = await signIn(user).unwrap();
-      console.log("fulfilled", response);
-      // here we will use the navigation
-    } catch (error) {
-      console.log("failed", error);
+      enqueueSnackbar(response.message, {
+        variant: "success",
+        autoHideDuration: 2000,
+      });
+
+      navigation("/home");
+    } catch (err) {
+      const { data } = err as any;
+      const dataError = data as IErrors;
+
+      if (data.message === "Invalid username or password.") {
+        enqueueSnackbar(dataError.message, {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
+      } else {
+        enqueueSnackbar(dataError.title, {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
+      }
     }
   };
 
@@ -100,12 +125,8 @@ function SignInPage() {
                   value={user.username}
                   onChange={handleInputChange}
                   disabled={isLoading}
-                  // error={isError}
-                  // helperText={
-                  //   isError && Array.isArray(errors?.Username)
-                  //     ? errors?.Username[0]
-                  //     : ""
-                  // }
+                  error={isError}
+                  // helperText={message !== "" ? userError.Username : message}
                   required
                 />
               </Grid>
@@ -120,12 +141,8 @@ function SignInPage() {
                   value={user.password}
                   onChange={handleInputChange}
                   disabled={isLoading}
-                  // error={isError}
-                  // helperText={
-                  //   isError && Array.isArray(errors?.Password)
-                  //     ? errors?.Password[0]
-                  //     : ""
-                  // }
+                  error={isError}
+                  // helperText={message !== "" ? userError.Password : message}
                   required
                   InputProps={{
                     endAdornment: (

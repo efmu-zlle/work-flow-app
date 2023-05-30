@@ -28,12 +28,12 @@ namespace work_flow_services.Controllers
             {
                 if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 {
-                    return Unauthorized(new { message = "Username is already taken." });
+                    return BadRequest(new { message = "Username is already taken." });
                 }
 
                 if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                 {
-                    return Unauthorized(new { message = "Email is already taken." });
+                    return BadRequest(new { message = "Email is already taken." });
                 }
 
                 var user = new User
