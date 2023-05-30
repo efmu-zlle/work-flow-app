@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IUser, IUserCredentials } from "../../interfaces";
+import { IUser, IUserCredentials } from "../../interfaces/user";
+import { EndPoints } from "../../interfaces";
 
 export const authSlice = createApi({
   reducerPath: "auth",
@@ -10,7 +11,7 @@ export const authSlice = createApi({
   endpoints: (builder) => ({
     signUp: builder.mutation<IUser, Partial<IUser>>({
       query: (body) => ({
-        url: "api/Auth/signUp",
+        url: `api/${EndPoints.signUp}`,
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
@@ -24,7 +25,7 @@ export const authSlice = createApi({
 
     signIn: builder.mutation<IUser, IUserCredentials>({
       query: (userCredentials) => ({
-        url: "api/Auth/signIn",
+        url: `api/${EndPoints.signIn}`,
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
