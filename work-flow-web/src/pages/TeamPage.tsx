@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Header from "../components/Header";
 import Button from "@mui/material/Button";
-import { IUser } from "../interfaces";
 import ListTeam from "../components/ListTeam";
 
 function TeamPage() {

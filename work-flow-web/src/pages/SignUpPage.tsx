@@ -8,17 +8,28 @@ import logo from "../assets/svg/logo.svg";
 import CustomButton from "../components/CustomButton";
 import CustomDivider from "../components/CustomDivider";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { IUser } from "../interfaces/user";
 import { useSignUpMutation } from "../store/api/authSlice";
+import { IUser } from "../interfaces/user";
+import { enqueueSnackbar } from "notistack";
+import { isRequiredError, isValidationError } from "../services/helpers";
+import { IUserError } from "../interfaces/error";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 function SignUpPage() {
+  const navigation = useNavigate();
+  const [_, setCurrentUser] = useLocalStorage<IUser>("currentUser", null);
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, { isLoading, isError }] = useSignUpMutation();
+  const [userError, setUserError] = useState<IUserError>({
+    Email: {},
+    Username: {},
+    Password: {},
+  });
   const [user, setUser] = useState<IUser>({
     username: "",
     email: "",
@@ -27,6 +38,15 @@ function SignUpPage() {
 
   const handleTogglePassword = () =>
     setShowPassword((prevToggle) => !prevToggle);
+
+  const getEmailError = () =>
+    userError.Email && userError.Email[0] ? userError.Email[0] : "";
+
+  const getUsernameError = () =>
+    userError.Username && userError.Username[0] ? userError.Username[0] : "";
+
+  const getPasswordError = () =>
+    userError.Password && userError.Password[0] ? userError.Password[0] : "";
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -39,9 +59,23 @@ function SignUpPage() {
 
     try {
       const response = await signUp(user).unwrap();
-      console.log("has succeded", response);
+      enqueueSnackbar(response.message, {
+        variant: "success",
+        autoHideDuration: 2000,
+      });
+      setCurrentUser(response.payload!);
+
+      navigation("/home");
     } catch (error) {
-      console.error("request failed", error);
+      if (isValidationError(error)) {
+        setUserError({ Email: "", Username: "", Password: "" });
+        enqueueSnackbar(error.data.message, { variant: "error" });
+      } else if (isRequiredError(error)) {
+        const { Email, Username, Password } = error.data.errors;
+        setUserError({ Email, Username, Password });
+
+        enqueueSnackbar(error.data.title, { variant: "error" });
+      }
     }
   };
 
@@ -93,13 +127,9 @@ function SignUpPage() {
                   name="email"
                   value={user.email}
                   onChange={handleInputChange}
-                  // error={isError}
+                  error={isError}
                   disabled={isLoading}
-                  // helperText={
-                  //   isError && Array.isArray(errors?.Email)
-                  //     ? errors?.Email[0]
-                  //     : ""
-                  // }
+                  helperText={getEmailError()}
                   required
                 />
               </Grid>
@@ -114,11 +144,7 @@ function SignUpPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  // helperText={
-                  //   isError && Array.isArray(errors?.Username)
-                  //     ? errors?.Username
-                  //     : ""
-                  // }
+                  helperText={getUsernameError()}
                   required
                 />
               </Grid>
@@ -134,11 +160,7 @@ function SignUpPage() {
                   onChange={handleInputChange}
                   disabled={isLoading}
                   error={isError}
-                  // helperText={
-                  //   isError && Array.isArray(errors?.Password)
-                  //     ? errors?.Password
-                  //     : ""
-                  // }
+                  helperText={getPasswordError()}
                   required
                   InputProps={{
                     endAdornment: (

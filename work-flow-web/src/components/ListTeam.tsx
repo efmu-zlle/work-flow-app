@@ -1,6 +1,5 @@
 import Grid from "@mui/material/Grid";
 import { MouseEvent, useState } from "react";
-import { EndPoints, ITeam } from "../interfaces";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
@@ -19,15 +18,15 @@ import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import CardHeader from "@mui/material/CardHeader";
 
 function ListTeam() {
-  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // const open = Boolean(anchorEl);
-  // const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -113,41 +112,41 @@ function ListTeam() {
             </Grid>
           ))}
         </Grid>
-      ) : (
-        <Box
+      ) : ( */}
+      <Box
+        sx={{
+          border: (theme) => `1px dotted ${theme.palette.primary.main}`,
+          borderRadius: ".50em",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <CardMedia
+          component="img"
+          src={teamwork}
           sx={{
-            border: (theme) => `1px dotted ${theme.palette.primary.main}`,
-            borderRadius: ".50em",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
+            height: "auto",
+            width: 400,
           }}
-        >
-          <CardMedia
-            component="img"
-            src={teamwork}
-            sx={{
-              height: "auto",
-              width: 400,
-            }}
-          />
+        />
 
-          <div style={{ fontStyle: "italic", marginTop: "5em" }}>
-            <Typography
-              component="span"
-              sx={{ display: "block", textAlign: "center", fontWeight: 700 }}
-            >
-              You don&apos;t have a team yet
-            </Typography>
-            <Typography component="span">
-              Create one, and be part of our community
-            </Typography>
-          </div>
-        </Box>
-      )} */}
+        <div style={{ fontStyle: "italic", marginTop: "5em" }}>
+          <Typography
+            component="span"
+            sx={{ display: "block", textAlign: "center", fontWeight: 700 }}
+          >
+            You don&apos;t have a team yet
+          </Typography>
+          <Typography component="span">
+            Create one, and be part of our community
+          </Typography>
+        </div>
+      </Box>
+      {/* )} */}
     </>
   );
 }

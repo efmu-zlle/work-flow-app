@@ -14,14 +14,15 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useSignInMutation } from "../store/api/authSlice";
-import { IUserCredentials } from "../interfaces/user";
-import { useSnackbar } from "notistack";
+import { IUser, IUserCredentials } from "../interfaces/user";
+import { enqueueSnackbar } from "notistack";
 import { isRequiredError, isValidationError } from "../services/helpers";
 import { IUserError } from "../interfaces/error";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 function SignInPage() {
-  const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
+  const [_, setCurrentUser] = useLocalStorage<IUser>("currentUser", null);
   const [signIn, { isLoading, isError }] = useSignInMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [userError, setUserError] = useState<IUserError>({
@@ -53,26 +54,23 @@ function SignInPage() {
 
     try {
       const response = await signIn(user).unwrap();
-
       enqueueSnackbar(response.message, {
         variant: "success",
         autoHideDuration: 2000,
       });
+      setCurrentUser(response.payload!);
 
       navigation("/home");
-    } catch (err) {
-      if (isValidationError(err)) {
-        enqueueSnackbar(err.data.message, { variant: "error" });
-        setUserError({
-          Username: "",
-          Password: "",
-        });
-      } else if (isRequiredError(err)) {
-        console.log(err.data.errors);
-        const { Username, Password } = err.data.errors;
-        setUserError({ Username: Username, Password: Password });
+    } catch (error) {
+      if (isValidationError(error)) {
+        enqueueSnackbar(error.data.message, { variant: "error" });
 
-        enqueueSnackbar(err.data.title, { variant: "error" });
+        setUserError({ Username: "", Password: "" });
+      } else if (isRequiredError(error)) {
+        const { Username, Password } = error.data.errors;
+        setUserError({ Username, Password });
+
+        enqueueSnackbar(error.data.title, { variant: "error" });
       }
     }
   };

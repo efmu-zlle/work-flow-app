@@ -10,8 +10,12 @@ import deepOrange from "@mui/material/colors/deepOrange";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { IUser } from "../interfaces/user";
 
 function Header() {
+  const [currentUser, _] = useLocalStorage<IUser>("currentUser", null);
+
   return (
     <AppBar
       position="fixed"
@@ -68,15 +72,15 @@ function Header() {
             ))}
           </Box>
           <Box>
-            {/* <Tooltip title={`${currentUser?.email}`}>
+            <Tooltip title={`${currentUser.email}`}>
               <IconButton sx={{ p: 0 }}>
                 <Avatar
                   sx={{ bgcolor: deepOrange[500], textTransform: "uppercase" }}
                 >
-                  {currentUser?.username[0]}
+                  {currentUser.username[0]}
                 </Avatar>
               </IconButton>
-            </Tooltip> */}
+            </Tooltip>
           </Box>
         </Toolbar>
       </Container>

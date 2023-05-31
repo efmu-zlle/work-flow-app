@@ -5,12 +5,12 @@ interface IEndPoints {
 }
 
 export const EndPoints: IEndPoints = {
-  signUp: "Auth/signUn",
+  signUp: "Auth/signUp",
   signIn: "Auth/signIn",
   getTeam: "Team/getTeam",
 };
 
-export interface IResponseInit<T> {
+export interface IResponseAPI<T> {
   payload: T | null;
   message: string;
 }
