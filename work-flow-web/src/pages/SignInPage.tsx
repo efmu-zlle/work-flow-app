@@ -13,11 +13,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useSignInMutation } from "../store/api/authSlice";
 import { IUser, IUserCredentials } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
 import { isRequiredError, isValidationError } from "../services/helpers";
 import { IUserError } from "../interfaces/error";
+import { useSignInMutation } from "../store/api/authSlice";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 function SignInPage() {
@@ -54,6 +54,7 @@ function SignInPage() {
 
     try {
       const response = await signIn(user).unwrap();
+
       enqueueSnackbar(response.message, {
         variant: "success",
         autoHideDuration: 2000,

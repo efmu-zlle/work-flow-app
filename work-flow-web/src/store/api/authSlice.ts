@@ -3,11 +3,11 @@ import { IUser, IUserCredentials } from "../../interfaces/user";
 import { EndPoints, IResponseAPI } from "../../interfaces";
 
 export const authSlice = createApi({
-  reducerPath: "auth",
+  reducerPath: "authSlice",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://localhost:5001/",
   }),
-  tagTypes: ["User"],
+  tagTypes: ["user"],
   endpoints: (builder) => ({
     signUp: builder.mutation<IResponseAPI<IUser>, Partial<IUser>>({
       query: (body) => ({
@@ -19,7 +19,7 @@ export const authSlice = createApi({
         body,
       }),
       // end query
-      invalidatesTags: ["User"],
+      invalidatesTags: ["user"],
     }),
     // end signUp
 
@@ -33,7 +33,7 @@ export const authSlice = createApi({
         body: userCredentials,
       }),
       // end query
-      invalidatesTags: ["User"],
+      invalidatesTags: ["user"],
     }),
     // end signIn
   }),

@@ -1,13 +1,15 @@
 interface IEndPoints {
   signUp: string;
   signIn: string;
-  getTeam: string;
+  getTeamById: string;
+  createTeam: string;
 }
 
 export const EndPoints: IEndPoints = {
   signUp: "Auth/signUp",
   signIn: "Auth/signIn",
-  getTeam: "Team/getTeam",
+  getTeamById: "Team",
+  createTeam: "Team/createTeam",
 };
 
 export interface IResponseAPI<T> {

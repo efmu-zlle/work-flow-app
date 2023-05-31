@@ -16,8 +16,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import CardHeader from "@mui/material/CardHeader";
+import { useGetTeamsQuery } from "../store/api/teamSlice";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { IUser } from "../interfaces/user";
 
 function ListTeam() {
+  const [currentUser, _] = useLocalStorage<IUser>("currentUser", null);
+  const { data: teams, isFetching } = useGetTeamsQuery(currentUser.userId!);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -28,11 +33,15 @@ function ListTeam() {
     setAnchorEl(null);
   };
 
+  if (isFetching) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
-      {/* {data && Array.isArray(data) && data.length !== 0 ? (
+      {teams?.payload && teams.payload.length !== 0 ? (
         <Grid container spacing={2} sx={{ width: "100%", maxHeight: "100%" }}>
-          {data.map((team) => (
+          {teams.payload.map((team) => (
             <Grid item key={team.teamId} xs={12} sm={6} md={4}>
               <Card
                 sx={{
@@ -112,41 +121,41 @@ function ListTeam() {
             </Grid>
           ))}
         </Grid>
-      ) : ( */}
-      <Box
-        sx={{
-          border: (theme) => `1px dotted ${theme.palette.primary.main}`,
-          borderRadius: ".50em",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <CardMedia
-          component="img"
-          src={teamwork}
+      ) : (
+        <Box
           sx={{
-            height: "auto",
-            width: 400,
+            border: (theme) => `1px dotted ${theme.palette.primary.main}`,
+            borderRadius: ".50em",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
           }}
-        />
+        >
+          <CardMedia
+            component="img"
+            src={teamwork}
+            sx={{
+              height: "auto",
+              width: 400,
+            }}
+          />
 
-        <div style={{ fontStyle: "italic", marginTop: "5em" }}>
-          <Typography
-            component="span"
-            sx={{ display: "block", textAlign: "center", fontWeight: 700 }}
-          >
-            You don&apos;t have a team yet
-          </Typography>
-          <Typography component="span">
-            Create one, and be part of our community
-          </Typography>
-        </div>
-      </Box>
-      {/* )} */}
+          <div style={{ fontStyle: "italic", marginTop: "5em" }}>
+            <Typography
+              component="span"
+              sx={{ display: "block", textAlign: "center", fontWeight: 700 }}
+            >
+              You don&apos;t have a team yet
+            </Typography>
+            <Typography component="span">
+              Create one, and be part of our community
+            </Typography>
+          </div>
+        </Box>
+      )}
     </>
   );
 }
