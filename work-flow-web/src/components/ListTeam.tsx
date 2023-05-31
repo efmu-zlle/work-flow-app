@@ -21,8 +21,11 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { IUser } from "../interfaces/user";
 
 function ListTeam() {
-  const [currentUser, _] = useLocalStorage<IUser>("currentUser", null);
-  const { data: teams, isFetching } = useGetTeamsQuery(currentUser.userId!);
+  const [{ userId }, _] = useLocalStorage<IUser>("currentUser", null);
+  const { data: teams, isFetching } = useGetTeamsQuery(userId!, {
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+  });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {

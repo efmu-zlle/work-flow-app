@@ -14,7 +14,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { IUser } from "../interfaces/user";
 
 function Header() {
-  const [currentUser, _] = useLocalStorage<IUser>("currentUser", null);
+  const [{ email, username }, _] = useLocalStorage<IUser>("currentUser", null);
 
   return (
     <AppBar
@@ -72,12 +72,12 @@ function Header() {
             ))}
           </Box>
           <Box>
-            <Tooltip title={`${currentUser.email}`}>
+            <Tooltip title={`${email}`}>
               <IconButton sx={{ p: 0 }}>
                 <Avatar
                   sx={{ bgcolor: deepOrange[500], textTransform: "uppercase" }}
                 >
-                  {currentUser.username[0]}
+                  {username[0]}
                 </Avatar>
               </IconButton>
             </Tooltip>

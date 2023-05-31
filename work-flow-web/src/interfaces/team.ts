@@ -1,9 +1,9 @@
 export interface ITeam {
-  teamId: string;
+  teamId?: string;
   name: string;
   description: string;
   creatorId: string;
-  code: string;
+  code?: string;
   createdAt?: string;
   updatedAt?: string;
 }

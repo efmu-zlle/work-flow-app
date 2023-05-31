@@ -2,8 +2,14 @@ import Box from "@mui/material/Box";
 import Header from "../components/Header";
 import Button from "@mui/material/Button";
 import ListTeam from "../components/ListTeam";
+import BasicModal from "../components/BasicModal";
+import { useState } from "react";
 
 function TeamPage() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       <Header />
@@ -23,7 +29,7 @@ function TeamPage() {
       >
         <div style={{ marginBottom: "1em", alignSelf: "flex-end" }}>
           <Button
-            type="submit"
+            type="button"
             variant="contained"
             color="primary"
             sx={{
@@ -33,12 +39,14 @@ function TeamPage() {
                 color: (theme) => theme.palette.primary.main,
               },
             }}
+            onClick={handleOpen}
           >
             create team
           </Button>
         </div>
         <ListTeam />
       </Box>
+      <BasicModal open={open} handleClose={handleClose} />
     </>
   );
 }

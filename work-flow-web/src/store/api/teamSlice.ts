@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { EndPoints, IResponseAPI } from "../../interfaces";
+import { BASE_URL, EndPoints, IResponseAPI } from "../../interfaces";
 import { ITeam } from "../../interfaces/team";
 
 export const teamSlice = createApi({
   reducerPath: "teamSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://localhost:5001/",
+    baseUrl: `${BASE_URL}`,
   }),
   tagTypes: ["teams"],
   endpoints: (builder) => ({

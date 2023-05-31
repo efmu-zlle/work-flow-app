@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IUser, IUserCredentials } from "../../interfaces/user";
-import { EndPoints, IResponseAPI } from "../../interfaces";
+import { BASE_URL, EndPoints, IResponseAPI } from "../../interfaces";
 
 export const authSlice = createApi({
   reducerPath: "authSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://localhost:5001/",
+    baseUrl: `${BASE_URL}`,
   }),
   tagTypes: ["user"],
   endpoints: (builder) => ({

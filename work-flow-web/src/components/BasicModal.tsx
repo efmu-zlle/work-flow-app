@@ -2,7 +2,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { IUser } from "../interfaces/user";
+
+type Props = {
+  open: boolean;
+  handleClose: () => void;
+};
 
 const style = {
   position: "absolute" as "absolute",
@@ -10,33 +18,62 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  backgroundImage: "linear-gradient(68deg, #CEDFFF, #D7FFEF, #D4F7FF)",
+  borderRadius: ".25em",
 };
 
-function BasicModal() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+function BasicModal({ open, handleClose }: Props) {
+  const [{ userId, username }, _] = useLocalStorage<IUser>("currentUser", null);
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+        <Box sx={style} component="form" noValidate autoComplete="off">
+          <Box>
+            <Typography variant="h6">Welcome, {username}</Typography>
+            <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
+              create a new team
+            </Typography>
+          </Box>
+          <TextField
+            autoFocus
+            fullWidth
+            label="name"
+            placeholder="name"
+            variant="filled"
+            sx={{ mt: "1em", mb: "1em" }}
+          />
+          <TextField
+            fullWidth
+            variant="filled"
+            label="description"
+            placeholder="description"
+            sx={{ mt: "1em", mb: "1em" }}
+          />
+          <Grid container spacing={2} sx={{ mt: ".50em" }}>
+            <Grid item xs={12} sm={6}>
+              <Button fullWidth type="submit" variant="contained">
+                create team
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Button
+                fullWidth
+                type="button"
+                variant="contained"
+                onClick={handleClose}
+              >
+                cancel
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
       </Modal>
     </div>
