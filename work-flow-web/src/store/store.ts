@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./api/authSlice";
 import { teamSlice } from "./api/teamSlice";
-import { modalSlice } from "./slices/modalSlice";
+import { modalTeamSlice } from "./slices/modalTeamSlice";
 
 export const store = configureStore({
   reducer: {
     [authSlice.reducerPath]: authSlice.reducer,
     [teamSlice.reducerPath]: teamSlice.reducer,
-    modalSlice: modalSlice.reducer,
+    modalTeamSlice: modalTeamSlice.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>

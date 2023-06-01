@@ -27,15 +27,12 @@ export const teamSlice = createApi({
     }),
     // end createTeam
 
-    updateTeam: builder.mutation<
-      IResponseAPI<ITeam>,
-      { id: string; requestBody: Partial<ITeam> }
-    >({
-      query: ({ id, requestBody }) => ({
-        url: `api/${EndPoints.updateTeam}/${id}`,
+    updateTeam: builder.mutation<IResponseAPI<ITeam>, Partial<ITeam>>({
+      query: (body) => ({
+        url: `api/${EndPoints.updateTeam}`,
         method: "PUT",
         headers: { "Content-Type": "application/json; charset=UTF-8" },
-        body: requestBody,
+        body,
       }),
       // end query
       invalidatesTags: ["teams"],

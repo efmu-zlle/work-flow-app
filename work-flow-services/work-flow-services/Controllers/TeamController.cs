@@ -67,19 +67,19 @@ namespace work_flow_services.Controllers
             }
         }
 
-        [HttpPut("updateTeam/{id}")]
-        public IActionResult UpdateTeam(string id, Team request)
+        [HttpPut("updateTeam")]
+        public IActionResult UpdateTeam(Team request)
         {
             try
             {
-                var team = _context.Teams.FirstOrDefault(t => t.TeamId == id);
+                var team = _context.Teams.FirstOrDefault(t => t.TeamId == request.TeamId);
 
                 if (team == null)
                 {
                     return NotFound();
                 }
 
-                team.Name = request.TeamId;
+                team.Name = request.Name;
                 team.Description = request.Description;
                 team.UpdatedAt = DateTime.Now;
 

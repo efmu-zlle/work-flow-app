@@ -25,30 +25,33 @@ import { IUser } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { useDispatch } from "react-redux";
-import { openModal } from "../store/slices/modalSlice";
-import TeamFormModal from "./TeamFormModal";
 import { ITeam } from "../interfaces/team";
+import { openModal } from "../store/slices/modalTeamSlice";
+import TeamFormModal from "./TeamFormModal";
 
 function TeamList() {
-  const [{ userId }, _] = useLocalStorage<IUser>("currentUser", null);
-  const [currentTeam, setCurrentTeam] = useLocalStorage<ITeam>(
-    "currentTeam",
-    null
-  );
   const dispatch = useDispatch();
+  const [{ userId }, _] = useLocalStorage<IUser>("currentUser", null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [deleteTeam] = useDeleteTeamMutation();
   const open = Boolean(anchorEl);
+  const [currentTeam, setCurrentTeam] = useState<ITeam>({
+    teamId: "",
+    name: "",
+    description: "",
+    creatorId: "",
+  });
+
   const { data: teams, isFetching } = useGetTeamsQuery(userId!, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
 
-  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleClickAnchor = (e: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseAnchor = () => {
     setAnchorEl(null);
   };
 
@@ -72,7 +75,7 @@ function TeamList() {
 
   return (
     <>
-      <TeamFormModal />
+      <TeamFormModal setAnchorEl={setAnchorEl} />
 
       <div style={{ marginBottom: "1em", alignSelf: "flex-end" }}>
         <Button
@@ -86,7 +89,16 @@ function TeamList() {
               color: (theme) => theme.palette.primary.main,
             },
           }}
-          onClick={() => dispatch(openModal(false))}
+          onClick={() =>
+            dispatch(
+              openModal({
+                teamId: "",
+                name: "",
+                description: "",
+                creatorId: "",
+              })
+            )
+          }
         >
           create team
         </Button>
@@ -148,7 +160,7 @@ function TeamList() {
                         description: team.description,
                         creatorId: team.creatorId,
                       });
-                      handleClick(e);
+                      handleClickAnchor(e);
                     }}
                   >
                     <MoreVertIcon color="primary" />
@@ -157,14 +169,14 @@ function TeamList() {
                     id="basic-menu"
                     anchorEl={anchorEl}
                     open={open}
-                    onClose={handleClose}
+                    onClose={handleCloseAnchor}
                     MenuListProps={{
                       "aria-labelledby": "basic-button",
                     }}
                     transformOrigin={{ horizontal: "right", vertical: "top" }}
                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                   >
-                    <MenuItem onClick={() => dispatch(openModal(true))}>
+                    <MenuItem onClick={() => dispatch(openModal(currentTeam))}>
                       <ListItemIcon>
                         <EditIcon fontSize="small" sx={{ color: "green" }} />
                       </ListItemIcon>

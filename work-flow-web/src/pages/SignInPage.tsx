@@ -15,7 +15,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { IUser, IUserCredentials } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
-import { isRequiredError, isValidationError } from "../services/helpers";
+import { isRequiredError, isValidationError } from "../utils/helpers";
 import { IUserError } from "../interfaces/error";
 import { useSignInMutation } from "../store/api/authSlice";
 import useLocalStorage from "../hooks/useLocalStorage";

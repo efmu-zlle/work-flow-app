@@ -6,16 +6,30 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { IUser } from "../interfaces/user";
-import { ChangeEvent, Dispatch, FormEvent, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useState,
+} from "react";
 import { ITeam } from "../interfaces/team";
-import { useCreateTeamMutation } from "../store/api/teamSlice";
-import { isRequiredError } from "../services/helpers";
+import {
+  useCreateTeamMutation,
+  useUpdateTeamMutation,
+} from "../store/api/teamSlice";
+import { isRequiredError } from "../utils/helpers";
 import { enqueueSnackbar } from "notistack";
 import { ITeamError } from "../interfaces/error";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { closeModal } from "../store/slices/modalSlice";
+import { closeModal, onChangeTeam } from "../store/slices/modalTeamSlice";
+import { IResponseAPI } from "../interfaces";
+
+interface Props {
+  setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
+}
 
 const style = {
   position: "absolute" as "absolute",
@@ -29,59 +43,49 @@ const style = {
   borderRadius: ".25em",
 };
 
-function TeamFormModal() {
-  const { open, isEdit } = useSelector((state: RootState) => state.modalSlice);
-  const dispatch = useDispatch();
+function TeamFormModal({ setAnchorEl }: Props) {
   const [{ userId, username }, _] = useLocalStorage<IUser>("currentUser", null);
-  const [currentTeam, setCurrentTeam] = useLocalStorage<ITeam>(
-    "currentTeam",
-    null
+  const [updateTeam, { isLoading: isUpdateLoading }] = useUpdateTeamMutation();
+  const [createTeam, { isLoading: isCreateLoading, isError }] =
+    useCreateTeamMutation();
+  const dispatch = useDispatch();
+  const { open, team, isEdit } = useSelector(
+    (state: RootState) => state.modalTeamSlice
   );
-  const [createTeam, { isLoading, isError }] = useCreateTeamMutation();
-  const [teamError, setTeamError] = useState<ITeamError>({
+  const [teamError, onChangeTeamError] = useState<ITeamError>({
     Name: {},
   });
-  const [team, setTeam] = useState<ITeam>({
-    name: currentTeam.name ? currentTeam.name : "",
-    description: "",
-    creatorId: "",
-  });
 
-  const handleCloseModal = () => {
-    if (isEdit === false) {
-      setTeam({ name: "", description: "", creatorId: "" });
-    }
-    dispatch(closeModal());
-  };
-
-  // this is just to reduce code
   const getNameError = () =>
     teamError.Name && teamError.Name[0] ? teamError.Name[0] : "";
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setTeam((prevTeam) => ({ ...prevTeam, [name]: value, creatorId: userId! }));
+    dispatch(onChangeTeam({ name, value, userId }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
     try {
-      const response = await createTeam(team).unwrap();
-      dispatch(closeModal());
+      let response: IResponseAPI<ITeam>;
+      if (isEdit) {
+        // sending the entire team with the teamId in it
+        response = await updateTeam(team).unwrap();
+        setAnchorEl(null);
+      } else {
+        response = await createTeam(team).unwrap();
+      }
 
-      enqueueSnackbar(response.message, {
+      dispatch(closeModal());
+      enqueueSnackbar(response!.message, {
         variant: "success",
         autoHideDuration: 2000,
       });
-
-      setTeam({ name: "", description: "", creatorId: "" });
     } catch (error) {
       if (isRequiredError(error)) {
         const { Name } = error.data.errors;
-        setTeamError({ Name });
-
+        onChangeTeamError({ Name });
         enqueueSnackbar(error.data.title, {
           variant: "error",
           autoHideDuration: 2000,
@@ -90,7 +94,13 @@ function TeamFormModal() {
     }
   };
   return (
-    <Modal open={open} onClose={handleCloseModal}>
+    <Modal
+      open={open}
+      onClose={() => {
+        dispatch(closeModal());
+        setAnchorEl(null);
+      }}
+    >
       <Box
         sx={style}
         component="form"
@@ -101,7 +111,7 @@ function TeamFormModal() {
         <Box>
           <Typography variant="h6">Welcome, {username}</Typography>
           <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
-            create a new team
+            {isEdit ? "update a " : "create a new"} team
           </Typography>
         </Box>
         <TextField
@@ -116,7 +126,7 @@ function TeamFormModal() {
           helperText={getNameError()}
           sx={{ mt: "1em", mb: "1em" }}
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={isCreateLoading || isUpdateLoading}
         />
         <TextField
           fullWidth
@@ -129,7 +139,7 @@ function TeamFormModal() {
           rows={4}
           sx={{ mt: "1em", mb: "1em" }}
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={isCreateLoading || isUpdateLoading}
         />
         <Grid container spacing={2} sx={{ mt: ".50em" }}>
           <Grid item xs={12} sm={6}>
@@ -137,9 +147,15 @@ function TeamFormModal() {
               fullWidth
               type="submit"
               variant="contained"
-              disabled={isLoading}
+              disabled={isCreateLoading || isUpdateLoading}
             >
-              {isLoading ? <CircularProgress size={24} /> : "create team"}
+              {isCreateLoading || isUpdateLoading ? (
+                <CircularProgress size={24} />
+              ) : isEdit ? (
+                "update team"
+              ) : (
+                "create team"
+              )}
             </Button>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -147,8 +163,11 @@ function TeamFormModal() {
               fullWidth
               type="button"
               variant="contained"
-              onClick={handleCloseModal}
-              disabled={isLoading}
+              onClick={() => {
+                dispatch(closeModal());
+                setAnchorEl(null);
+              }}
+              disabled={isCreateLoading || isUpdateLoading}
             >
               cancel
             </Button>
