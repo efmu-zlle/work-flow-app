@@ -20,24 +20,24 @@ namespace work_flow_services.Controllers
             _context = context;
         }
 
-        [HttpGet("getTeam")]
-        public ActionResult<IEnumerable<Team>> GetTeams()
-        {
-            try
-            {
-                var teams = _context.Teams.ToList();
+        //[HttpGet("getTeams")]
+        //public ActionResult<IEnumerable<Team>> GetTeams()
+        //{
+        //    try
+        //    {
+        //        var teams = _context.Teams.ToList();
 
-                return Ok(new { payload = teams });
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = new { message = "Internal server error", error = ex.ToString() };
+        //        return Ok(new { payload = teams });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var errorMessage = new { message = "Internal server error", error = ex.ToString() };
 
-                return StatusCode(500, errorMessage);
-            }
-        }
+        //        return StatusCode(500, errorMessage);
+        //    }
+        //}
 
-        [HttpGet("{id}")]
+        [HttpGet("getTeam/{id}")]
         public ActionResult<IEnumerable<Team>> GetTeamsByUserId(string id)
         {
             try
@@ -67,8 +67,8 @@ namespace work_flow_services.Controllers
                     Description = request.Description,
                     CreatorId = request.CreatorId,
                     Code = Helper.GenerateCode(),
-                    CreatedAt = request.CreatedAt,
-                    UpdatedAt = request.CreatedAt
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
 
                 _context.Teams.Add(team);
@@ -81,6 +81,33 @@ namespace work_flow_services.Controllers
             {
 
                 return StatusCode(500, $"Internal server error: {ex} ");
+            }
+        }
+
+        [HttpDelete("deleteTeam/{id}")]
+        public IActionResult DeleteTeam(string id)
+        {
+            try
+            {
+                var team = _context.Teams.FirstOrDefault(t => t.TeamId == id);
+
+                // order by date time
+
+                if (team == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Teams.Remove(team);
+                _context.SaveChanges();
+
+                return Ok(new { message = "Team has been deleted" });
+            }
+            catch (Exception ex)
+            {
+                var messageError = new { message = "Internal server error", error = ex.ToString() };
+
+                return StatusCode(500, messageError);
             }
         }
       

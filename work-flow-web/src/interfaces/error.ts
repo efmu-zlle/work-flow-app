@@ -22,3 +22,7 @@ export interface IUserError {
   Username: ErrorField;
   Password: ErrorField;
 }
+
+export interface ITeamError {
+  Name: ErrorField;
+}

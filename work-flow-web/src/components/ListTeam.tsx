@@ -16,20 +16,27 @@ import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import CardHeader from "@mui/material/CardHeader";
-import { useGetTeamsQuery } from "../store/api/teamSlice";
+import {
+  useDeleteTeamMutation,
+  useGetTeamsQuery,
+} from "../store/api/teamSlice";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { IUser } from "../interfaces/user";
+import { enqueueSnackbar } from "notistack";
 
 function ListTeam() {
   const [{ userId }, _] = useLocalStorage<IUser>("currentUser", null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [deleteTeam] = useDeleteTeamMutation();
+  const [id, setId] = useState("");
+  const open = Boolean(anchorEl);
   const { data: teams, isFetching } = useGetTeamsQuery(userId!, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(e.currentTarget);
   };
 
   const handleClose = () => {
@@ -39,6 +46,23 @@ function ListTeam() {
   if (isFetching) {
     return <div>Loading...</div>;
   }
+
+  const handleEditTeam = async (): Promise<void> => {
+    console.log(id);
+  };
+
+  const handleDeleteTeam = async (): Promise<void> => {
+    try {
+      const response = await deleteTeam(id).unwrap();
+      setAnchorEl(null);
+      enqueueSnackbar(response.message, {
+        variant: "success",
+        autoHideDuration: 1000,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -91,7 +115,9 @@ function ListTeam() {
                     aria-controls={open ? "basic-menu" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
+                    onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                      handleClick(e), setId(team.teamId!);
+                    }}
                   >
                     <MoreVertIcon color="primary" />
                   </IconButton>
@@ -106,15 +132,15 @@ function ListTeam() {
                     transformOrigin={{ horizontal: "right", vertical: "top" }}
                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                   >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={handleEditTeam}>
                       <ListItemIcon>
-                        <EditIcon fontSize="small" />
+                        <EditIcon fontSize="small" sx={{ color: "green" }} />
                       </ListItemIcon>
                       Edit
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={handleDeleteTeam}>
                       <ListItemIcon>
-                        <DeleteIcon fontSize="small" />
+                        <DeleteIcon fontSize="small" sx={{ color: "red" }} />
                       </ListItemIcon>
                       Delete
                     </MenuItem>

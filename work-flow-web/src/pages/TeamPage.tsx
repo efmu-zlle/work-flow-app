@@ -2,13 +2,12 @@ import Box from "@mui/material/Box";
 import Header from "../components/Header";
 import Button from "@mui/material/Button";
 import ListTeam from "../components/ListTeam";
-import BasicModal from "../components/BasicModal";
+import ListTeamModal from "../components/ListTeamModal";
 import { useState } from "react";
 
 function TeamPage() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -46,7 +45,7 @@ function TeamPage() {
         </div>
         <ListTeam />
       </Box>
-      <BasicModal open={open} handleClose={handleClose} />
+      <ListTeamModal open={open} setOpen={setOpen} />
     </>
   );
 }

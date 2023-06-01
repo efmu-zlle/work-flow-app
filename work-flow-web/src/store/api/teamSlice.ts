@@ -15,7 +15,7 @@ export const teamSlice = createApi({
     }),
     // end getTeams
 
-    createTeam: builder.mutation({
+    createTeam: builder.mutation<IResponseAPI<ITeam>, Partial<ITeam>>({
       query: (body) => ({
         url: `api/${EndPoints.createTeam}`,
         method: "POST",
@@ -28,7 +28,24 @@ export const teamSlice = createApi({
       invalidatesTags: ["teams"],
     }),
     // end createTeam
+
+    deleteTeam: builder.mutation<IResponseAPI<ITeam>, string>({
+      query: (id) => ({
+        url: `api/${EndPoints.deleteTeamById}/${id}`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+      // end query
+      invalidatesTags: ["teams"],
+    }),
+    // end deleteTeam
   }),
 });
 
-export const { useGetTeamsQuery, useCreateTeamMutation } = teamSlice;
+export const {
+  useGetTeamsQuery,
+  useCreateTeamMutation,
+  useDeleteTeamMutation,
+} = teamSlice;
