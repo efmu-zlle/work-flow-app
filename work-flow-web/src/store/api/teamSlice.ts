@@ -19,9 +19,7 @@ export const teamSlice = createApi({
       query: (body) => ({
         url: `api/${EndPoints.createTeam}`,
         method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-        },
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
         body,
       }),
       // end query
@@ -29,13 +27,26 @@ export const teamSlice = createApi({
     }),
     // end createTeam
 
+    updateTeam: builder.mutation<
+      IResponseAPI<ITeam>,
+      { id: string; requestBody: Partial<ITeam> }
+    >({
+      query: ({ id, requestBody }) => ({
+        url: `api/${EndPoints.updateTeam}/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        body: requestBody,
+      }),
+      // end query
+      invalidatesTags: ["teams"],
+    }),
+    // end updateTeam
+
     deleteTeam: builder.mutation<IResponseAPI<ITeam>, string>({
       query: (id) => ({
         url: `api/${EndPoints.deleteTeamById}/${id}`,
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-        },
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
       }),
       // end query
       invalidatesTags: ["teams"],
@@ -47,5 +58,6 @@ export const teamSlice = createApi({
 export const {
   useGetTeamsQuery,
   useCreateTeamMutation,
+  useUpdateTeamMutation,
   useDeleteTeamMutation,
 } = teamSlice;

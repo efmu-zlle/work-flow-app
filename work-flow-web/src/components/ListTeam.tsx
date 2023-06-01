@@ -55,6 +55,7 @@ function ListTeam() {
     try {
       const response = await deleteTeam(id).unwrap();
       setAnchorEl(null);
+
       enqueueSnackbar(response.message, {
         variant: "success",
         autoHideDuration: 1000,

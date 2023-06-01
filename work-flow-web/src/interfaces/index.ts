@@ -5,6 +5,7 @@ interface IEndPoints {
   signIn: string;
   getTeamById: string;
   createTeam: string;
+  updateTeam: string;
   deleteTeamById: string;
 }
 
@@ -13,6 +14,7 @@ export const EndPoints: IEndPoints = {
   signIn: "Auth/signIn",
   getTeamById: "Team/getTeam",
   createTeam: "Team/createTeam",
+  updateTeam: "Team/updateTeam",
   deleteTeamById: "Team/deleteTeam",
 };
 

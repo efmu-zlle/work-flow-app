@@ -3,11 +3,12 @@ import Header from "../components/Header";
 import Button from "@mui/material/Button";
 import ListTeam from "../components/ListTeam";
 import ListTeamModal from "../components/ListTeamModal";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { openModal } from "../store/slices/modalSlice";
 
 function TeamPage() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -38,14 +39,14 @@ function TeamPage() {
                 color: (theme) => theme.palette.primary.main,
               },
             }}
-            onClick={handleOpen}
+            onClick={() => dispatch(openModal())}
           >
             create team
           </Button>
         </div>
         <ListTeam />
       </Box>
-      <ListTeamModal open={open} setOpen={setOpen} />
+      <ListTeamModal />
     </>
   );
 }

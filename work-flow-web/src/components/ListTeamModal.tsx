@@ -13,11 +13,9 @@ import { isRequiredError } from "../services/helpers";
 import { enqueueSnackbar } from "notistack";
 import { ITeamError } from "../interfaces/error";
 import CircularProgress from "@mui/material/CircularProgress";
-
-type Props = {
-  open: boolean;
-  setOpen: Dispatch<React.SetStateAction<boolean>>;
-};
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { closeModal } from "../store/slices/modalSlice";
 
 const style = {
   position: "absolute" as "absolute",
@@ -31,7 +29,9 @@ const style = {
   borderRadius: ".25em",
 };
 
-function ListTeamModal({ open, setOpen }: Props) {
+function ListTeamModal() {
+  const { open } = useSelector((state: RootState) => state.modalSlice);
+  const dispatch = useDispatch();
   const [{ userId, username }, _] = useLocalStorage<IUser>("currentUser", null);
   const [createTeam, { isLoading, isError }] = useCreateTeamMutation();
   const [team, setTeam] = useState<ITeam>({
@@ -44,13 +44,14 @@ function ListTeamModal({ open, setOpen }: Props) {
     Name: {},
   });
 
+  // this is just to reduce code
   const getNameError = () =>
     teamError.Name && teamError.Name[0] ? teamError.Name[0] : "";
 
   const handleClose = () => {
     setTeamError({ Name: {} });
     setTeam({ name: "", description: "", creatorId: "" });
-    setOpen(false);
+    dispatch(closeModal());
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,12 +65,14 @@ function ListTeamModal({ open, setOpen }: Props) {
 
     try {
       const response = await createTeam(team).unwrap();
-      setOpen(false);
+      dispatch(closeModal());
 
       enqueueSnackbar(response.message, {
         variant: "success",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
+
+      setTeam({ name: "", description: "", creatorId: "" });
     } catch (error) {
       if (isRequiredError(error)) {
         const { Name } = error.data.errors;
@@ -77,7 +80,7 @@ function ListTeamModal({ open, setOpen }: Props) {
 
         enqueueSnackbar(error.data.title, {
           variant: "error",
-          autoHideDuration: 1000,
+          autoHideDuration: 2000,
         });
       }
     }
@@ -110,6 +113,7 @@ function ListTeamModal({ open, setOpen }: Props) {
           placeholder="name"
           variant="filled"
           name="name"
+          value={team.name}
           error={isError}
           helperText={getNameError()}
           sx={{ mt: "1em", mb: "1em" }}
@@ -122,6 +126,7 @@ function ListTeamModal({ open, setOpen }: Props) {
           label="description"
           placeholder="description"
           name="description"
+          value={team.description}
           multiline
           rows={4}
           sx={{ mt: "1em", mb: "1em" }}

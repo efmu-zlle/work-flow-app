@@ -13,9 +13,7 @@ export const authSlice = createApi({
       query: (body) => ({
         url: `api/${EndPoints.signUp}`,
         method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-        },
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
         body,
       }),
       // end query
@@ -27,9 +25,7 @@ export const authSlice = createApi({
       query: (userCredentials) => ({
         url: `api/${EndPoints.signIn}`,
         method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-        },
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
         body: userCredentials,
       }),
       // end query

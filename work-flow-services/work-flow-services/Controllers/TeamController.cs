@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,29 +21,12 @@ namespace work_flow_services.Controllers
             _context = context;
         }
 
-        //[HttpGet("getTeams")]
-        //public ActionResult<IEnumerable<Team>> GetTeams()
-        //{
-        //    try
-        //    {
-        //        var teams = _context.Teams.ToList();
-
-        //        return Ok(new { payload = teams });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var errorMessage = new { message = "Internal server error", error = ex.ToString() };
-
-        //        return StatusCode(500, errorMessage);
-        //    }
-        //}
-
         [HttpGet("getTeam/{id}")]
         public ActionResult<IEnumerable<Team>> GetTeamsByUserId(string id)
         {
             try
             {
-                var teams = _context.Teams.Where(t => t.CreatorId == id).ToList();
+                var teams = _context.Teams.Where(t => t.CreatorId == id).ToList().OrderBy(o => o.CreatedAt);
 
                 return Ok(new { payload = teams });
             }
@@ -74,13 +58,39 @@ namespace work_flow_services.Controllers
                 _context.Teams.Add(team);
                 await _context.SaveChangesAsync();
 
-                // I may add isSucesss later
-                return Ok(new { message = "Team has been added succesfully" });
+                return Ok(new { message = "Team created successfully" });
             }
             catch (Exception ex)
             {
 
                 return StatusCode(500, $"Internal server error: {ex} ");
+            }
+        }
+
+        [HttpPut("updateTeam/{id}")]
+        public IActionResult UpdateTeam(string id, Team request)
+        {
+            try
+            {
+                var team = _context.Teams.FirstOrDefault(t => t.TeamId == id);
+
+                if (team == null)
+                {
+                    return NotFound();
+                }
+
+                team.Name = request.TeamId;
+                team.Description = request.Description;
+                team.UpdatedAt = DateTime.Now;
+
+                _context.Teams.Update(team);
+                _context.SaveChanges();
+
+                return Ok(new { message = "Team updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: ${ex}");
             }
         }
 
@@ -91,8 +101,6 @@ namespace work_flow_services.Controllers
             {
                 var team = _context.Teams.FirstOrDefault(t => t.TeamId == id);
 
-                // order by date time
-
                 if (team == null)
                 {
                     return NotFound();
@@ -101,7 +109,7 @@ namespace work_flow_services.Controllers
                 _context.Teams.Remove(team);
                 _context.SaveChanges();
 
-                return Ok(new { message = "Team has been deleted" });
+                return Ok(new { message = "Team deleted successfully" });
             }
             catch (Exception ex)
             {
