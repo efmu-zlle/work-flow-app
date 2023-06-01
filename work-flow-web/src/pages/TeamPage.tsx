@@ -1,15 +1,8 @@
 import Box from "@mui/material/Box";
 import Header from "../components/Header";
-import Button from "@mui/material/Button";
-import ListTeam from "../components/ListTeam";
-import ListTeamModal from "../components/ListTeamModal";
-import { useDispatch } from "react-redux";
-
-import { openModal } from "../store/slices/modalSlice";
+import TeamList from "../components/TeamList";
 
 function TeamPage() {
-  const dispatch = useDispatch();
-
   return (
     <>
       <Header />
@@ -27,26 +20,8 @@ function TeamPage() {
           py: 15,
         }}
       >
-        <div style={{ marginBottom: "1em", alignSelf: "flex-end" }}>
-          <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            sx={{
-              textTransform: "capitalize",
-              "&:hover": {
-                backgroundColor: (theme) => theme.palette.secondary.main,
-                color: (theme) => theme.palette.primary.main,
-              },
-            }}
-            onClick={() => dispatch(openModal())}
-          >
-            create team
-          </Button>
-        </div>
-        <ListTeam />
+        <TeamList />
       </Box>
-      <ListTeamModal />
     </>
   );
 }

@@ -23,12 +23,21 @@ import {
 import useLocalStorage from "../hooks/useLocalStorage";
 import { IUser } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
+import Button from "@mui/material/Button";
+import { useDispatch } from "react-redux";
+import { openModal } from "../store/slices/modalSlice";
+import TeamFormModal from "./TeamFormModal";
+import { ITeam } from "../interfaces/team";
 
-function ListTeam() {
+function TeamList() {
   const [{ userId }, _] = useLocalStorage<IUser>("currentUser", null);
+  const [currentTeam, setCurrentTeam] = useLocalStorage<ITeam>(
+    "currentTeam",
+    null
+  );
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [deleteTeam] = useDeleteTeamMutation();
-  const [id, setId] = useState("");
   const open = Boolean(anchorEl);
   const { data: teams, isFetching } = useGetTeamsQuery(userId!, {
     refetchOnFocus: true,
@@ -47,13 +56,9 @@ function ListTeam() {
     return <div>Loading...</div>;
   }
 
-  const handleEditTeam = async (): Promise<void> => {
-    console.log(id);
-  };
-
   const handleDeleteTeam = async (): Promise<void> => {
     try {
-      const response = await deleteTeam(id).unwrap();
+      const response = await deleteTeam(currentTeam.teamId!).unwrap();
       setAnchorEl(null);
 
       enqueueSnackbar(response.message, {
@@ -67,6 +72,26 @@ function ListTeam() {
 
   return (
     <>
+      <TeamFormModal />
+
+      <div style={{ marginBottom: "1em", alignSelf: "flex-end" }}>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          sx={{
+            textTransform: "capitalize",
+            "&:hover": {
+              backgroundColor: (theme) => theme.palette.secondary.main,
+              color: (theme) => theme.palette.primary.main,
+            },
+          }}
+          onClick={() => dispatch(openModal(false))}
+        >
+          create team
+        </Button>
+      </div>
+
       {teams?.payload && teams.payload.length !== 0 ? (
         <Grid container spacing={2} sx={{ width: "100%", maxHeight: "100%" }}>
           {teams.payload.map((team) => (
@@ -117,7 +142,13 @@ function ListTeam() {
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
                     onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                      handleClick(e), setId(team.teamId!);
+                      setCurrentTeam({
+                        teamId: team.teamId,
+                        name: team.name,
+                        description: team.description,
+                        creatorId: team.creatorId,
+                      });
+                      handleClick(e);
                     }}
                   >
                     <MoreVertIcon color="primary" />
@@ -133,7 +164,7 @@ function ListTeam() {
                     transformOrigin={{ horizontal: "right", vertical: "top" }}
                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                   >
-                    <MenuItem onClick={handleEditTeam}>
+                    <MenuItem onClick={() => dispatch(openModal(true))}>
                       <ListItemIcon>
                         <EditIcon fontSize="small" sx={{ color: "green" }} />
                       </ListItemIcon>
@@ -190,4 +221,4 @@ function ListTeam() {
   );
 }
 
-export default ListTeam;
+export default TeamList;

@@ -1,19 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface CounterState {
   open: boolean;
+  isEdit: boolean;
 }
 
 const initialState: CounterState = {
   open: false,
+  isEdit: false,
 };
 
 export const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    openModal: (state) => {
+    openModal: (state, action: PayloadAction<boolean>) => {
       state.open = true;
+      state.isEdit = action.payload;
     },
     closeModal: (state) => {
       state.open = false;

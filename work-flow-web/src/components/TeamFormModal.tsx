@@ -29,30 +29,34 @@ const style = {
   borderRadius: ".25em",
 };
 
-function ListTeamModal() {
-  const { open } = useSelector((state: RootState) => state.modalSlice);
+function TeamFormModal() {
+  const { open, isEdit } = useSelector((state: RootState) => state.modalSlice);
   const dispatch = useDispatch();
   const [{ userId, username }, _] = useLocalStorage<IUser>("currentUser", null);
+  const [currentTeam, setCurrentTeam] = useLocalStorage<ITeam>(
+    "currentTeam",
+    null
+  );
   const [createTeam, { isLoading, isError }] = useCreateTeamMutation();
+  const [teamError, setTeamError] = useState<ITeamError>({
+    Name: {},
+  });
   const [team, setTeam] = useState<ITeam>({
-    name: "",
+    name: currentTeam.name ? currentTeam.name : "",
     description: "",
     creatorId: "",
   });
 
-  const [teamError, setTeamError] = useState<ITeamError>({
-    Name: {},
-  });
+  const handleCloseModal = () => {
+    if (isEdit === false) {
+      setTeam({ name: "", description: "", creatorId: "" });
+    }
+    dispatch(closeModal());
+  };
 
   // this is just to reduce code
   const getNameError = () =>
     teamError.Name && teamError.Name[0] ? teamError.Name[0] : "";
-
-  const handleClose = () => {
-    setTeamError({ Name: {} });
-    setTeam({ name: "", description: "", creatorId: "" });
-    dispatch(closeModal());
-  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -85,14 +89,8 @@ function ListTeamModal() {
       }
     }
   };
-
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={open} onClose={handleCloseModal}>
       <Box
         sx={style}
         component="form"
@@ -149,7 +147,7 @@ function ListTeamModal() {
               fullWidth
               type="button"
               variant="contained"
-              onClick={handleClose}
+              onClick={handleCloseModal}
               disabled={isLoading}
             >
               cancel
@@ -161,4 +159,4 @@ function ListTeamModal() {
   );
 }
 
-export default ListTeamModal;
+export default TeamFormModal;
