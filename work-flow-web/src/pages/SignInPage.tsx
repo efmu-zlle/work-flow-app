@@ -55,12 +55,8 @@ function SignInPage() {
     try {
       const response = await signIn(user).unwrap();
 
-      enqueueSnackbar(response.message, {
-        variant: "success",
-        autoHideDuration: 2000,
-      });
       setCurrentUser(response.payload!);
-
+      enqueueSnackbar(response.message, { variant: "success" });
       navigation("/home");
     } catch (error) {
       if (isValidationError(error)) {

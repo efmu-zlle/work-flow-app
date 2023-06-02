@@ -1,5 +1,5 @@
 export interface ITeam {
-  teamId?: string;
+  teamId: string;
   name: string;
   description: string;
   creatorId: string;

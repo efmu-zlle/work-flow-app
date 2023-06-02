@@ -39,7 +39,7 @@ namespace work_flow_services.Controllers
         }
 
         [HttpPost("createTeam")]
-        public async Task<IActionResult> CreateTeam(Team request)
+        public IActionResult CreateTeam(Team request)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace work_flow_services.Controllers
                 };
 
                 _context.Teams.Add(team);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 return Ok(new { message = "Team created successfully" });
             }

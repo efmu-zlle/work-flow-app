@@ -5,9 +5,9 @@ import { modalTeamSlice } from "./slices/modalTeamSlice";
 
 export const store = configureStore({
   reducer: {
+    modalTeamSlice: modalTeamSlice.reducer,
     [authSlice.reducerPath]: authSlice.reducer,
     [teamSlice.reducerPath]: teamSlice.reducer,
-    modalTeamSlice: modalTeamSlice.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>

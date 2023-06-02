@@ -7,11 +7,11 @@ export const teamSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}`,
   }),
-  tagTypes: ["teams"],
+  tagTypes: ["team"],
   endpoints: (builder) => ({
     getTeams: builder.query<IResponseAPI<ITeam[]>, string>({
       query: (id) => `api/${EndPoints.getTeamById}/${id}`,
-      providesTags: ["teams"],
+      providesTags: ["team"],
     }),
     // end getTeams
 
@@ -23,19 +23,19 @@ export const teamSlice = createApi({
         body,
       }),
       // end query
-      invalidatesTags: ["teams"],
+      invalidatesTags: ["team"],
     }),
     // end createTeam
 
     updateTeam: builder.mutation<IResponseAPI<ITeam>, Partial<ITeam>>({
-      query: (body) => ({
+      query: (team) => ({
         url: `api/${EndPoints.updateTeam}`,
         method: "PUT",
         headers: { "Content-Type": "application/json; charset=UTF-8" },
-        body,
+        body: team,
       }),
       // end query
-      invalidatesTags: ["teams"],
+      invalidatesTags: ["team"],
     }),
     // end updateTeam
 
@@ -46,7 +46,7 @@ export const teamSlice = createApi({
         headers: { "Content-Type": "application/json; charset=UTF-8" },
       }),
       // end query
-      invalidatesTags: ["teams"],
+      invalidatesTags: ["team"],
     }),
     // end deleteTeam
   }),

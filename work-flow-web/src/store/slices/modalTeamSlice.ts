@@ -1,42 +1,38 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ITeam } from "../../interfaces/team";
+import { ITeamError } from "../../interfaces/error";
 
 export interface ModalTeamState {
   open: boolean;
-  team: ITeam;
+  currentTeam: ITeam;
   isEdit: boolean;
+  teamError: ITeamError;
 }
 
 const initialState: ModalTeamState = {
   open: false,
-  team: {
+  currentTeam: {
     teamId: "",
     name: "",
     description: "",
     creatorId: "",
   },
   isEdit: false,
+  teamError: {
+    Name: {},
+  },
 };
 
 export const modalTeamSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<ITeam>) => {
-      const { teamId } = action.payload;
-      if (teamId !== "") {
-        state.isEdit = true;
-      } else {
-        state.isEdit = false;
-      }
+    openModal: (state) => {
       state.open = true;
-      state.team = action.payload;
     },
 
     closeModal: (state) => {
       state.open = false;
-      state.team = { teamId: "", name: "", description: "", creatorId: "" };
-      state.isEdit = false;
     },
 
     onChangeTeam: (
@@ -48,10 +44,40 @@ export const modalTeamSlice = createSlice({
       }>
     ) => {
       const { name, value, userId } = action.payload;
-      state.team = { ...state.team, [name]: value, creatorId: userId! };
+      state.currentTeam = {
+        ...state.currentTeam,
+        [name]: value,
+        creatorId: userId!,
+      };
+    },
+
+    setCurrentTeam: (state, action: PayloadAction<ITeam>) => {
+      state.currentTeam = action.payload;
+      state.isEdit = true;
+    },
+
+    setTeamError: (state, action: PayloadAction<ITeamError>) => {
+      state.teamError = action.payload;
+    },
+
+    resetEdit: (state) => {
+      state.isEdit = false;
+      state.currentTeam = {
+        teamId: "",
+        name: "",
+        description: "",
+        creatorId: "",
+      };
+      state.teamError.Name = {};
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { openModal, closeModal, onChangeTeam } = modalTeamSlice.actions;
+export const {
+  openModal,
+  closeModal,
+  onChangeTeam,
+  setCurrentTeam,
+  setTeamError,
+  resetEdit,
+} = modalTeamSlice.actions;
