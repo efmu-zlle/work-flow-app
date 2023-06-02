@@ -1,20 +1,20 @@
-import useLocalStorage from "../../hooks/useLocalStorage";
-import { IUser } from "../../interfaces/user";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { IUser } from "../interfaces/user";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { ChangeEvent, FormEvent, useState, MouseEvent } from "react";
-import { ITeam } from "../../interfaces/team";
+import { ITeam } from "../interfaces/team";
 import Button from "@mui/material/Button";
 import {
   useCreateTeamMutation,
   useDeleteTeamMutation,
   useGetTeamsQuery,
   useUpdateTeamMutation,
-} from "../../store/api/teamSlice";
+} from "../store/api/teamSlice";
 import Modal from "@mui/material/Modal";
-import { IResponseAPI } from "../../interfaces";
+import { IResponseAPI } from "../interfaces";
 import { enqueueSnackbar } from "notistack";
-import { isRequiredError } from "../../utils/helpers";
+import { isRequiredError } from "../utils/helpers";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -22,9 +22,9 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
-import Header from "../Header";
+import Header from "../components/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState } from "../store/store";
 import {
   closeModal,
   onChangeTeam,
@@ -32,21 +32,21 @@ import {
   resetEdit,
   setCurrentTeam,
   setTeamError,
-} from "../../store/slices/modalTeamSlice";
+} from "../store/slices/teamModalSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
-import teamwork from "../../assets/svg/teamwork_dark.svg";
+import teamwork from "../assets/svg/teamwork_dark.svg";
 
 //icons
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import ListIcon from "@mui/icons-material/List";
 import CardMedia from "@mui/material/CardMedia";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 const style = {
   position: "absolute" as "absolute",
@@ -62,9 +62,9 @@ const style = {
 
 const MAX_WORD_COUNT = 10;
 
-function Get() {
+function TeamPage() {
   const { open, isEdit, currentTeam, teamError } = useSelector(
-    (state: RootState) => state.modalTeamSlice
+    (state: RootState) => state.teamModalSlice
   );
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -127,6 +127,7 @@ function Get() {
       }
     }
   };
+
   return (
     <>
       <Header />
@@ -192,7 +193,7 @@ function Get() {
                         alignItems: "flex-start",
                       }}
                     >
-                      <TaskOutlinedIcon fontSize="small" sx={{ mr: ".25em" }} />
+                      <TaskAltIcon fontSize="small" sx={{ mr: ".25em" }} />
                       <Typography
                         component="span"
                         variant="subtitle2"
@@ -239,7 +240,7 @@ function Get() {
                         <ListItemIcon>
                           <ListIcon fontSize="small" sx={{ color: "blue" }} />
                         </ListItemIcon>
-                        Tasks
+                        Todo
                       </MenuItem>
                       <MenuItem onClick={() => dispatch(openModal())}>
                         <ListItemIcon>
@@ -392,4 +393,4 @@ function Get() {
   );
 }
 
-export default Get;
+export default TeamPage;

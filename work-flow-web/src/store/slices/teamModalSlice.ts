@@ -2,14 +2,14 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ITeam } from "../../interfaces/team";
 import { ITeamError } from "../../interfaces/error";
 
-export interface ModalTeamState {
+export interface TeamModalState {
   open: boolean;
   currentTeam: ITeam;
   isEdit: boolean;
   teamError: ITeamError;
 }
 
-const initialState: ModalTeamState = {
+const initialState: TeamModalState = {
   open: false,
   currentTeam: {
     teamId: "",
@@ -23,7 +23,7 @@ const initialState: ModalTeamState = {
   },
 };
 
-export const modalTeamSlice = createSlice({
+export const teamModalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
@@ -80,4 +80,4 @@ export const {
   setCurrentTeam,
   setTeamError,
   resetEdit,
-} = modalTeamSlice.actions;
+} = teamModalSlice.actions;

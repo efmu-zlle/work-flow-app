@@ -6,7 +6,7 @@ import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage";
 import MemberPage from "./pages/MemberPage";
 import TodoPage from "./pages/TodoPage";
-import Get from "./components/issues/Get";
+import TeamPage from "./pages/TeamPage";
 
 function App() {
   const customTheme = createTheme({
@@ -44,7 +44,7 @@ function App() {
           />
           <Route path="sign-up" element={<SignUpPage />} />
           <Route path="home" element={<HomePage />} />
-          <Route path="team" element={<Get />} />
+          <Route path="team" element={<TeamPage />} />
           <Route path="member" element={<MemberPage />} />
           <Route path="team/task" element={<TodoPage />} />
           <Route path="*" element={<NotFound />} />

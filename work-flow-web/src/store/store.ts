@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./api/authSlice";
 import { teamSlice } from "./api/teamSlice";
-import { modalTeamSlice } from "./slices/modalTeamSlice";
+import { teamModalSlice } from "./slices/teamModalSlice";
 
 export const store = configureStore({
   reducer: {
-    modalTeamSlice: modalTeamSlice.reducer,
+    teamModalSlice: teamModalSlice.reducer,
     [authSlice.reducerPath]: authSlice.reducer,
     [teamSlice.reducerPath]: teamSlice.reducer,
   },
