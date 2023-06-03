@@ -9,7 +9,7 @@ export const todoSlice = createApi({
   }),
   tagTypes: ["todo"],
   endpoints: (builder) => ({
-    getTodoById: builder.query<IResponseAPI<ITodo>, string>({
+    getTodoById: builder.query<IResponseAPI<ITodo[]>, string>({
       query: (id) => `api/${EndPoints.getTodoById}/${id}`,
       providesTags: [{ type: "todo", id: "LIST" }],
     }),
