@@ -44,9 +44,11 @@ function App() {
           />
           <Route path="sign-up" element={<SignUpPage />} />
           <Route path="home" element={<HomePage />} />
-          <Route path="team" element={<TeamPage />} />
           <Route path="member" element={<MemberPage />} />
-          <Route path="team/task" element={<TodoPage />} />
+          <Route path="team">
+            <Route index element={<TeamPage />} />
+            <Route path="todo/:id" element={<TodoPage />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

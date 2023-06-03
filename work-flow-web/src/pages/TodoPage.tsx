@@ -1,5 +1,13 @@
+import Header from "../components/Header";
+import TodoList from "../components/Todo/TodoList";
+
 function TodoPage() {
-  return <div>TodoPage</div>;
+  return (
+    <>
+      <Header />
+      <TodoList />
+    </>
+  );
 }
 
 export default TodoPage;

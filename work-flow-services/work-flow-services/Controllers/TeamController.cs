@@ -62,7 +62,6 @@ namespace work_flow_services.Controllers
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, $"Internal server error: {ex} ");
             }
         }

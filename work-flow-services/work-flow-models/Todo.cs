@@ -13,8 +13,8 @@ namespace work_flow_models
         [Key]
         public string TodoId { get; set; }
 
-        [Required(ErrorMessage = "The 'Description' field is required")]
-        public string Description { get; set; }
+        [Required(ErrorMessage = "The 'Title' field is required")]
+        public string Title { get; set; }
 
         public bool IsCompleted { get; set; }
 

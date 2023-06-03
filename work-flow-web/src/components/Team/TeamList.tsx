@@ -54,7 +54,7 @@ function TeamList({ anchorEl, setAnchorEl }: Props) {
   const navigate = useNavigate();
   const [{ userId }, _] = useLocalStorage<IUser>("currentUser", null);
 
-  const { data } = useGetTeamsQuery(userId!);
+  const { data: teams, isLoading } = useGetTeamsQuery(userId!);
 
   const [deleteTeam] = useDeleteTeamMutation();
 
@@ -72,6 +72,10 @@ function TeamList({ anchorEl, setAnchorEl }: Props) {
       console.error(error);
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -92,9 +96,9 @@ function TeamList({ anchorEl, setAnchorEl }: Props) {
           create team
         </Button>
       </div>
-      {data?.payload && data.payload.length !== 0 ? (
+      {teams?.payload && teams.payload.length !== 0 ? (
         <Grid container spacing={2} sx={{ width: "100%", maxHeight: "100%" }}>
-          {data.payload.map((team) => (
+          {teams.payload.map((team) => (
             <Grid item key={team.teamId} xs={12} sm={6} md={4}>
               <Card
                 sx={{
@@ -169,7 +173,9 @@ function TeamList({ anchorEl, setAnchorEl }: Props) {
                     transformOrigin={{ horizontal: "right", vertical: "top" }}
                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                   >
-                    <MenuItem onClick={() => navigate("task")}>
+                    <MenuItem
+                      onClick={() => navigate(`todo/${currentTeam.teamId}`)}
+                    >
                       <ListItemIcon>
                         <ListIcon fontSize="small" sx={{ color: "blue" }} />
                       </ListItemIcon>
