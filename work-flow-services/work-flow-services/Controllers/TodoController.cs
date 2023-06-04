@@ -64,16 +64,16 @@ namespace work_flow_services.Controllers
             }
         }
 
-        [HttpPut("updateTodo")]
-        public IActionResult UpdateTodo(Todo request)
+        [HttpPut("updateTodo/{id}")]
+        public IActionResult UpdateTodo(string id, Todo request)
         {
             try
             {
-                var todo = _context.Todos.FirstOrDefault(t => t.TodoId == request.TodoId);
+                var todo = _context.Todos.FirstOrDefault(t => t.TodoId == id);
 
                 if (todo == null)
                 {
-                    NotFound();
+                    return NotFound();
                 }
 
                 todo.Title = request.Title;
@@ -83,7 +83,7 @@ namespace work_flow_services.Controllers
                 _context.Todos.Update(todo);
                 _context.SaveChanges();
 
-                return Ok(new { message = "Todo update successfully" });
+                return Ok(new { message = "Todo update successfully", payload = todo });
             }
             catch (Exception ex)
             {

@@ -25,20 +25,23 @@ export const todoSlice = createApi({
     }),
     // end createTodo
 
-    updateTodo: builder.mutation<IResponseAPI<ITodo>, Partial<ITodo>>({
-      query: (todo) => ({
-        url: `api/${EndPoints.updateTodo}`,
-        method: "UPDATE",
-        body: todo,
+    updateTodo: builder.mutation<
+      IResponseAPI<ITodo>,
+      Pick<ITodo, "todoId"> & Partial<ITodo>
+    >({
+      query: ({ todoId, ...patch }) => ({
+        url: `api/${EndPoints.updateTodo}/${todoId}`,
+        method: "PUT",
+        body: patch,
       }),
       // end query
       invalidatesTags: [{ type: "todo", id: "LIST" }],
     }),
     // end updateTodo
 
-    deleteTodo: builder.mutation<IResponseAPI<ITodo>, string>({
-      query: (id) => ({
-        url: `api/${EndPoints.deleteTodo}/${id}`,
+    deleteTodo: builder.mutation<IResponseAPI<ITodo>, ITodo>({
+      query: (todo) => ({
+        url: `api/${EndPoints.deleteTodo}/${todo.todoId}`,
         method: "DELETE",
       }),
       // end query
