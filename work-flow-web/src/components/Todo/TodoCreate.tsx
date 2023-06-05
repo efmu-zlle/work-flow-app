@@ -1,7 +1,7 @@
 // material ui
 import { Button, IconButton, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
-import { useCreateTodoMutation } from "../../store/api/todoSlice";
+import { useCreateTodoMutation } from "../../services/todoService";
 import { useParams } from "react-router-dom";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { ITodo } from "../../interfaces/todo";

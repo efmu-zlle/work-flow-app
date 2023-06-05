@@ -27,6 +27,6 @@ export const EndPoints: IEndPoints = {
 };
 
 export interface IResponseAPI<T> {
-  payload: T | null;
-  message: string;
+  payload: T;
+  message?: string;
 }

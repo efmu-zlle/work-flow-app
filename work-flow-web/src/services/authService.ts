@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IUser, IUserCredentials } from "../../interfaces/user";
-import { BASE_URL, EndPoints, IResponseAPI } from "../../interfaces";
+import { IUser, IUserCredentials } from "../interfaces/user";
+import { BASE_URL, EndPoints, IResponseAPI } from "../interfaces";
 
-export const authSlice = createApi({
-  reducerPath: "authSlice",
+export const authService = createApi({
+  reducerPath: "authService",
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}`,
   }),
@@ -35,4 +35,4 @@ export const authSlice = createApi({
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation } = authSlice;
+export const { useSignUpMutation, useSignInMutation } = authService;

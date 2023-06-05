@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL, EndPoints, IResponseAPI } from "../../interfaces";
-import { ITeam } from "../../interfaces/team";
+import { ITeam } from "../interfaces/team";
+import { BASE_URL, EndPoints, IResponseAPI } from "../interfaces";
 
-export const teamSlice = createApi({
-  reducerPath: "teamSlice",
+export const teamService = createApi({
+  reducerPath: "teamService",
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}`,
   }),
@@ -57,4 +57,4 @@ export const {
   useCreateTeamMutation,
   useUpdateTeamMutation,
   useDeleteTeamMutation,
-} = teamSlice;
+} = teamService;

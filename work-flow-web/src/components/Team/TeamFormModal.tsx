@@ -1,18 +1,13 @@
 // react
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction } from "react";
 // redux
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import {
-  useCreateTeamMutation,
-  useUpdateTeamMutation,
-} from "../../store/api/teamSlice";
 import {
   closeModal,
   onChangeTeam,
   resetEdit,
   setTeamError,
 } from "../../store/slices/teamModalSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/useStore";
 //interfaces
 import { IResponseAPI } from "../../interfaces";
 import { ITeam } from "../../interfaces/team";
@@ -29,6 +24,10 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { enqueueSnackbar } from "notistack";
+import {
+  useCreateTeamMutation,
+  useUpdateTeamMutation,
+} from "../../services/teamService";
 
 type Props = {
   setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
@@ -49,10 +48,10 @@ const style = {
 };
 
 function TeamFormModal({ setAnchorEl }: Props) {
-  const { open, isEdit, currentTeam, teamError } = useSelector(
-    (state: RootState) => state.teamModalSlice
+  const { open, isEdit, currentTeam, teamError } = useAppSelector(
+    (state) => state.teamModalSlice
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [{ userId, username }, _] = useLocalStorage<IUser>("currentUser", null);
   const [createTeam, { isLoading: isCreateLoading, isError: isErrorCreate }] =

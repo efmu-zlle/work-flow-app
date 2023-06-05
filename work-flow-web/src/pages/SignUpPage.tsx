@@ -13,7 +13,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useSignUpMutation } from "../store/api/authSlice";
+import { useSignUpMutation } from "../services/authService";
 import { IUser } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
 import { isRequiredError, isValidationError } from "../utils/helpers";

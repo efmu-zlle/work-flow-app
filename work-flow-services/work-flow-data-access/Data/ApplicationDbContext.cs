@@ -20,5 +20,7 @@ namespace work_flow_data_access.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<Todo> Todos { get; set; }
+
+        public DbSet<Test> Tests { get; set; }
     }
 }

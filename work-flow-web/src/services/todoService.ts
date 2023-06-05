@@ -1,12 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL, EndPoints, IResponseAPI } from "../../interfaces";
-import { ITodo } from "../../interfaces/todo";
+import { BASE_URL, EndPoints, IResponseAPI } from "../interfaces";
+import { ITodo } from "../interfaces/todo";
 
-export const todoSlice = createApi({
-  reducerPath: "todoSlice",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_URL}`,
-  }),
+export const todoService = createApi({
+  reducerPath: "todoService",
+  baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   tagTypes: ["todo"],
   endpoints: (builder) => ({
     getTodoById: builder.query<IResponseAPI<ITodo[]>, string>({
@@ -25,17 +23,13 @@ export const todoSlice = createApi({
     }),
     // end createTodo
 
-    updateTodo: builder.mutation<
-      IResponseAPI<ITodo>,
-      Pick<ITodo, "todoId"> & Partial<ITodo>
-    >({
-      query: ({ todoId, ...patch }) => ({
-        url: `api/${EndPoints.updateTodo}/${todoId}`,
+    updateTodo: builder.mutation<ITodo, Partial<ITodo>>({
+      query: (todo) => ({
+        url: `api/${EndPoints.updateTodo}/${todo.todoId}`,
         method: "PUT",
-        body: patch,
+        body: todo,
       }),
       // end query
-      invalidatesTags: [{ type: "todo", id: "LIST" }],
     }),
     // end updateTodo
 
@@ -56,4 +50,4 @@ export const {
   useCreateTodoMutation,
   useUpdateTodoMutation,
   useDeleteTodoMutation,
-} = todoSlice;
+} = todoService;

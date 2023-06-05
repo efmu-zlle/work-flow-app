@@ -21,12 +21,11 @@ import ListIcon from "@mui/icons-material/List";
 import CardMedia from "@mui/material/CardMedia";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 // redux
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../hooks/useStore";
 import {
   useDeleteTeamMutation,
   useGetTeamsQuery,
-} from "../../store/api/teamSlice";
+} from "../../services/teamService";
 import {
   openModal,
   resetEdit,
@@ -45,10 +44,8 @@ type Props = {
 };
 
 function TeamList({ anchorEl, setAnchorEl }: Props) {
-  const { currentTeam } = useSelector(
-    (state: RootState) => state.teamModalSlice
-  );
-  const dispatch = useDispatch();
+  const { currentTeam } = useAppSelector((state) => state.teamModalSlice);
+  const dispatch = useAppDispatch();
 
   const openAnchor = Boolean(anchorEl);
   const navigate = useNavigate();

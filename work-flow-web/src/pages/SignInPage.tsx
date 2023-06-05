@@ -17,7 +17,7 @@ import { IUser, IUserCredentials } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
 import { isRequiredError, isValidationError } from "../utils/helpers";
 import { IUserError } from "../interfaces/error";
-import { useSignInMutation } from "../store/api/authSlice";
+import { useSignInMutation } from "../services/authService";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 function SignInPage() {
