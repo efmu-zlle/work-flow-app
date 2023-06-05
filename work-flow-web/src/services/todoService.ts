@@ -7,8 +7,8 @@ export const todoService = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   tagTypes: ["todo"],
   endpoints: (builder) => ({
-    getTodoById: builder.query<IResponseAPI<ITodo[]>, string>({
-      query: (id) => `api/${EndPoints.getTodoById}/${id}`,
+    getTodosByTeamId: builder.query<IResponseAPI<ITodo[]>, string>({
+      query: (teamId) => `api/${EndPoints.getTodosByTeamId}/${teamId}`,
       providesTags: [{ type: "todo", id: "LIST" }],
     }),
 
@@ -20,10 +20,11 @@ export const todoService = createApi({
       }),
       // end query
       invalidatesTags: [{ type: "todo", id: "LIST" }],
+      //add an optimics fetch
     }),
     // end createTodo
 
-    updateTodo: builder.mutation<ITodo, Partial<ITodo>>({
+    updateTodo: builder.mutation<IResponseAPI<ITodo>, Partial<ITodo>>({
       query: (todo) => ({
         url: `api/${EndPoints.updateTodo}/${todo.todoId}`,
         method: "PUT",
@@ -46,7 +47,7 @@ export const todoService = createApi({
 });
 
 export const {
-  useGetTodoByIdQuery,
+  useGetTodosByTeamIdQuery,
   useCreateTodoMutation,
   useUpdateTodoMutation,
   useDeleteTodoMutation,

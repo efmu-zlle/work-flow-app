@@ -21,8 +21,8 @@ namespace work_flow_services.Controllers
             _context = context;
         }
 
-        [HttpGet("getTodo/{id}")]
-        public ActionResult<IEnumerable<Todo>> GetTodoById(string id)
+        [HttpGet("getTodosByTeamId/{id}")]
+        public ActionResult<IEnumerable<Todo>> GetTodosByTeamId(string id)
         {
             try
             {

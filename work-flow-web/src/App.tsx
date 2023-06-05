@@ -47,7 +47,7 @@ function App() {
           <Route path="member" element={<MemberPage />} />
           <Route path="team">
             <Route index element={<TeamPage />} />
-            <Route path="todo/:id" element={<TodoPage />} />
+            <Route path="todo/:teamId" element={<TodoPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

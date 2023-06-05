@@ -1,13 +1,16 @@
 // material ui
-import { Button, IconButton, TextField } from "@mui/material";
+import { CircularProgress, IconButton, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useCreateTodoMutation } from "../../services/todoService";
 import { useParams } from "react-router-dom";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { ITodo } from "../../interfaces/todo";
+import { enqueueSnackbar } from "notistack";
+// icons
+import SendIcon from "@mui/icons-material/Send";
 
 function TodoCreate() {
-  const { id } = useParams<{ id: string }>();
+  const { teamId } = useParams<{ teamId: string }>();
   const [createTodo, { isLoading: isLoadingCreate }] = useCreateTodoMutation();
   const [todo, setTodo] = useState<ITodo>({
     title: "",
@@ -20,7 +23,7 @@ function TodoCreate() {
 
     setTodo((prevTodo) => ({
       ...prevTodo,
-      teamId: id!,
+      teamId: teamId!,
       [name]: value,
     }));
   };
@@ -30,7 +33,7 @@ function TodoCreate() {
 
     try {
       const response = await createTodo(todo).unwrap();
-      console.log(response);
+      enqueueSnackbar(response.message, { variant: "success" });
     } catch (error) {
       console.log(error);
     }
@@ -50,11 +53,16 @@ function TodoCreate() {
         variant="standard"
         name="title"
         onChange={handleInputChange}
+        disabled={isLoadingCreate}
       />
 
-      <Button type="submit" variant="contained">
-        create todo
-      </Button>
+      <IconButton type="submit" aria-label="submit" size="large" sx={{ ml: 1 }}>
+        {isLoadingCreate ? (
+          <CircularProgress size={24} />
+        ) : (
+          <SendIcon sx={{ color: "blue" }} />
+        )}
+      </IconButton>
     </Box>
   );
 }

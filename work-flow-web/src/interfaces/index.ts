@@ -7,7 +7,7 @@ interface IEndPoints {
   createTeam: string;
   updateTeam: string;
   deleteTeamById: string;
-  getTodoById: string;
+  getTodosByTeamId: string;
   createTodo: string;
   updateTodo: string;
   deleteTodo: string;
@@ -20,7 +20,7 @@ export const EndPoints: IEndPoints = {
   createTeam: "Team/createTeam",
   updateTeam: "Team/updateTeam",
   deleteTeamById: "Team/deleteTeam",
-  getTodoById: "Todo/getTodo",
+  getTodosByTeamId: "Todo/getTodosByTeamId",
   createTodo: "Todo/createTodo",
   updateTodo: "Todo/updateTodo",
   deleteTodo: "Todo/deleteTodo",
@@ -28,5 +28,5 @@ export const EndPoints: IEndPoints = {
 
 export interface IResponseAPI<T> {
   payload: T;
-  message?: string;
+  message: string;
 }
