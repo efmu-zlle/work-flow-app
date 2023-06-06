@@ -13,6 +13,8 @@ import { ITodo } from "../../interfaces/todo";
 import { useAppDispatch } from "../../hooks/useStore";
 import TextField from "@mui/material/TextField";
 import ListItem from "@mui/material/ListItem";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function TodoList() {
   const { teamId } = useParams<{ teamId: string }>();
@@ -21,7 +23,7 @@ function TodoList() {
   const [deleteTodo] = useDeleteTodoMutation();
   const dispatch = useAppDispatch();
 
-  const [todoList, setTodoList] = useState<ITodo | undefined>(undefined);
+  const [todoUpdate, setTodoUpdate] = useState<ITodo | undefined>(undefined);
 
   const handleInputChange = (value: string, todo: ITodo) => {
     const updateTitle = data?.payload.map((t) =>
@@ -38,22 +40,22 @@ function TodoList() {
       )
     );
 
-    setTodoList(patchCollection.patches[0].value);
+    setTodoUpdate(patchCollection.patches[0].value);
   };
 
   const handleUpdate = () => {
-    console.log("handleUpdate");
-    if (todoList) {
-      updateTodo(todoList)
+    if (todoUpdate) {
+      updateTodo(todoUpdate)
         .unwrap()
         .then((res) => {
           enqueueSnackbar(res.message, {
             variant: "success",
             autoHideDuration: 1000,
           });
-          setTodoList(undefined);
+          setTodoUpdate(undefined);
         })
-        .catch((err) => console.error(err));
+        .catch((error) => console.error(error));
+      //here handle the other error
     }
   };
 
@@ -88,7 +90,7 @@ function TodoList() {
   }
 
   return (
-    <div>
+    <>
       {data?.payload.map((todo) => (
         <ListItem key={todo.todoId}>
           <Checkbox
@@ -106,12 +108,12 @@ function TodoList() {
               handleInputChange(e.target.value, todo)
             }
           />
-          <Button type="button" onClick={() => handleDelete(todo)}>
-            delete
-          </Button>
+          <IconButton type="button" onClick={() => handleDelete(todo)}>
+            <DeleteIcon color="error" />
+          </IconButton>
         </ListItem>
       ))}
-    </div>
+    </>
   );
 }
 

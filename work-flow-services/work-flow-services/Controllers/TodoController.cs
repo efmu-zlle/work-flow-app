@@ -56,7 +56,7 @@ namespace work_flow_services.Controllers
                 _context.Todos.Add(newTodo);
                 _context.SaveChanges();
 
-                return Ok(new { message = "Todo created successfully" });
+                return Ok(new { message = "Todo created successfully", payload = newTodo });
             }
             catch (Exception ex)
             {

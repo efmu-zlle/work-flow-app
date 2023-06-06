@@ -19,8 +19,19 @@ export const todoService = createApi({
         body: todo,
       }),
       // end query
-      invalidatesTags: [{ type: "todo", id: "LIST" }],
-      //add an optimics fetch
+      async onQueryStarted(todo, { queryFulfilled, dispatch }) {
+        const { data: response } = await queryFulfilled;
+        const patchResult = dispatch(
+          todoService.util.updateQueryData(
+            "getTodosByTeamId",
+            todo.teamId!,
+            (draft) => {
+              draft.payload.push(response.payload);
+            }
+          )
+        );
+        queryFulfilled.catch(patchResult.undo);
+      },
     }),
     // end createTodo
 
