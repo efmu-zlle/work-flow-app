@@ -5,6 +5,10 @@ import TodoList from "../components/Todo/TodoList";
 
 // material ui
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 function TodoPage() {
   return (
@@ -26,15 +30,31 @@ function TodoPage() {
         <Card
           sx={{
             width: "100%",
-            maxWidth: 500,
+            maxWidth: 1100,
             backgroundImage:
               "linear-gradient(90deg, #CEDFFF 0%, #D7FFEF 35%, #D4F7FF 80%)",
-            py: 4,
-            px: 6,
           }}
         >
           <TodoCreate />
-          <TodoList />
+          <Divider
+            sx={{ borderColor: (theme) => theme.palette.primary.main }}
+          />
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography textAlign="center" variant="h6">
+                  Incompleted
+                </Typography>
+                <TodoList state="incompleted" />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography textAlign="center" variant="h6">
+                  Completed
+                </Typography>
+                <TodoList state="completed" />
+              </Grid>
+            </Grid>
+          </CardContent>
         </Card>
       </Box>
     </>

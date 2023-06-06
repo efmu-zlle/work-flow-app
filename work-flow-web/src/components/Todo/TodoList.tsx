@@ -15,10 +15,20 @@ import TextField from "@mui/material/TextField";
 import ListItem from "@mui/material/ListItem";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import List from "@mui/material/List";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import { isRequiredError } from "../../utils/helpers";
 
-function TodoList() {
+type Props = {
+  state: "completed" | "incompleted";
+};
+
+function TodoList({ state }: Props) {
   const { teamId } = useParams<{ teamId: string }>();
-  const { data, isLoading: isLoadingTodos } = useGetTodosByTeamIdQuery(teamId!);
+  const { data: todos, isLoading: isLoadingTodos } = useGetTodosByTeamIdQuery(
+    teamId!
+  );
   const [updateTodo] = useUpdateTodoMutation();
   const [deleteTodo] = useDeleteTodoMutation();
   const dispatch = useAppDispatch();
@@ -26,7 +36,7 @@ function TodoList() {
   const [todoUpdate, setTodoUpdate] = useState<ITodo | undefined>(undefined);
 
   const handleInputChange = (value: string, todo: ITodo) => {
-    const updateTitle = data?.payload.map((t) =>
+    const updateTitle = todos?.payload.map((t) =>
       t.todoId === todo.todoId ? { ...t, title: value } : t
     );
 
@@ -54,13 +64,16 @@ function TodoList() {
           });
           setTodoUpdate(undefined);
         })
-        .catch((error) => console.error(error));
-      //here handle the other error
+        .catch((error) => {
+          if (isRequiredError(error)) {
+            enqueueSnackbar(error.data.title, { variant: "error" });
+          }
+        });
     }
   };
 
   const handleToggle = (todo: ITodo) => {
-    const updateIsCompleted = data?.payload.map((t) =>
+    const updateIsCompleted = todos?.payload.map((t) =>
       t.todoId === todo.todoId ? { ...t, isCompleted: !todo.isCompleted } : t
     );
 
@@ -90,30 +103,47 @@ function TodoList() {
   }
 
   return (
-    <>
-      {data?.payload.map((todo) => (
-        <ListItem key={todo.todoId}>
-          <Checkbox
-            onClick={() => handleToggle(todo)}
-            checked={todo.isCompleted}
-            color="success"
-          />
-          <TextField
-            fullWidth
-            name="title"
-            variant="standard"
-            value={todo.title}
-            onBlur={handleUpdate}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleInputChange(e.target.value, todo)
-            }
-          />
-          <IconButton type="button" onClick={() => handleDelete(todo)}>
-            <DeleteIcon color="error" />
-          </IconButton>
-        </ListItem>
-      ))}
-    </>
+    <List>
+      {todos?.payload
+        .filter((todo) =>
+          state === "completed" ? todo.isCompleted : !todo.isCompleted
+        )
+        .map((todo) => {
+          const labelId = `label-${todo.todoId}`;
+          return (
+            <ListItem
+              key={labelId}
+              secondaryAction={
+                <IconButton type="button" onClick={() => handleDelete(todo)}>
+                  <DeleteIcon color="error" />
+                </IconButton>
+              }
+            >
+              <ListItemIcon>
+                <Checkbox
+                  onClick={() => handleToggle(todo)}
+                  checked={todo.isCompleted}
+                  color="success"
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <TextField
+                    fullWidth
+                    name="title"
+                    variant="standard"
+                    value={todo.title}
+                    onBlur={handleUpdate}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleInputChange(e.target.value, todo)
+                    }
+                  />
+                }
+              />
+            </ListItem>
+          );
+        })}
+    </List>
   );
 }
 

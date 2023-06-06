@@ -43,7 +43,7 @@ namespace work_flow_services.Controllers
         {
             try
             {
-                var newTodo = new Todo
+                var todo = new Todo
                 {
                     TodoId = Guid.NewGuid().ToString(),
                     Title = request.Title,
@@ -53,10 +53,10 @@ namespace work_flow_services.Controllers
                     TeamId = request.TeamId,
                 };
 
-                _context.Todos.Add(newTodo);
+                _context.Todos.Add(todo);
                 _context.SaveChanges();
 
-                return Ok(new { message = "Todo created successfully", payload = newTodo });
+                return Ok(new { message = "Todo created successfully", payload = todo });
             }
             catch (Exception ex)
             {

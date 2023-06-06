@@ -4,10 +4,12 @@ import { teamService } from "../services/teamService";
 import { teamModalSlice } from "./slices/teamModalSlice";
 import { todoService } from "../services/todoService";
 import { setupListeners } from "@reduxjs/toolkit/query";
+import { todoErrorSlice } from "./slices/todoErrorSlice";
 
 export const store = configureStore({
   reducer: {
     teamModalSlice: teamModalSlice.reducer,
+    todoErrorSlice: todoErrorSlice.reducer,
     [authService.reducerPath]: authService.reducer,
     [teamService.reducerPath]: teamService.reducer,
     [todoService.reducerPath]: todoService.reducer,

@@ -26,3 +26,7 @@ export interface IUserError {
 export interface ITeamError {
   Name: ErrorField;
 }
+
+export interface ITodoError {
+  Title: ErrorField;
+}
