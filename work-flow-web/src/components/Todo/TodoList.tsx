@@ -18,6 +18,7 @@ import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { isRequiredError } from "../../utils/helpers";
+import { ITodoError } from "../../interfaces/error";
 
 type Props = {
   state: "completed" | "incompleted";
@@ -28,11 +29,17 @@ function TodoList({ state }: Props) {
   const { data: todos, isLoading: isLoadingTodos } = useGetTodosByTeamIdQuery(
     teamId!
   );
-  const [updateTodo] = useUpdateTodoMutation();
+  const [updateTodo, { isError: isErrorUpdate }] = useUpdateTodoMutation();
   const [deleteTodo] = useDeleteTodoMutation();
   const dispatch = useAppDispatch();
 
   const [todoUpdate, setTodoUpdate] = useState<ITodo | undefined>(undefined);
+  const [todoError, setTodoError] = useState<ITodoError>({
+    Title: {},
+  });
+
+  const getTitleError = () =>
+    todoError.Title && todoError.Title[0] ? todoError.Title[0] : "";
 
   const handleInputChange = (value: string, todo: ITodo) => {
     const updateTitle = todos?.payload.map((t) =>
@@ -61,10 +68,15 @@ function TodoList({ state }: Props) {
             variant: "success",
             autoHideDuration: 1000,
           });
+
+          setTodoError({ Title: {} });
           setTodoUpdate(undefined);
         })
         .catch((error) => {
           if (isRequiredError(error)) {
+            const { Title } = error.data.errors;
+            setTodoError({ Title });
+
             enqueueSnackbar(error.data.title, { variant: "error" });
           }
         });
@@ -133,6 +145,8 @@ function TodoList({ state }: Props) {
                     variant="standard"
                     value={todo.title}
                     onBlur={handleUpdate}
+                    error={isErrorUpdate}
+                    helperText={getTitleError()}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       handleInputChange(e.target.value, todo)
                     }

@@ -12,8 +12,7 @@ import { enqueueSnackbar } from "notistack";
 // icons
 import SendIcon from "@mui/icons-material/Send";
 import { isRequiredError } from "../../utils/helpers";
-import { useAppDispatch, useAppSelector } from "../../hooks/useStore";
-import { setTodoError } from "../../store/slices/todoErrorSlice";
+import { ITodoError } from "../../interfaces/error";
 
 function TodoCreate() {
   const { teamId } = useParams<{ teamId: string }>();
@@ -25,8 +24,9 @@ function TodoCreate() {
     teamId: teamId!,
   });
 
-  const { todoError } = useAppSelector((state) => state.todoErrorSlice);
-  const dispatch = useAppDispatch();
+  const [todoError, setTodoError] = useState<ITodoError>({
+    Title: {},
+  });
 
   const getTitleError = () =>
     todoError.Title && todoError.Title[0] ? todoError.Title[0] : "";
@@ -46,13 +46,15 @@ function TodoCreate() {
     createTodo(todo)
       .unwrap()
       .then((res) => {
-        setTodo({ ...todo, title: "" });
         enqueueSnackbar(res.message, { variant: "success" });
+
+        setTodo({ ...todo, title: "" });
+        setTodoError({ Title: {} });
       })
       .catch((error) => {
         if (isRequiredError(error)) {
           const { Title } = error.data.errors;
-          dispatch(setTodoError({ Title }));
+          setTodoError({ Title });
 
           enqueueSnackbar(error.data.title, { variant: "error" });
         }
