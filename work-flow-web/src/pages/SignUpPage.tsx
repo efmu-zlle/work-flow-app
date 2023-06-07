@@ -18,11 +18,13 @@ import { IUser } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
 import { isRequiredError, isValidationError } from "../utils/helpers";
 import { IUserError } from "../interfaces/error";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { useAppDispatch } from "../hooks/useStore";
+import { setCurrentUser } from "../store/slices/authSlice";
 
 function SignUpPage() {
+  const dispatch = useAppDispatch();
   const navigation = useNavigate();
-  const [_, setCurrentUser] = useLocalStorage<IUser>("currentUser", null);
+
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, { isLoading, isError }] = useSignUpMutation();
   const [userError, setUserError] = useState<IUserError>({
@@ -60,7 +62,12 @@ function SignUpPage() {
     try {
       const response = await signUp(user).unwrap();
 
-      setCurrentUser(response.payload!);
+      dispatch(setCurrentUser(response.payload));
+      window.localStorage.setItem(
+        "currentUser",
+        JSON.stringify(response.payload)
+      );
+
       enqueueSnackbar(response.message, { variant: "success" });
       navigation("/home");
     } catch (error) {

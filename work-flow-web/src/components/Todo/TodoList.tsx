@@ -7,7 +7,6 @@ import {
 } from "../../services/todoService";
 import Checkbox from "@mui/material/Checkbox";
 import { ChangeEvent, useCallback, useState } from "react";
-import Button from "@mui/material/Button";
 import { enqueueSnackbar } from "notistack";
 import { ITodo } from "../../interfaces/todo";
 import { useAppDispatch } from "../../hooks/useStore";
@@ -87,7 +86,7 @@ function TodoList({ state }: Props) {
       )
     );
 
-    updateTodo(patchCollection.patches[0].value).unwrap();
+    updateTodo(patchCollection.patches[0].value);
   };
 
   const handleDelete = useCallback(

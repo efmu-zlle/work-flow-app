@@ -13,18 +13,21 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { IUser, IUserCredentials } from "../interfaces/user";
+import { IUserCredentials } from "../interfaces/user";
 import { enqueueSnackbar } from "notistack";
 import { isRequiredError, isValidationError } from "../utils/helpers";
 import { IUserError } from "../interfaces/error";
 import { useSignInMutation } from "../services/authService";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { useAppDispatch } from "../hooks/useStore";
+import { setCurrentUser } from "../store/slices/authSlice";
 
 function SignInPage() {
   const navigation = useNavigate();
-  const [_, setCurrentUser] = useLocalStorage<IUser>("currentUser", null);
+  const dispatch = useAppDispatch();
+
   const [signIn, { isLoading, isError }] = useSignInMutation();
   const [showPassword, setShowPassword] = useState(false);
+
   const [userError, setUserError] = useState<IUserError>({
     Username: {},
     Password: {},
@@ -55,7 +58,12 @@ function SignInPage() {
     try {
       const response = await signIn(user).unwrap();
 
-      setCurrentUser(response.payload!);
+      dispatch(setCurrentUser(response.payload));
+      window.localStorage.setItem(
+        "currentUser",
+        JSON.stringify(response.payload)
+      );
+
       enqueueSnackbar(response.message, { variant: "success" });
       navigation("/home");
     } catch (error) {
