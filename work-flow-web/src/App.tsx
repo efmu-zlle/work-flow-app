@@ -4,7 +4,6 @@ import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage";
-import MemberPage from "./pages/MemberPage";
 import TodoPage from "./pages/TodoPage";
 import TeamPage from "./pages/TeamPage";
 import { useAppSelector } from "./hooks/useStore";
@@ -51,7 +50,6 @@ function App() {
             path="home"
             element={!currentUser ? <Navigate to="/" replace /> : <HomePage />}
           />
-          <Route path="member" element={<MemberPage />} />
           <Route path="team">
             <Route
               index

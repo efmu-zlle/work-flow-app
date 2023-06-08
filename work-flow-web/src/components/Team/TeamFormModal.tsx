@@ -25,6 +25,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { enqueueSnackbar } from "notistack";
 import {
+  teamService,
   useCreateTeamMutation,
   useUpdateTeamMutation,
 } from "../../services/teamService";
@@ -93,15 +94,15 @@ function TeamFormModal({ setAnchorEl }: Props) {
     }
   };
 
+  const handleClose = () => {
+    dispatch(closeModal());
+    dispatch(resetEdit());
+    dispatch(teamService.util.resetApiState());
+    setAnchorEl(null);
+  };
+
   return (
-    <Modal
-      open={open}
-      onClose={() => {
-        dispatch(closeModal());
-        dispatch(resetEdit());
-        setAnchorEl(null);
-      }}
-    >
+    <Modal open={open} onClose={handleClose}>
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -173,11 +174,7 @@ function TeamFormModal({ setAnchorEl }: Props) {
               fullWidth
               type="button"
               variant="contained"
-              onClick={() => {
-                dispatch(closeModal());
-                dispatch(resetEdit());
-                setAnchorEl(null);
-              }}
+              onClick={handleClose}
               disabled={isCreateLoading || isUpdateLoading}
             >
               cancel

@@ -171,7 +171,10 @@ function TeamList({ anchorEl, setAnchorEl }: Props) {
                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                   >
                     <MenuItem
-                      onClick={() => navigate(`todo/${currentTeam.teamId}`)}
+                      onClick={() => {
+                        navigate(`todo/${currentTeam.teamId}`);
+                        dispatch(resetEdit());
+                      }}
                     >
                       <ListItemIcon>
                         <ListIcon fontSize="small" sx={{ color: "blue" }} />

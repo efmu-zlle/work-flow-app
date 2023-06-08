@@ -36,7 +36,7 @@ function Header() {
             component="nav"
             sx={{ flexGrow: 1.2, display: { xs: "none", sm: "block" } }}
           >
-            {["home", "team", "member"].map((text, index) => (
+            {["home", "team"].map((text, index) => (
               <MuiLink
                 key={index}
                 component={RouterLink}
