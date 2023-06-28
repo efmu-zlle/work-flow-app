@@ -1,52 +1,52 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ITeam } from "../interfaces/team";
-import { BASE_URL, EndPoints, IResponseAPI } from "../interfaces";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Team } from '../interfaces/team';
+import { BASE_URL, EndPoints, ResponseAPI } from '../interfaces';
 
 export const teamService = createApi({
-  reducerPath: "teamService",
+  reducerPath: 'teamService',
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}`,
   }),
-  tagTypes: ["team"],
+  tagTypes: ['team'],
   endpoints: (builder) => ({
-    getTeams: builder.query<IResponseAPI<ITeam[]>, string>({
+    getTeams: builder.query<ResponseAPI<Team[]>, string>({
       query: (id) => `api/${EndPoints.getTeamById}/${id}`,
-      providesTags: ["team"],
+      providesTags: ['team'],
     }),
     // end getTeams
 
-    createTeam: builder.mutation<IResponseAPI<ITeam>, Partial<ITeam>>({
+    createTeam: builder.mutation<ResponseAPI<Team>, Partial<Team>>({
       query: (body) => ({
         url: `api/${EndPoints.createTeam}`,
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body,
       }),
       // end query
-      invalidatesTags: ["team"],
+      invalidatesTags: ['team'],
     }),
     // end createTeam
 
-    updateTeam: builder.mutation<IResponseAPI<ITeam>, Partial<ITeam>>({
+    updateTeam: builder.mutation<ResponseAPI<Team>, Partial<Team>>({
       query: (team) => ({
         url: `api/${EndPoints.updateTeam}`,
-        method: "PUT",
-        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body: team,
       }),
       // end query
-      invalidatesTags: ["team"],
+      invalidatesTags: ['team'],
     }),
     // end updateTeam
 
-    deleteTeam: builder.mutation<IResponseAPI<ITeam>, string>({
+    deleteTeam: builder.mutation<ResponseAPI<Team>, string>({
       query: (id) => ({
         url: `api/${EndPoints.deleteTeamById}/${id}`,
-        method: "DELETE",
-        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
       }),
       // end query
-      invalidatesTags: ["team"],
+      invalidatesTags: ['team'],
     }),
     // end deleteTeam
   }),

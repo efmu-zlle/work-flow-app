@@ -1,4 +1,4 @@
-export interface IUser {
+export interface User {
   userId?: string;
   username: string;
   email: string;
@@ -7,7 +7,7 @@ export interface IUser {
   updatedAt?: string;
 }
 
-export interface IUserCredentials {
+export interface UserCredentials {
   username: string;
   password: string;
 }

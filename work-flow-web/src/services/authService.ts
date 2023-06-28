@@ -1,35 +1,35 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IUser, IUserCredentials } from "../interfaces/user";
-import { BASE_URL, EndPoints, IResponseAPI } from "../interfaces";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { User, UserCredentials } from '../interfaces/user';
+import { BASE_URL, EndPoints, ResponseAPI } from '../interfaces';
 
 export const authService = createApi({
-  reducerPath: "authService",
+  reducerPath: 'authService',
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}`,
   }),
-  tagTypes: ["user"],
+  tagTypes: ['user'],
   endpoints: (builder) => ({
-    signUp: builder.mutation<IResponseAPI<IUser>, Partial<IUser>>({
+    signUp: builder.mutation<ResponseAPI<User>, Partial<User>>({
       query: (body) => ({
         url: `api/${EndPoints.signUp}`,
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body,
       }),
       // end query
-      invalidatesTags: ["user"],
+      invalidatesTags: ['user'],
     }),
     // end signUp
 
-    signIn: builder.mutation<IResponseAPI<IUser>, IUserCredentials>({
+    signIn: builder.mutation<ResponseAPI<User>, UserCredentials>({
       query: (userCredentials) => ({
         url: `api/${EndPoints.signIn}`,
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body: userCredentials,
       }),
       // end query
-      invalidatesTags: ["user"],
+      invalidatesTags: ['user'],
     }),
     // end signIn
   }),

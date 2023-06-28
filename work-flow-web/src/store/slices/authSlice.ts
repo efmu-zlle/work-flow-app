@@ -1,21 +1,21 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IUser } from "../../interfaces/user";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { User } from '../../interfaces/user';
 
 interface AuthSlice {
-  currentUser: IUser | null;
+  currentUser: User | null;
 }
 
-const storedUser = localStorage.getItem("currentUser");
+const storedUser = localStorage.getItem('currentUser');
 
 const initialState: AuthSlice = {
   currentUser: storedUser ? JSON.parse(storedUser) : null,
 };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
-    setCurrentUser: (state, action: PayloadAction<IUser>) => {
+    setCurrentUser: (state, action: PayloadAction<User>) => {
       state.currentUser = action.payload;
     },
 

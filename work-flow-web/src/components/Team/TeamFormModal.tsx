@@ -1,34 +1,34 @@
 // react
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction } from 'react';
 // redux
 import {
   closeModal,
   onChangeTeam,
   resetEdit,
   setTeamError,
-} from "../../store/slices/teamModalSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks/useStore";
+} from '../../store/slices/teamModalSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useStore';
 //interfaces
-import { IResponseAPI } from "../../interfaces";
-import { ITeam } from "../../interfaces/team";
-import { IUser } from "../../interfaces/user";
-import { isRequiredError } from "../../utils/helpers";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import { ResponseAPI } from '../../interfaces';
+import { Team } from '../../interfaces/team';
+import { User } from '../../interfaces/user';
+import { isRequiredError } from '../../utils/helpers';
+import useLocalStorage from '../../hooks/useLocalStorage';
 // material ui
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import { enqueueSnackbar } from "notistack";
+import { enqueueSnackbar } from 'notistack';
 import {
   teamService,
   useCreateTeamMutation,
   useUpdateTeamMutation,
-} from "../../services/teamService";
+} from '../../services/teamService';
 
 type Props = {
   setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
@@ -37,15 +37,15 @@ type Props = {
 const MAX_WORD_COUNT = 10;
 
 const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
   boxShadow: 24,
   p: 4,
-  backgroundImage: "linear-gradient(68deg, #CEDFFF, #D7FFEF, #D4F7FF)",
-  borderRadius: ".25em",
+  backgroundImage: 'linear-gradient(68deg, #CEDFFF, #D7FFEF, #D4F7FF)',
+  borderRadius: '.25em',
 };
 
 function TeamFormModal({ setAnchorEl }: Props) {
@@ -54,14 +54,14 @@ function TeamFormModal({ setAnchorEl }: Props) {
   );
   const dispatch = useAppDispatch();
 
-  const [{ userId, username }, _] = useLocalStorage<IUser>("currentUser", null);
+  const [{ userId, username }, _] = useLocalStorage<User>('currentUser', null);
   const [createTeam, { isLoading: isCreateLoading, isError: isErrorCreate }] =
     useCreateTeamMutation();
   const [updateTeam, { isLoading: isUpdateLoading, isError: isErrorUpdate }] =
     useUpdateTeamMutation();
 
   const getNameError = () =>
-    teamError.Name && teamError.Name[0] ? teamError.Name[0] : "";
+    teamError.Name && teamError.Name[0] ? teamError.Name[0] : '';
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,7 +73,7 @@ function TeamFormModal({ setAnchorEl }: Props) {
     e.preventDefault();
 
     try {
-      let response: IResponseAPI<ITeam>;
+      let response: ResponseAPI<Team>;
       if (isEdit) {
         // sending the entire team with the teamId in it
         response = await updateTeam(currentTeam).unwrap();
@@ -84,12 +84,12 @@ function TeamFormModal({ setAnchorEl }: Props) {
 
       dispatch(closeModal());
       dispatch(resetEdit());
-      enqueueSnackbar(response!.message, { variant: "success" });
+      enqueueSnackbar(response!.message, { variant: 'success' });
     } catch (error) {
       if (isRequiredError(error)) {
         const { Name } = error.data.errors;
         dispatch(setTeamError({ Name }));
-        enqueueSnackbar(error.data.title, { variant: "error" });
+        enqueueSnackbar(error.data.title, { variant: 'error' });
       }
     }
   };
@@ -108,12 +108,11 @@ function TeamFormModal({ setAnchorEl }: Props) {
         onSubmit={handleSubmit}
         sx={style}
         noValidate
-        autoComplete="off"
-      >
+        autoComplete="off">
         <Box>
           <Typography variant="h6">Welcome, {username}</Typography>
-          <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
-            {isEdit ? "update a " : "create a new"} team
+          <Typography variant="h6" sx={{ textTransform: 'capitalize' }}>
+            {isEdit ? 'update a ' : 'create a new'} team
           </Typography>
         </Box>
         <TextField
@@ -125,7 +124,7 @@ function TeamFormModal({ setAnchorEl }: Props) {
           value={currentTeam.name}
           error={isErrorCreate || isErrorUpdate}
           helperText={getNameError()}
-          sx={{ mt: "1em", mb: "1em" }}
+          sx={{ mt: '1em', mb: '1em' }}
           onChange={handleInputChange}
           disabled={isCreateLoading || isUpdateLoading}
           required
@@ -147,25 +146,24 @@ function TeamFormModal({ setAnchorEl }: Props) {
           value={currentTeam.description}
           multiline
           rows={4}
-          sx={{ mt: "1em", mb: "1em" }}
+          sx={{ mt: '1em', mb: '1em' }}
           onChange={handleInputChange}
           disabled={isCreateLoading || isUpdateLoading}
         />
 
-        <Grid container spacing={2} sx={{ mt: ".50em" }}>
+        <Grid container spacing={2} sx={{ mt: '.50em' }}>
           <Grid item xs={12} sm={6}>
             <Button
               fullWidth
               type="submit"
               variant="contained"
-              disabled={isCreateLoading || isUpdateLoading}
-            >
+              disabled={isCreateLoading || isUpdateLoading}>
               {isCreateLoading || isUpdateLoading ? (
                 <CircularProgress size={24} />
               ) : isEdit ? (
-                "update team"
+                'update team'
               ) : (
-                "create team"
+                'create team'
               )}
             </Button>
           </Grid>
@@ -175,8 +173,7 @@ function TeamFormModal({ setAnchorEl }: Props) {
               type="button"
               variant="contained"
               onClick={handleClose}
-              disabled={isCreateLoading || isUpdateLoading}
-            >
+              disabled={isCreateLoading || isUpdateLoading}>
               cancel
             </Button>
           </Grid>

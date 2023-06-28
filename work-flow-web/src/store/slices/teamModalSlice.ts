@@ -1,21 +1,21 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { ITeam } from "../../interfaces/team";
-import { ITeamError } from "../../interfaces/error";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Team } from '../../interfaces/team';
+import { TeamError } from '../../interfaces/error';
 
 export interface TeamModalState {
   open: boolean;
-  currentTeam: ITeam;
+  currentTeam: Team;
   isEdit: boolean;
-  teamError: ITeamError;
+  teamError: TeamError;
 }
 
 const initialState: TeamModalState = {
   open: false,
   currentTeam: {
-    teamId: "",
-    name: "",
-    description: "",
-    creatorId: "",
+    teamId: '',
+    name: '',
+    description: '',
+    creatorId: '',
   },
   isEdit: false,
   teamError: {
@@ -24,7 +24,7 @@ const initialState: TeamModalState = {
 };
 
 export const teamModalSlice = createSlice({
-  name: "modal",
+  name: 'modal',
   initialState,
   reducers: {
     openModal: (state) => {
@@ -51,22 +51,22 @@ export const teamModalSlice = createSlice({
       };
     },
 
-    setCurrentTeam: (state, action: PayloadAction<ITeam>) => {
+    setCurrentTeam: (state, action: PayloadAction<Team>) => {
       state.currentTeam = action.payload;
       state.isEdit = true;
     },
 
-    setTeamError: (state, action: PayloadAction<ITeamError>) => {
+    setTeamError: (state, action: PayloadAction<TeamError>) => {
       state.teamError = action.payload;
     },
 
     resetEdit: (state) => {
       state.isEdit = false;
       state.currentTeam = {
-        teamId: "",
-        name: "",
-        description: "",
-        creatorId: "",
+        teamId: '',
+        name: '',
+        description: '',
+        creatorId: '',
       };
       state.teamError.Name = {};
     },

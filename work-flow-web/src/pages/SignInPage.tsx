@@ -1,25 +1,25 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import CardMedia from "@mui/material/CardMedia";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import hero from "../assets/images/bg-hero.png";
-import logo from "../assets/svg/logo.svg";
-import CustomButton from "../components/CustomButton";
-import CustomDivider from "../components/CustomDivider";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { IUserCredentials } from "../interfaces/user";
-import { enqueueSnackbar } from "notistack";
-import { isRequiredError, isValidationError } from "../utils/helpers";
-import { IUserError } from "../interfaces/error";
-import { useSignInMutation } from "../services/authService";
-import { useAppDispatch } from "../hooks/useStore";
-import { setCurrentUser } from "../store/slices/authSlice";
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import hero from '../assets/images/bg-hero.png';
+import logo from '../assets/svg/logo.svg';
+import CustomButton from '../components/CustomButton';
+import CustomDivider from '../components/CustomDivider';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { UserCredentials } from '../interfaces/user';
+import { enqueueSnackbar } from 'notistack';
+import { isRequiredError, isValidationError } from '../utils/helpers';
+import { UserError } from '../interfaces/error';
+import { useSignInMutation } from '../services/authService';
+import { useAppDispatch } from '../hooks/useStore';
+import { setCurrentUser } from '../store/slices/authSlice';
 
 function SignInPage() {
   const navigation = useNavigate();
@@ -28,13 +28,13 @@ function SignInPage() {
   const [signIn, { isLoading, isError }] = useSignInMutation();
   const [showPassword, setShowPassword] = useState(false);
 
-  const [userError, setUserError] = useState<IUserError>({
+  const [userError, setUserError] = useState<UserError>({
     Username: {},
     Password: {},
   });
-  const [user, setUser] = useState<IUserCredentials>({
-    username: "",
-    password: "",
+  const [user, setUser] = useState<UserCredentials>({
+    username: '',
+    password: '',
   });
 
   const handleTogglePassword = () =>
@@ -47,10 +47,10 @@ function SignInPage() {
   };
 
   const getUsernameError = () =>
-    userError.Username && userError.Username[0] ? userError.Username[0] : "";
+    userError.Username && userError.Username[0] ? userError.Username[0] : '';
 
   const getPasswordError = () =>
-    userError.Password && userError.Password ? userError.Password[0] : "";
+    userError.Password && userError.Password ? userError.Password[0] : '';
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -60,28 +60,28 @@ function SignInPage() {
 
       dispatch(setCurrentUser(response.payload));
       window.localStorage.setItem(
-        "currentUser",
+        'currentUser',
         JSON.stringify(response.payload)
       );
 
-      enqueueSnackbar(response.message, { variant: "success" });
-      navigation("/home");
+      enqueueSnackbar(response.message, { variant: 'success' });
+      navigation('/home');
     } catch (error) {
       if (isValidationError(error)) {
-        enqueueSnackbar(error.data.message, { variant: "error" });
+        enqueueSnackbar(error.data.message, { variant: 'error' });
 
-        setUserError({ Username: "", Password: "" });
+        setUserError({ Username: '', Password: '' });
       } else if (isRequiredError(error)) {
         const { Username, Password } = error.data.errors;
         setUserError({ Username, Password });
 
-        enqueueSnackbar(error.data.title, { variant: "error" });
+        enqueueSnackbar(error.data.title, { variant: 'error' });
       }
     }
   };
 
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
+    <Grid container component="main" sx={{ height: '100vh' }}>
       {/* first item of the container */}
       <Grid
         item
@@ -90,29 +90,25 @@ function SignInPage() {
         md={5}
         lg={4}
         sx={{
-          backgroundImage: "linear-gradient(68deg, #CEDFFF, #D7FFEF, #D4F7FF)",
-        }}
-      >
+          backgroundImage: 'linear-gradient(68deg, #CEDFFF, #D7FFEF, #D4F7FF)',
+        }}>
         {/* container of the form  */}
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             mt: 4,
             px: 4.25,
-          }}
-        >
+          }}>
           <CardMedia
             component="img"
             image={logo}
             alt="logo"
-            sx={{ height: "0", width: "80px", mb: 15 }}
-          ></CardMedia>
+            sx={{ height: '0', width: '80px', mb: 15 }}></CardMedia>
           <Typography
             component="h1"
             variant="h5"
-            sx={{ fontWeight: "bolder", mb: 0.5 }}
-          >
+            sx={{ fontWeight: 'bolder', mb: 0.5 }}>
             Welcome back,
           </Typography>
           <Typography variant="body2">Please enter your details</Typography>
@@ -121,8 +117,7 @@ function SignInPage() {
             onSubmit={handleSubmit}
             sx={{ mt: 4 }}
             noValidate
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -144,7 +139,7 @@ function SignInPage() {
                 <TextField
                   fullWidth
                   variant="outlined"
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   label="password"
                   name="password"
@@ -166,13 +161,13 @@ function SignInPage() {
                 />
               </Grid>
             </Grid>
-            <CustomButton isLink={false} isLoading={isLoading} text={"login"} />
+            <CustomButton isLink={false} isLoading={isLoading} text={'login'} />
             <CustomDivider />
             <Link to="/sign-up">
               <CustomButton
                 isLink={true}
                 isLoading={isLoading}
-                text={"sign up"}
+                text={'sign up'}
               />
             </Link>
           </Box>
@@ -188,11 +183,10 @@ function SignInPage() {
         lg={8}
         sx={{
           backgroundImage: `url(${hero})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></Grid>
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}></Grid>
     </Grid>
   );
 }

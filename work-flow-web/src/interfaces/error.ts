@@ -17,16 +17,16 @@ type ErrorField = {
   [index: number]: string;
 };
 
-export interface IUserError {
+export interface UserError {
   Email?: ErrorField;
   Username: ErrorField;
   Password: ErrorField;
 }
 
-export interface ITeamError {
+export interface TeamError {
   Name: ErrorField;
 }
 
-export interface ITodoError {
+export interface TodoError {
   Title: ErrorField;
 }
