@@ -47,21 +47,20 @@ function Header() {
                   fontWeight: 600,
                   textDecoration: 'none',
                   position: 'relative',
-                  transition: 'transform 0.3s',
                   '&::after': {
                     content: '""',
                     position: 'absolute',
-                    left: 0,
+                    right: 0,
                     bottom: 0,
-                    width: '100%',
+                    width: '0%',
                     height: 2,
                     backgroundColor: (theme) => theme.palette.primary.main,
-                    transform: 'scaleX(0)',
-                    transformOrigin: 'left',
-                    transition: 'transform 0.3s',
+                    transition: 'all 0.3s ease-out',
                   },
                   '&:hover::after': {
-                    transform: 'scaleX(1)',
+                    width: '100%',
+                    right: 'initial',
+                    left: 0,
                   },
                 }}>
                 {text}
